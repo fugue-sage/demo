@@ -11,11 +11,11 @@ import Policies.RegionPolicy
 import Policies.TagsPolicy
 
 # Region
-demo-app-region: AWS.Us-west-2
+demo-app-region: AWS.Us-east-2
 
 # Tags
-demo-app-tag: AWS.tag('Name', 'Fugue Demo App')
-#demo-app-tag: AWS.tag('Application', 'Fugue Demo App')
+#demo-app-tag: AWS.tag('Name', 'Fugue Demo App')
+demo-app-tag: AWS.tag('Application', 'Fugue Demo App')
 
 # Network (VPC)
 demo-app-network: Network.new {
