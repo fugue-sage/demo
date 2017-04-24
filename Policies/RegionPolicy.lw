@@ -1,0 +1,10 @@
+import Fugue.AWS as AWS
+
+validate usWestOnly
+
+
+fun usWestOnly(region: AWS.Region) -> Validation:
+  case region of
+    | AWS.Us-west-1 -> Validation.success
+    | AWS.Us-west-2 -> Validation.success
+    | _             -> Validation.failure("Invalid Region: Everything must run in US west 1 or 2 only")

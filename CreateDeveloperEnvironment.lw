@@ -1,0 +1,29 @@
+composition
+
+import Corp
+
+import Fugue.AWS.Pattern.Network as Network
+import Fugue.AWS.EC2 as EC2
+import Fugue.AWS as AWS
+
+devNetwork: Network.new {
+  name: "Developer Environment",
+  cidr: "10.0.0.0/16",
+  region: AWS.Us-east-1,
+  publicSubnets: [
+    (AWS.A, "10.0.0.0/24"),
+    (AWS.B, "10.0.1.0/24"),
+  ],
+  privateSubnets: [],
+  enableDnsSupport: True,
+  enableDnsHostnames: True,
+  tags: [
+    AWS.tag("Name", "Developer Environment")
+  ],
+}
+
+devEnvironment: Corp.DeveloperEnvironment.new {
+  name: "DevEnvironment",
+  keyName: "Demo",
+  subnets: devNetwork.publicSubnets,
+}

@@ -1,0 +1,1181 @@
+2017-04-23T23:11:30.04 [ fugue ] DEBUG - -------------------------------Configuration Info-------------------------------
+2017-04-23T23:11:30.04 [ fugue ] DEBUG - Fugue CLI Version: 1.0.3-2016-506a18a76db7c4377577292e89ccdc6344a72eca
+2017-04-23T23:11:30.04 [ fugue ] DEBUG - Configuration File Path (symbolic links followed): /Users/sage/projects/demo/fugue.yaml
+2017-04-23T23:11:30.04 [ fugue ] DEBUG - Conductor Region: us-east-1
+2017-04-23T23:11:30.04 [ fugue ] DEBUG - Compositions Bucket: fugue-087820496137-us-east-1
+2017-04-23T23:11:30.04 [ fugue ] DEBUG - Request Queue: fugue-demarc-requests
+2017-04-23T23:11:30.04 [ fugue ] DEBUG - Response Table: fugue-cli-responses
+2017-04-23T23:11:30.04 [ fugue ] DEBUG - --------------------------------------------------------------------------------
+2017-04-23T23:11:30.04 [ fugue ] DEBUG - parsing args "['FugueDemo.lw', '--dry-run']" for run
+2017-04-23T23:11:38.04 [ fugue ] WARNING - Could not lookup fugue-087820496137-us-east-1/dryrun/2d261d98-6607-4979-a78b-b825eeb94793.db29e31c-bc86-4a22-b953-50c435564c45, retrying in 2 seconds: An error occurred (NoSuchKey) when calling the GetObject operation: The specified key does not exist.
+2017-04-23T23:11:41.04 [ fugue.screen ] INFO - {
+    "fid": "2d261d98-6607-4979-a78b-b825eeb94793",
+    "job_id": "1492989095",
+    "requests": [
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189.default_acl",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2.DefaultNetworkAcl": "VpiRrgXuoo",
+                "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe.NetworkAclAssociation.NetworkAclAssociationId": "6Idim0gQaZ",
+                "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe.NetworkAclAssociation.NetworkAclId": "KGecQwlacF",
+                "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189.NetworkAclAssociation.NetworkAclAssociationId": "gfEkk9Q3TY",
+                "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189.NetworkAclAssociation.NetworkAclId": "Klk8ENwHZd"
+            },
+            "params": {
+                "AssociationId": "gfEkk9Q3TY",
+                "NetworkAclId": "VpiRrgXuoo"
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.replace_network_acl_association"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe.default_acl",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2.DefaultNetworkAcl": "VpiRrgXuoo",
+                "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe.NetworkAclAssociation.NetworkAclAssociationId": "6Idim0gQaZ",
+                "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe.NetworkAclAssociation.NetworkAclId": "KGecQwlacF",
+                "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189.NetworkAclAssociation.NetworkAclAssociationId": "gfEkk9Q3TY",
+                "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189.NetworkAclAssociation.NetworkAclId": "Klk8ENwHZd"
+            },
+            "params": {
+                "AssociationId": "6Idim0gQaZ",
+                "NetworkAclId": "VpiRrgXuoo"
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.replace_network_acl_association"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.37dcf4d1-d6e4-5351-9f2f-ad7b9eb7be3e",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "BsFXqifT8B",
+                "2d261d98-6607-4979-a78b-b825eeb94793.37dcf4d1-d6e4-5351-9f2f-ad7b9eb7be3e": "gcrC4siU7t"
+            },
+            "params": {},
+            "region": "us-west-2",
+            "request_type": "aws.ec2.create_internet_gateway"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.37dcf4d1-d6e4-5351-9f2f-ad7b9eb7be3e",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "BsFXqifT8B",
+                "2d261d98-6607-4979-a78b-b825eeb94793.37dcf4d1-d6e4-5351-9f2f-ad7b9eb7be3e": "gcrC4siU7t"
+            },
+            "params": {
+                "InternetGatewayId": "gcrC4siU7t",
+                "VpcId": "BsFXqifT8B"
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.attach_internet_gateway"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.37dcf4d1-d6e4-5351-9f2f-ad7b9eb7be3e",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "BsFXqifT8B",
+                "2d261d98-6607-4979-a78b-b825eeb94793.37dcf4d1-d6e4-5351-9f2f-ad7b9eb7be3e": "gcrC4siU7t"
+            },
+            "params": {
+                "Resources": [
+                    "gcrC4siU7t"
+                ],
+                "Tags": [
+                    {
+                        "Key": "Fugue ID",
+                        "Value": "2d261d98-6607-4979-a78b-b825eeb94793.37dcf4d1-d6e4-5351-9f2f-ad7b9eb7be3e"
+                    },
+                    {
+                        "Key": "Name",
+                        "Value": "demo-network-IGW"
+                    },
+                    {
+                        "Key": "network",
+                        "Value": "public"
+                    }
+                ]
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.create_tags"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "Ip6KhOV1sZ",
+                "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe": "CYOYSCmw4G",
+                "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189": "1qWZCe2aDC"
+            },
+            "params": {
+                "AvailabilityZone": "us-west-2a",
+                "CidrBlock": "10.0.1.0/24",
+                "VpcId": "Ip6KhOV1sZ"
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.create_subnet"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "Ip6KhOV1sZ",
+                "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe": "CYOYSCmw4G",
+                "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189": "1qWZCe2aDC"
+            },
+            "params": {
+                "MapPublicIpOnLaunch": {
+                    "Value": true
+                },
+                "SubnetId": "1qWZCe2aDC"
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.modify_subnet_attribute"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "Ip6KhOV1sZ",
+                "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe": "CYOYSCmw4G",
+                "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189": "1qWZCe2aDC"
+            },
+            "params": {
+                "Resources": [
+                    "1qWZCe2aDC"
+                ],
+                "Tags": [
+                    {
+                        "Key": "Fugue ID",
+                        "Value": "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189"
+                    },
+                    {
+                        "Key": "Name",
+                        "Value": "demo-network-PUBLIC-SN-A"
+                    },
+                    {
+                        "Key": "network",
+                        "Value": "public"
+                    }
+                ]
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.create_tags"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "Ip6KhOV1sZ",
+                "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe": "CYOYSCmw4G",
+                "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189": "1qWZCe2aDC"
+            },
+            "params": {
+                "AvailabilityZone": "us-west-2b",
+                "CidrBlock": "10.0.2.0/24",
+                "VpcId": "Ip6KhOV1sZ"
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.create_subnet"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "Ip6KhOV1sZ",
+                "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe": "CYOYSCmw4G",
+                "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189": "1qWZCe2aDC"
+            },
+            "params": {
+                "MapPublicIpOnLaunch": {
+                    "Value": true
+                },
+                "SubnetId": "CYOYSCmw4G"
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.modify_subnet_attribute"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "Ip6KhOV1sZ",
+                "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe": "CYOYSCmw4G",
+                "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189": "1qWZCe2aDC"
+            },
+            "params": {
+                "Resources": [
+                    "CYOYSCmw4G"
+                ],
+                "Tags": [
+                    {
+                        "Key": "Fugue ID",
+                        "Value": "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe"
+                    },
+                    {
+                        "Key": "Name",
+                        "Value": "demo-network-PUBLIC-SN-B"
+                    },
+                    {
+                        "Key": "network",
+                        "Value": "public"
+                    }
+                ]
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.create_tags"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.c8022d83-ba39-5e00-9cbe-fde80ac7e657",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.b55554a9-32b4-5805-92fa-b907d5588d4e": "QfjX0UfGRZ"
+            },
+            "params": {
+                "AssociatePublicIpAddress": true,
+                "IamInstanceProfile": "demo-app-instance-profile",
+                "ImageId": "ami-b7b366d7",
+                "InstanceMonitoring": {
+                    "Enabled": true
+                },
+                "InstanceType": "t2.micro",
+                "LaunchConfigurationName": "2d261d98-6607-4979-a78b-b825eeb94793.c8022d83-ba39-5e00-9cbe-fde80ac7e657",
+                "SecurityGroups": [
+                    "QfjX0UfGRZ"
+                ]
+            },
+            "region": "us-west-2",
+            "request_type": "aws.autoscaling.create_launch_configuration"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "9L1BLwwU9j",
+                "2d261d98-6607-4979-a78b-b825eeb94793.acc4c2ec-cdaa-5e2d-9de4-5d79f37b6040": "Cjom5JHR5l"
+            },
+            "params": {
+                "CidrBlock": "10.0.0.0/16"
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.create_vpc"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "9L1BLwwU9j",
+                "2d261d98-6607-4979-a78b-b825eeb94793.acc4c2ec-cdaa-5e2d-9de4-5d79f37b6040": "Cjom5JHR5l"
+            },
+            "params": {
+                "DhcpOptionsId": "Cjom5JHR5l",
+                "VpcId": "9L1BLwwU9j"
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.associate_dhcp_options"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "9L1BLwwU9j",
+                "2d261d98-6607-4979-a78b-b825eeb94793.acc4c2ec-cdaa-5e2d-9de4-5d79f37b6040": "Cjom5JHR5l"
+            },
+            "params": {
+                "EnableDnsSupport": {
+                    "Value": true
+                },
+                "VpcId": "9L1BLwwU9j"
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.modify_vpc_attribute"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "9L1BLwwU9j",
+                "2d261d98-6607-4979-a78b-b825eeb94793.acc4c2ec-cdaa-5e2d-9de4-5d79f37b6040": "Cjom5JHR5l"
+            },
+            "params": {
+                "EnableDnsHostnames": {
+                    "Value": false
+                },
+                "VpcId": "9L1BLwwU9j"
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.modify_vpc_attribute"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2.tags",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "9L1BLwwU9j",
+                "2d261d98-6607-4979-a78b-b825eeb94793.acc4c2ec-cdaa-5e2d-9de4-5d79f37b6040": "Cjom5JHR5l"
+            },
+            "params": {
+                "Resources": [
+                    "9L1BLwwU9j"
+                ],
+                "Tags": [
+                    {
+                        "Key": "Fugue ID",
+                        "Value": "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2"
+                    },
+                    {
+                        "Key": "Name",
+                        "Value": "demo-network"
+                    }
+                ]
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.create_tags"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.a0ef32c6-3028-5df8-a7f8-0d2ff237c089",
+            "params": {
+                "InstanceProfileName": "demo-app-instance-profile"
+            },
+            "region": "us-east-1",
+            "request_type": "aws.iam.create_instance_profile"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.a0ef32c6-3028-5df8-a7f8-0d2ff237c089.role",
+            "params": {
+                "InstanceProfileName": "demo-app-instance-profile",
+                "RoleName": "demo-app-role"
+            },
+            "region": "us-east-1",
+            "request_type": "aws.iam.add_role_to_instance_profile"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.b55554a9-32b4-5805-92fa-b907d5588d4e",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "k0wkG30iQ5",
+                "2d261d98-6607-4979-a78b-b825eeb94793.ad0e1860-37c9-5871-a0b2-6dbc071f46ba": "gddDtsGHWl",
+                "2d261d98-6607-4979-a78b-b825eeb94793.b55554a9-32b4-5805-92fa-b907d5588d4e": "r4ZrhARbEx"
+            },
+            "params": {
+                "Description": "Allow http traffic from the ELB SG",
+                "GroupName": "2d261d98-6607-4979-a78b-b825eeb94793.b55554a9-32b4-5805-92fa-b907d5588d4e",
+                "VpcId": "k0wkG30iQ5"
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.create_security_group"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.b55554a9-32b4-5805-92fa-b907d5588d4e",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "k0wkG30iQ5",
+                "2d261d98-6607-4979-a78b-b825eeb94793.ad0e1860-37c9-5871-a0b2-6dbc071f46ba": "gddDtsGHWl",
+                "2d261d98-6607-4979-a78b-b825eeb94793.b55554a9-32b4-5805-92fa-b907d5588d4e": "r4ZrhARbEx"
+            },
+            "params": {
+                "Resources": [
+                    "r4ZrhARbEx"
+                ],
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": "Fugue Demo App"
+                    },
+                    {
+                        "Key": "Name",
+                        "Value": "demo-app-web-sg"
+                    },
+                    {
+                        "Key": "Fugue ID",
+                        "Value": "2d261d98-6607-4979-a78b-b825eeb94793.b55554a9-32b4-5805-92fa-b907d5588d4e"
+                    }
+                ]
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.create_tags"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.b55554a9-32b4-5805-92fa-b907d5588d4e",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "k0wkG30iQ5",
+                "2d261d98-6607-4979-a78b-b825eeb94793.ad0e1860-37c9-5871-a0b2-6dbc071f46ba": "gddDtsGHWl",
+                "2d261d98-6607-4979-a78b-b825eeb94793.b55554a9-32b4-5805-92fa-b907d5588d4e": "r4ZrhARbEx"
+            },
+            "params": {
+                "GroupId": "r4ZrhARbEx",
+                "IpPermissions": [
+                    {
+                        "FromPort": 3000,
+                        "IpProtocol": "tcp",
+                        "ToPort": 3000,
+                        "UserIdGroupPairs": [
+                            {
+                                "GroupId": "gddDtsGHWl"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.authorize_security_group_ingress"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.b55554a9-32b4-5805-92fa-b907d5588d4e",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "k0wkG30iQ5",
+                "2d261d98-6607-4979-a78b-b825eeb94793.ad0e1860-37c9-5871-a0b2-6dbc071f46ba": "gddDtsGHWl",
+                "2d261d98-6607-4979-a78b-b825eeb94793.b55554a9-32b4-5805-92fa-b907d5588d4e": "r4ZrhARbEx"
+            },
+            "params": {
+                "GroupId": "r4ZrhARbEx",
+                "IpPermissions": [
+                    {
+                        "IpProtocol": "-1",
+                        "IpRanges": [
+                            {
+                                "CidrIp": "0.0.0.0/0"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.authorize_security_group_egress"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.b55554a9-32b4-5805-92fa-b907d5588d4e",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "k0wkG30iQ5",
+                "2d261d98-6607-4979-a78b-b825eeb94793.ad0e1860-37c9-5871-a0b2-6dbc071f46ba": "gddDtsGHWl",
+                "2d261d98-6607-4979-a78b-b825eeb94793.b55554a9-32b4-5805-92fa-b907d5588d4e": "r4ZrhARbEx"
+            },
+            "params": {
+                "GroupId": "r4ZrhARbEx",
+                "IpPermissions": [
+                    {
+                        "IpProtocol": "-1",
+                        "IpRanges": [
+                            {
+                                "CidrIp": "0.0.0.0/0"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.revoke_security_group_egress"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.ad0e1860-37c9-5871-a0b2-6dbc071f46ba",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "k0wkG30iQ5",
+                "2d261d98-6607-4979-a78b-b825eeb94793.ad0e1860-37c9-5871-a0b2-6dbc071f46ba": "gddDtsGHWl",
+                "2d261d98-6607-4979-a78b-b825eeb94793.b55554a9-32b4-5805-92fa-b907d5588d4e": "r4ZrhARbEx"
+            },
+            "params": {
+                "Description": "Allow http/s traffic from the Internet",
+                "GroupName": "2d261d98-6607-4979-a78b-b825eeb94793.ad0e1860-37c9-5871-a0b2-6dbc071f46ba",
+                "VpcId": "k0wkG30iQ5"
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.create_security_group"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.ad0e1860-37c9-5871-a0b2-6dbc071f46ba",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "k0wkG30iQ5",
+                "2d261d98-6607-4979-a78b-b825eeb94793.ad0e1860-37c9-5871-a0b2-6dbc071f46ba": "gddDtsGHWl",
+                "2d261d98-6607-4979-a78b-b825eeb94793.b55554a9-32b4-5805-92fa-b907d5588d4e": "r4ZrhARbEx"
+            },
+            "params": {
+                "Resources": [
+                    "gddDtsGHWl"
+                ],
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": "Fugue Demo App"
+                    },
+                    {
+                        "Key": "Name",
+                        "Value": "demo-app-elb-sg"
+                    },
+                    {
+                        "Key": "Fugue ID",
+                        "Value": "2d261d98-6607-4979-a78b-b825eeb94793.ad0e1860-37c9-5871-a0b2-6dbc071f46ba"
+                    }
+                ]
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.create_tags"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.ad0e1860-37c9-5871-a0b2-6dbc071f46ba",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "k0wkG30iQ5",
+                "2d261d98-6607-4979-a78b-b825eeb94793.ad0e1860-37c9-5871-a0b2-6dbc071f46ba": "gddDtsGHWl",
+                "2d261d98-6607-4979-a78b-b825eeb94793.b55554a9-32b4-5805-92fa-b907d5588d4e": "r4ZrhARbEx"
+            },
+            "params": {
+                "GroupId": "gddDtsGHWl",
+                "IpPermissions": [
+                    {
+                        "FromPort": 80,
+                        "IpProtocol": "tcp",
+                        "IpRanges": [
+                            {
+                                "CidrIp": "0.0.0.0/0"
+                            }
+                        ],
+                        "ToPort": 80
+                    },
+                    {
+                        "FromPort": 443,
+                        "IpProtocol": "tcp",
+                        "IpRanges": [
+                            {
+                                "CidrIp": "0.0.0.0/0"
+                            }
+                        ],
+                        "ToPort": 443
+                    }
+                ]
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.authorize_security_group_ingress"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.ad0e1860-37c9-5871-a0b2-6dbc071f46ba",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "k0wkG30iQ5",
+                "2d261d98-6607-4979-a78b-b825eeb94793.ad0e1860-37c9-5871-a0b2-6dbc071f46ba": "gddDtsGHWl",
+                "2d261d98-6607-4979-a78b-b825eeb94793.b55554a9-32b4-5805-92fa-b907d5588d4e": "r4ZrhARbEx"
+            },
+            "params": {
+                "GroupId": "gddDtsGHWl",
+                "IpPermissions": [
+                    {
+                        "IpProtocol": "-1",
+                        "IpRanges": [
+                            {
+                                "CidrIp": "0.0.0.0/0"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.authorize_security_group_egress"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.ad0e1860-37c9-5871-a0b2-6dbc071f46ba",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "k0wkG30iQ5",
+                "2d261d98-6607-4979-a78b-b825eeb94793.ad0e1860-37c9-5871-a0b2-6dbc071f46ba": "gddDtsGHWl",
+                "2d261d98-6607-4979-a78b-b825eeb94793.b55554a9-32b4-5805-92fa-b907d5588d4e": "r4ZrhARbEx"
+            },
+            "params": {
+                "GroupId": "gddDtsGHWl",
+                "IpPermissions": [
+                    {
+                        "IpProtocol": "-1",
+                        "IpRanges": [
+                            {
+                                "CidrIp": "0.0.0.0/0"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.revoke_security_group_egress"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.237b3b54-2332-51e9-bd32-e9d9c1077f4c",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.237b3b54-2332-51e9-bd32-e9d9c1077f4c.AutoScalingGroup.AutoScalingGroupARN": "40HQyeQj5B",
+                "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe": "Kl5G4AEt1k",
+                "2d261d98-6607-4979-a78b-b825eeb94793.a607389c-4cec-5c4c-a583-b4ee3a6503a2": "oBvvlOowzJ",
+                "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189": "zsPU7uD9dI",
+                "2d261d98-6607-4979-a78b-b825eeb94793.c8022d83-ba39-5e00-9cbe-fde80ac7e657": "9w6SMyB3q5"
+            },
+            "params": {
+                "AutoScalingGroupName": "2d261d98-6607-4979-a78b-b825eeb94793.237b3b54-2332-51e9-bd32-e9d9c1077f4c",
+                "DefaultCooldown": 300,
+                "HealthCheckType": "EC2",
+                "LaunchConfigurationName": "9w6SMyB3q5",
+                "LoadBalancerNames": [
+                    "oBvvlOowzJ"
+                ],
+                "MaxSize": 4,
+                "MinSize": 4,
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "PropagateAtLaunch": true,
+                        "Value": "Fugue Demo App"
+                    },
+                    {
+                        "Key": "Name",
+                        "PropagateAtLaunch": true,
+                        "Value": "demo-app-asg"
+                    },
+                    {
+                        "Key": "Fugue ID",
+                        "PropagateAtLaunch": true,
+                        "Value": "2d261d98-6607-4979-a78b-b825eeb94793.237b3b54-2332-51e9-bd32-e9d9c1077f4c"
+                    }
+                ],
+                "TerminationPolicies": [
+                    "ClosestToNextInstanceHour"
+                ],
+                "VPCZoneIdentifier": "zsPU7uD9dI,Kl5G4AEt1k"
+            },
+            "region": "us-west-2",
+            "request_type": "aws.autoscaling.create_auto_scaling_group"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.237b3b54-2332-51e9-bd32-e9d9c1077f4c.metrics",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.237b3b54-2332-51e9-bd32-e9d9c1077f4c.AutoScalingGroup.AutoScalingGroupARN": "40HQyeQj5B",
+                "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe": "Kl5G4AEt1k",
+                "2d261d98-6607-4979-a78b-b825eeb94793.a607389c-4cec-5c4c-a583-b4ee3a6503a2": "oBvvlOowzJ",
+                "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189": "zsPU7uD9dI",
+                "2d261d98-6607-4979-a78b-b825eeb94793.c8022d83-ba39-5e00-9cbe-fde80ac7e657": "9w6SMyB3q5"
+            },
+            "params": {
+                "AutoScalingGroupName": "2d261d98-6607-4979-a78b-b825eeb94793.237b3b54-2332-51e9-bd32-e9d9c1077f4c",
+                "Granularity": "1Minute",
+                "Metrics": [
+                    "GroupInServiceInstances",
+                    "GroupTotalInstances"
+                ]
+            },
+            "region": "us-west-2",
+            "request_type": "aws.autoscaling.enable_metrics_collection"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.ce7f538b-9717-5343-8154-78467b4ab467",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "mFNym2G2gr",
+                "2d261d98-6607-4979-a78b-b825eeb94793.37dcf4d1-d6e4-5351-9f2f-ad7b9eb7be3e": "s1QgJP6nwm",
+                "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe": "ZKrchdiSB9",
+                "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189": "OenPhf9RG6",
+                "2d261d98-6607-4979-a78b-b825eeb94793.ce7f538b-9717-5343-8154-78467b4ab467": "WlpZ4AqECu"
+            },
+            "params": {
+                "VpcId": "mFNym2G2gr"
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.create_route_table"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.ce7f538b-9717-5343-8154-78467b4ab467.tags",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "mFNym2G2gr",
+                "2d261d98-6607-4979-a78b-b825eeb94793.37dcf4d1-d6e4-5351-9f2f-ad7b9eb7be3e": "s1QgJP6nwm",
+                "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe": "ZKrchdiSB9",
+                "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189": "OenPhf9RG6",
+                "2d261d98-6607-4979-a78b-b825eeb94793.ce7f538b-9717-5343-8154-78467b4ab467": "WlpZ4AqECu"
+            },
+            "params": {
+                "Resources": [
+                    "WlpZ4AqECu"
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "demo-network-PUBLIC-RT"
+                    },
+                    {
+                        "Key": "network",
+                        "Value": "public"
+                    },
+                    {
+                        "Key": "Fugue ID",
+                        "Value": "2d261d98-6607-4979-a78b-b825eeb94793.ce7f538b-9717-5343-8154-78467b4ab467"
+                    }
+                ]
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.create_tags"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.ce7f538b-9717-5343-8154-78467b4ab467.route",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "mFNym2G2gr",
+                "2d261d98-6607-4979-a78b-b825eeb94793.37dcf4d1-d6e4-5351-9f2f-ad7b9eb7be3e": "s1QgJP6nwm",
+                "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe": "ZKrchdiSB9",
+                "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189": "OenPhf9RG6",
+                "2d261d98-6607-4979-a78b-b825eeb94793.ce7f538b-9717-5343-8154-78467b4ab467": "WlpZ4AqECu"
+            },
+            "params": {
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "GatewayId": "s1QgJP6nwm",
+                "RouteTableId": "WlpZ4AqECu"
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.create_route"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.ce7f538b-9717-5343-8154-78467b4ab467.c3b29890-0702-5c42-bae5-a3a244568189.association",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "mFNym2G2gr",
+                "2d261d98-6607-4979-a78b-b825eeb94793.37dcf4d1-d6e4-5351-9f2f-ad7b9eb7be3e": "s1QgJP6nwm",
+                "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe": "ZKrchdiSB9",
+                "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189": "OenPhf9RG6",
+                "2d261d98-6607-4979-a78b-b825eeb94793.ce7f538b-9717-5343-8154-78467b4ab467": "WlpZ4AqECu"
+            },
+            "params": {
+                "RouteTableId": "WlpZ4AqECu",
+                "SubnetId": "OenPhf9RG6"
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.associate_route_table"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.ce7f538b-9717-5343-8154-78467b4ab467.39d077b6-4666-5da1-8efb-06134b2488fe.association",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.21c09c81-c7c8-5404-ba85-3468fee982b2": "mFNym2G2gr",
+                "2d261d98-6607-4979-a78b-b825eeb94793.37dcf4d1-d6e4-5351-9f2f-ad7b9eb7be3e": "s1QgJP6nwm",
+                "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe": "ZKrchdiSB9",
+                "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189": "OenPhf9RG6",
+                "2d261d98-6607-4979-a78b-b825eeb94793.ce7f538b-9717-5343-8154-78467b4ab467": "WlpZ4AqECu"
+            },
+            "params": {
+                "RouteTableId": "WlpZ4AqECu",
+                "SubnetId": "ZKrchdiSB9"
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.associate_route_table"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.acc4c2ec-cdaa-5e2d-9de4-5d79f37b6040",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.acc4c2ec-cdaa-5e2d-9de4-5d79f37b6040": "muvC6gOGJY"
+            },
+            "params": {
+                "DhcpConfigurations": [
+                    {
+                        "Key": "domain-name-servers",
+                        "Values": [
+                            "AmazonProvidedDNS"
+                        ]
+                    },
+                    {
+                        "Key": "domain-name",
+                        "Values": [
+                            "us-west-2.compute.internal"
+                        ]
+                    }
+                ]
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.create_dhcp_options"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.acc4c2ec-cdaa-5e2d-9de4-5d79f37b6040.tags",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.acc4c2ec-cdaa-5e2d-9de4-5d79f37b6040": "muvC6gOGJY"
+            },
+            "params": {
+                "Resources": [
+                    "muvC6gOGJY"
+                ],
+                "Tags": [
+                    {
+                        "Key": "Fugue ID",
+                        "Value": "2d261d98-6607-4979-a78b-b825eeb94793.acc4c2ec-cdaa-5e2d-9de4-5d79f37b6040"
+                    }
+                ]
+            },
+            "region": "us-west-2",
+            "request_type": "aws.ec2.create_tags"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.a607389c-4cec-5c4c-a583-b4ee3a6503a2",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe": "wWI6GU8gSC",
+                "2d261d98-6607-4979-a78b-b825eeb94793.a607389c-4cec-5c4c-a583-b4ee3a6503a2": "d1XNN0DV8I",
+                "2d261d98-6607-4979-a78b-b825eeb94793.ad0e1860-37c9-5871-a0b2-6dbc071f46ba": "C4dEE6Tzlj",
+                "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189": "33CA04UyVo"
+            },
+            "params": {
+                "Listeners": [
+                    {
+                        "InstancePort": 3000,
+                        "LoadBalancerPort": 80,
+                        "Protocol": "HTTP"
+                    }
+                ],
+                "LoadBalancerName": "demo-app-elb",
+                "SecurityGroups": [
+                    "C4dEE6Tzlj"
+                ],
+                "Subnets": [
+                    "33CA04UyVo",
+                    "wWI6GU8gSC"
+                ],
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": "Fugue Demo App"
+                    },
+                    {
+                        "Key": "Name",
+                        "Value": "demo-app-elb"
+                    },
+                    {
+                        "Key": "Fugue ID",
+                        "Value": "2d261d98-6607-4979-a78b-b825eeb94793.a607389c-4cec-5c4c-a583-b4ee3a6503a2"
+                    }
+                ]
+            },
+            "region": "us-west-2",
+            "request_type": "aws.elb.create_load_balancer"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.a607389c-4cec-5c4c-a583-b4ee3a6503a2.healthCheck",
+            "guidMap": {
+                "2d261d98-6607-4979-a78b-b825eeb94793.39d077b6-4666-5da1-8efb-06134b2488fe": "wWI6GU8gSC",
+                "2d261d98-6607-4979-a78b-b825eeb94793.a607389c-4cec-5c4c-a583-b4ee3a6503a2": "d1XNN0DV8I",
+                "2d261d98-6607-4979-a78b-b825eeb94793.ad0e1860-37c9-5871-a0b2-6dbc071f46ba": "C4dEE6Tzlj",
+                "2d261d98-6607-4979-a78b-b825eeb94793.c3b29890-0702-5c42-bae5-a3a244568189": "33CA04UyVo"
+            },
+            "params": {
+                "HealthCheck": {
+                    "HealthyThreshold": 3,
+                    "Interval": 15,
+                    "Target": "TCP:3000",
+                    "Timeout": 3,
+                    "UnhealthyThreshold": 3
+                },
+                "LoadBalancerName": "d1XNN0DV8I"
+            },
+            "region": "us-west-2",
+            "request_type": "aws.elb.configure_health_check"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.3c1884ab-30ff-51bd-9091-2bc04ff1270c",
+            "params": {
+                "AssumeRolePolicyDocument": {
+                    "Statement": {
+                        "Action": "sts:AssumeRole",
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": [
+                                "ec2.amazonaws.com"
+                            ]
+                        }
+                    },
+                    "Version": "2012-10-17"
+                },
+                "RoleName": "demo-app-role"
+            },
+            "region": "us-east-1",
+            "request_type": "aws.iam.create_role"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.3c1884ab-30ff-51bd-9091-2bc04ff1270c.policy",
+            "params": {
+                "PolicyDocument": {
+                    "Statement": [
+                        {
+                            "Action": [
+                                "dynamodb:*"
+                            ],
+                            "Effect": "Allow",
+                            "Resource": "*"
+                        }
+                    ],
+                    "Version": "2012-10-17"
+                },
+                "PolicyName": "ddb-full",
+                "RoleName": "demo-app-role"
+            },
+            "region": "us-east-1",
+            "request_type": "aws.iam.put_role_policy"
+        },
+        {
+            "guid": "2d261d98-6607-4979-a78b-b825eeb94793.46750f2a-e086-5600-af79-41d5f2e75652",
+            "params": {
+                "AttributeDefinitions": [
+                    {
+                        "AttributeName": "PropertyName",
+                        "AttributeType": "S"
+                    }
+                ],
+                "KeySchema": [
+                    {
+                        "AttributeName": "PropertyName",
+                        "KeyType": "HASH"
+                    }
+                ],
+                "ProvisionedThroughput": {
+                    "ReadCapacityUnits": 10,
+                    "WriteCapacityUnits": 10
+                },
+                "TableName": "demo-app-table"
+            },
+            "region": "us-west-2",
+            "request_type": "aws.dynamodb.create_table"
+        }
+    ]
+}
+2017-04-23T23:14:07.04 [ fugue ] DEBUG - -------------------------------Configuration Info-------------------------------
+2017-04-23T23:14:07.04 [ fugue ] DEBUG - Fugue CLI Version: 1.0.3-2016-506a18a76db7c4377577292e89ccdc6344a72eca
+2017-04-23T23:14:07.04 [ fugue ] DEBUG - Configuration File Path (symbolic links followed): /Users/sage/projects/demo/fugue.yaml
+2017-04-23T23:14:07.04 [ fugue ] DEBUG - Conductor Region: us-east-1
+2017-04-23T23:14:07.04 [ fugue ] DEBUG - Compositions Bucket: fugue-087820496137-us-east-1
+2017-04-23T23:14:07.04 [ fugue ] DEBUG - Request Queue: fugue-demarc-requests
+2017-04-23T23:14:07.04 [ fugue ] DEBUG - Response Table: fugue-cli-responses
+2017-04-23T23:14:07.04 [ fugue ] DEBUG - --------------------------------------------------------------------------------
+2017-04-23T23:14:07.04 [ fugue ] DEBUG - parsing args "['Policy.lw']" for rbac-attach
+2017-04-23T23:14:07.04 [ fugue.screen ] INFO - Compiling Ludwig file Policy.lw ...
+2017-04-23T23:14:07.04 [ fugue.screen ] INFO - [ OK ] Successfully compiled. No errors.
+2017-04-23T23:14:07.04 [ fugue.screen ] INFO - Uploading policy to S3 ...
+2017-04-23T23:14:08.04 [ fugue.screen ] INFO - [ OK ] Successfully uploaded.
+2017-04-23T23:14:08.04 [ fugue.screen ] INFO - Requesting the Conductor set new policy ...
+2017-04-23T23:14:13.04 [ fugue.screen ] INFO - [ DONE ] Policy uploaded and applied.
+2017-04-23T23:15:03.04 [ fugue ] DEBUG - -------------------------------Configuration Info-------------------------------
+2017-04-23T23:15:03.04 [ fugue ] DEBUG - Fugue CLI Version: 1.0.3-2016-506a18a76db7c4377577292e89ccdc6344a72eca
+2017-04-23T23:15:03.04 [ fugue ] DEBUG - Configuration File Path (symbolic links followed): /Users/sage/projects/demo/fugue.yaml
+2017-04-23T23:15:03.04 [ fugue ] DEBUG - Conductor Region: us-east-1
+2017-04-23T23:15:03.04 [ fugue ] DEBUG - Compositions Bucket: fugue-087820496137-us-east-1
+2017-04-23T23:15:03.04 [ fugue ] DEBUG - Request Queue: fugue-demarc-requests
+2017-04-23T23:15:03.04 [ fugue ] DEBUG - Response Table: fugue-cli-responses
+2017-04-23T23:15:03.04 [ fugue ] DEBUG - --------------------------------------------------------------------------------
+2017-04-23T23:15:03.04 [ fugue ] DEBUG - parsing args "['CreateDeveloperEnvironment.lw', '-a', 'dev']" for run
+2017-04-23T23:15:03.04 [ fugue.screen ] INFO - [ fugue run ] Running CreateDeveloperEnvironment.lw
+
+Run Details:
+    Account: default
+    Alias: dev
+2017-04-23T23:15:03.04 [ fugue.screen ] INFO - Compiling Ludwig file /Users/sage/projects/demo/CreateDeveloperEnvironment.lw
+2017-04-23T23:15:04.04 [ fugue.screen ] ERROR - Error compiling Ludwig composition:
+
+ludwig ([33mevaluation error[0m):
+  "/opt/fugue/lib/Fugue/AWS/EC2/DhcpOptions.lw" (line 60, column 3):
+  error:
+
+    60|   EC2.DhcpOptions{
+    61|     tags: tags,
+    62|     domainNameServers: domainNameServers,
+    63|     domainName: domainName,
+    64|     ntpServers: ntpServers,
+    65|     netBiosNameServers: netBiosNameServers,
+    66|     netBiosNodeType: netBiosNodeType,
+    67|     region: region
+    68|   }
+
+  Failed validations:
+    - All taggable resources must have the following tags:
+      - Name
+   (from Corp.InfoSecStandards.requireStandardTagsOnEC2DhcpOptions)
+
+  Stack trace:
+    In call to [33mnew[0m at "/opt/fugue/lib/Fugue/AWS/EC2/DhcpOptions.lw" (line 157, column 3)
+    In call to [33mdefaultForRegion[0m at "/opt/fugue/lib/Fugue/AWS/EC2/Vpc.lw" (line 94, column 34)
+    In call to [33mnew[0m at "/opt/fugue/lib/Fugue/AWS/Pattern/Network.lw" (line 83, column 12)
+    In call to [33mnew[0m at "/Users/sage/projects/demo/CreateDeveloperEnvironment.lw" (line 9, column 13)
+Traceback (most recent call last):
+  File "site-packages/fugue_cli/composition.py", line 115, in compile_composition
+  File "subprocess.py", line 711, in run
+subprocess.CalledProcessError: Command '['lwc', '--color', '-s', 'proto', '--timeout', '10', '--composition', '/Users/sage/projects/demo/CreateDeveloperEnvironment.lw']' returned non-zero exit status 1
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "site-packages/fugue_cli/cli.py", line 155, in invoke
+  File "site-packages/click/core.py", line 1060, in invoke
+  File "site-packages/click/core.py", line 889, in invoke
+  File "site-packages/click/core.py", line 534, in invoke
+  File "site-packages/click/decorators.py", line 27, in new_func
+  File "site-packages/fugue_cli/commands/run.py", line 175, in run
+  File "site-packages/fugue_cli/commands/run.py", line 57, in compile_composition
+  File "site-packages/fugue_cli/composition.py", line 123, in compile_composition
+fugue_cli.exceptions.FugueError: Error compiling Ludwig composition:
+
+ludwig ([33mevaluation error[0m):
+  "/opt/fugue/lib/Fugue/AWS/EC2/DhcpOptions.lw" (line 60, column 3):
+  error:
+
+    60|   EC2.DhcpOptions{
+    61|     tags: tags,
+    62|     domainNameServers: domainNameServers,
+    63|     domainName: domainName,
+    64|     ntpServers: ntpServers,
+    65|     netBiosNameServers: netBiosNameServers,
+    66|     netBiosNodeType: netBiosNodeType,
+    67|     region: region
+    68|   }
+
+  Failed validations:
+    - All taggable resources must have the following tags:
+      - Name
+   (from Corp.InfoSecStandards.requireStandardTagsOnEC2DhcpOptions)
+
+  Stack trace:
+    In call to [33mnew[0m at "/opt/fugue/lib/Fugue/AWS/EC2/DhcpOptions.lw" (line 157, column 3)
+    In call to [33mdefaultForRegion[0m at "/opt/fugue/lib/Fugue/AWS/EC2/Vpc.lw" (line 94, column 34)
+    In call to [33mnew[0m at "/opt/fugue/lib/Fugue/AWS/Pattern/Network.lw" (line 83, column 12)
+    In call to [33mnew[0m at "/Users/sage/projects/demo/CreateDeveloperEnvironment.lw" (line 9, column 13)
+
+2017-04-23T23:16:15.04 [ fugue ] DEBUG - -------------------------------Configuration Info-------------------------------
+2017-04-23T23:16:15.04 [ fugue ] DEBUG - Fugue CLI Version: 1.0.3-2016-506a18a76db7c4377577292e89ccdc6344a72eca
+2017-04-23T23:16:15.04 [ fugue ] DEBUG - Configuration File Path (symbolic links followed): /Users/sage/projects/demo/fugue.yaml
+2017-04-23T23:16:15.04 [ fugue ] DEBUG - Conductor Region: us-east-1
+2017-04-23T23:16:15.04 [ fugue ] DEBUG - Compositions Bucket: fugue-087820496137-us-east-1
+2017-04-23T23:16:15.04 [ fugue ] DEBUG - Request Queue: fugue-demarc-requests
+2017-04-23T23:16:15.04 [ fugue ] DEBUG - Response Table: fugue-cli-responses
+2017-04-23T23:16:15.04 [ fugue ] DEBUG - --------------------------------------------------------------------------------
+2017-04-23T23:16:15.04 [ fugue ] DEBUG - parsing args "['CreateDeveloperEnvironment.lw', '-a', 'dev']" for run
+2017-04-23T23:16:15.04 [ fugue.screen ] INFO - [ fugue run ] Running CreateDeveloperEnvironment.lw
+
+Run Details:
+    Account: default
+    Alias: dev
+2017-04-23T23:16:15.04 [ fugue.screen ] INFO - Compiling Ludwig file /Users/sage/projects/demo/CreateDeveloperEnvironment.lw
+2017-04-23T23:16:16.04 [ fugue.screen ] ERROR - Error compiling Ludwig composition:
+
+ludwig ([33mevaluation error[0m):
+  "/opt/fugue/lib/Fugue/AWS/EC2/DhcpOptions.lw" (line 60, column 3):
+  error:
+
+    60|   EC2.DhcpOptions{
+    61|     tags: tags,
+    62|     domainNameServers: domainNameServers,
+    63|     domainName: domainName,
+    64|     ntpServers: ntpServers,
+    65|     netBiosNameServers: netBiosNameServers,
+    66|     netBiosNodeType: netBiosNodeType,
+    67|     region: region
+    68|   }
+
+  Failed validations:
+    - All taggable resources must have the following tags:
+      - Name
+   (from Corp.InfoSecStandards.requireStandardTagsOnEC2DhcpOptions)
+
+  Stack trace:
+    In call to [33mnew[0m at "/opt/fugue/lib/Fugue/AWS/EC2/DhcpOptions.lw" (line 157, column 3)
+    In call to [33mdefaultForRegion[0m at "/opt/fugue/lib/Fugue/AWS/EC2/Vpc.lw" (line 94, column 34)
+    In call to [33mnew[0m at "/opt/fugue/lib/Fugue/AWS/Pattern/Network.lw" (line 83, column 12)
+    In call to [33mnew[0m at "/Users/sage/projects/demo/CreateDeveloperEnvironment.lw" (line 9, column 13)
+Traceback (most recent call last):
+  File "site-packages/fugue_cli/composition.py", line 115, in compile_composition
+  File "subprocess.py", line 711, in run
+subprocess.CalledProcessError: Command '['lwc', '--color', '-s', 'proto', '--timeout', '10', '--composition', '/Users/sage/projects/demo/CreateDeveloperEnvironment.lw']' returned non-zero exit status 1
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "site-packages/fugue_cli/cli.py", line 155, in invoke
+  File "site-packages/click/core.py", line 1060, in invoke
+  File "site-packages/click/core.py", line 889, in invoke
+  File "site-packages/click/core.py", line 534, in invoke
+  File "site-packages/click/decorators.py", line 27, in new_func
+  File "site-packages/fugue_cli/commands/run.py", line 175, in run
+  File "site-packages/fugue_cli/commands/run.py", line 57, in compile_composition
+  File "site-packages/fugue_cli/composition.py", line 123, in compile_composition
+fugue_cli.exceptions.FugueError: Error compiling Ludwig composition:
+
+ludwig ([33mevaluation error[0m):
+  "/opt/fugue/lib/Fugue/AWS/EC2/DhcpOptions.lw" (line 60, column 3):
+  error:
+
+    60|   EC2.DhcpOptions{
+    61|     tags: tags,
+    62|     domainNameServers: domainNameServers,
+    63|     domainName: domainName,
+    64|     ntpServers: ntpServers,
+    65|     netBiosNameServers: netBiosNameServers,
+    66|     netBiosNodeType: netBiosNodeType,
+    67|     region: region
+    68|   }
+
+  Failed validations:
+    - All taggable resources must have the following tags:
+      - Name
+   (from Corp.InfoSecStandards.requireStandardTagsOnEC2DhcpOptions)
+
+  Stack trace:
+    In call to [33mnew[0m at "/opt/fugue/lib/Fugue/AWS/EC2/DhcpOptions.lw" (line 157, column 3)
+    In call to [33mdefaultForRegion[0m at "/opt/fugue/lib/Fugue/AWS/EC2/Vpc.lw" (line 94, column 34)
+    In call to [33mnew[0m at "/opt/fugue/lib/Fugue/AWS/Pattern/Network.lw" (line 83, column 12)
+    In call to [33mnew[0m at "/Users/sage/projects/demo/CreateDeveloperEnvironment.lw" (line 9, column 13)
+
+2017-04-23T23:17:06.04 [ fugue ] DEBUG - -------------------------------Configuration Info-------------------------------
+2017-04-23T23:17:06.04 [ fugue ] DEBUG - Fugue CLI Version: 1.0.3-2016-506a18a76db7c4377577292e89ccdc6344a72eca
+2017-04-23T23:17:06.04 [ fugue ] DEBUG - Configuration File Path (symbolic links followed): /Users/sage/projects/demo/fugue.yaml
+2017-04-23T23:17:06.04 [ fugue ] DEBUG - Conductor Region: us-east-1
+2017-04-23T23:17:06.04 [ fugue ] DEBUG - Compositions Bucket: fugue-087820496137-us-east-1
+2017-04-23T23:17:06.04 [ fugue ] DEBUG - Request Queue: fugue-demarc-requests
+2017-04-23T23:17:06.04 [ fugue ] DEBUG - Response Table: fugue-cli-responses
+2017-04-23T23:17:06.04 [ fugue ] DEBUG - --------------------------------------------------------------------------------
+2017-04-23T23:17:06.04 [ fugue ] DEBUG - parsing args "['CreateDeveloperEnvironment.lw', '-a', 'dev']" for run
+2017-04-23T23:17:06.04 [ fugue.screen ] INFO - [ fugue run ] Running CreateDeveloperEnvironment.lw
+
+Run Details:
+    Account: default
+    Alias: dev
+2017-04-23T23:17:06.04 [ fugue.screen ] INFO - Compiling Ludwig file /Users/sage/projects/demo/CreateDeveloperEnvironment.lw
+2017-04-23T23:17:07.04 [ fugue.screen ] ERROR - Error compiling Ludwig composition:
+
+ludwig ([33mevaluation error[0m):
+  "Corp/InfoSecStandards.lw" (line 50, column 20):
+  error:
+
+    50|   List.any(fun(e): e == Environment.environment, approvedEnvironments)
+                           [31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+
+  ENVIRONMENT must be set to DEV, QA, or PROD.
+
+  Stack trace:
+    In call to [33mtest[0m at "/opt/fugue/lib/Ludwig/List.lw" (line 271, column 30)
+    In call to [33many[0m at "Corp/InfoSecStandards.lw" (line 50, column 3)
+    In call to [33misApprovedEnvironment[0m at "Corp/DeveloperEnvironment.lw" (line 89, column 6)
+    In call to [33mmakeAsgRules[0m at "Corp/DeveloperEnvironment.lw" (line 68, column 20)
+    In call to [33mmakeDeveloperEnvironmentSgs[0m at "Corp/DeveloperEnvironment.lw" (line 118, column 12)
+    In call to [33mnew[0m at "/Users/sage/projects/demo/CreateDeveloperEnvironment.lw" (line 25, column 17)
+Traceback (most recent call last):
+  File "site-packages/fugue_cli/composition.py", line 115, in compile_composition
+  File "subprocess.py", line 711, in run
+subprocess.CalledProcessError: Command '['lwc', '--color', '-s', 'proto', '--timeout', '10', '--composition', '/Users/sage/projects/demo/CreateDeveloperEnvironment.lw']' returned non-zero exit status 1
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "site-packages/fugue_cli/cli.py", line 155, in invoke
+  File "site-packages/click/core.py", line 1060, in invoke
+  File "site-packages/click/core.py", line 889, in invoke
+  File "site-packages/click/core.py", line 534, in invoke
+  File "site-packages/click/decorators.py", line 27, in new_func
+  File "site-packages/fugue_cli/commands/run.py", line 175, in run
+  File "site-packages/fugue_cli/commands/run.py", line 57, in compile_composition
+  File "site-packages/fugue_cli/composition.py", line 123, in compile_composition
+fugue_cli.exceptions.FugueError: Error compiling Ludwig composition:
+
+ludwig ([33mevaluation error[0m):
+  "Corp/InfoSecStandards.lw" (line 50, column 20):
+  error:
+
+    50|   List.any(fun(e): e == Environment.environment, approvedEnvironments)
+                           [31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+
+  ENVIRONMENT must be set to DEV, QA, or PROD.
+
+  Stack trace:
+    In call to [33mtest[0m at "/opt/fugue/lib/Ludwig/List.lw" (line 271, column 30)
+    In call to [33many[0m at "Corp/InfoSecStandards.lw" (line 50, column 3)
+    In call to [33misApprovedEnvironment[0m at "Corp/DeveloperEnvironment.lw" (line 89, column 6)
+    In call to [33mmakeAsgRules[0m at "Corp/DeveloperEnvironment.lw" (line 68, column 20)
+    In call to [33mmakeDeveloperEnvironmentSgs[0m at "Corp/DeveloperEnvironment.lw" (line 118, column 12)
+    In call to [33mnew[0m at "/Users/sage/projects/demo/CreateDeveloperEnvironment.lw" (line 25, column 17)
+
+2017-04-23T23:17:24.04 [ fugue ] DEBUG - -------------------------------Configuration Info-------------------------------
+2017-04-23T23:17:24.04 [ fugue ] DEBUG - Fugue CLI Version: 1.0.3-2016-506a18a76db7c4377577292e89ccdc6344a72eca
+2017-04-23T23:17:24.04 [ fugue ] DEBUG - Configuration File Path (symbolic links followed): /Users/sage/projects/demo/fugue.yaml
+2017-04-23T23:17:24.04 [ fugue ] DEBUG - Conductor Region: us-east-1
+2017-04-23T23:17:24.04 [ fugue ] DEBUG - Compositions Bucket: fugue-087820496137-us-east-1
+2017-04-23T23:17:24.04 [ fugue ] DEBUG - Request Queue: fugue-demarc-requests
+2017-04-23T23:17:24.04 [ fugue ] DEBUG - Response Table: fugue-cli-responses
+2017-04-23T23:17:24.04 [ fugue ] DEBUG - --------------------------------------------------------------------------------
+2017-04-23T23:17:24.04 [ fugue ] DEBUG - parsing args "['CreateDeveloperEnvironment.lw', '-a', 'dev']" for run
+2017-04-23T23:17:24.04 [ fugue.screen ] INFO - [ fugue run ] Running CreateDeveloperEnvironment.lw
+
+Run Details:
+    Account: default
+    Alias: dev
+2017-04-23T23:17:24.04 [ fugue.screen ] INFO - Compiling Ludwig file /Users/sage/projects/demo/CreateDeveloperEnvironment.lw
+2017-04-23T23:17:26.04 [ fugue.screen ] INFO - [ OK ] Successfully compiled. No errors.
+2017-04-23T23:17:26.04 [ fugue.screen ] INFO - Uploading compiled Ludwig composition to S3...
+2017-04-23T23:17:27.04 [ fugue.screen ] INFO - [ OK ] Successfully uploaded.
+2017-04-23T23:17:27.04 [ fugue.screen ] INFO - Requesting the Conductor to create and run process based on composition ...
+2017-04-23T23:17:34.04 [ fugue.screen ] INFO - [ DONE ] Process created and running.
+2017-04-23T23:17:34.04 [ fugue.screen ] INFO - State    Updated    Created    Account              FID                                   Alias    Last Message
+-------  ---------  ---------  -------------------  ------------------------------------  -------  --------------
+Running  4:17pm     4:17pm     fugue-1487973234972  edb92649-7a1c-49f1-8b5f-8da4975706c5  dev
+2017-04-23T23:17:34.04 [ fugue.screen ] INFO - [ HELP ] Run the 'fugue status' command to view details and status for all Fugue processes.

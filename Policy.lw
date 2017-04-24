@@ -1,0 +1,37 @@
+composition
+
+import Fugue.System.Policy as .
+
+# Add your default account ID below. You can find this ID by executing
+# `fugue account list`.
+default: Account(accountId: "fugue-1487973234972")
+staging: Account(accountId: "staging-1488398672205")
+webteam: Account(accountId: "webteam-1491270485353")
+
+alice: User {userId: "alice"}
+
+aliceLimitedAccessDefault: accountRules {
+          principals: [alice],
+          accounts: [default],
+          actions:[AccountRunProcess,
+                   AccountKillProcess,
+                   AccountStatusProcess]}
+
+hector: User {userId: "hector"}
+
+hectorLimitedAccessDefault: accountRules {
+          principals: [hector],
+          accounts: [default],
+          actions:[AccountRunProcess,
+                   AccountKillProcess,
+                   AccountStatusProcess]}
+
+sam: User {userId: "sam"}
+
+samLimitedAccessDefault: accountRules {
+          principals: [sam],
+          accounts: [default],
+          actions:[AccountRunProcess,
+                   AccountKillProcess,
+                   AccountUpdateProcess,
+                   AccountStatusProcess]}
