@@ -11,7 +11,7 @@ import Policies.RegionPolicy
 import Policies.TagsPolicy
 
 # Region
-demo-app-region: AWS.Us-east-1
+demo-app-region: AWS.Us-east-2
 
 # Tags
 #demo-app-tag: AWS.tag('Name', 'Fugue Demo App')
