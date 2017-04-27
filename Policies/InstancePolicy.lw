@@ -1,32 +1,32 @@
 import Fugue.AWS.AutoScaling as AutoScaling
 import Fugue.AWS.EC2 as EC2
 
-# validate validateInstanceTypeLC
-# validate validateInstanceTypeEC2
+validate validateInstanceTypeLC
+validate validateInstanceTypeEC2
 
-# fun validateInstanceTypeLC(lc: AutoScaling.LaunchConfiguration) -> Validation:
-#   let instanceType: lc.(AutoScaling.AutoScalingGroup.LaunchConfiguration).instanceType
-#   case instanceType of
-#     | EC2.T2_micro -> Validation.success
-#     | EC2.T2_small -> Validation.success
-#     | _             -> Validation.failure("Failed Compliance Validation: Must be a valid EC2 instance type. Please see InfoSec.")
-
-
-
-# fun validateInstanceTypeEC2(instanceType: EC2.InstanceType) -> Validation:
-#   case instanceType of
-#     | EC2.T2_micro  -> Validation.success
-#     | EC2.T2_small  -> Validation.success
-#     | EC2.T2_medium -> Validation.success
-#     | _ -> Validation.failure("Failed Compliance Validation: Must be a valid EC2 instance type. Please see InfoSec.")
-
-validate validateInstanceType
-
-fun validateInstanceType(asg: AutoScaling.AutoScalingGroup) -> Validation:
-  let lc: asg.(AutoScaling.AutoScalingGroup).launchConfiguration
+fun validateInstanceTypeLC(lc: AutoScaling.LaunchConfiguration) -> Validation:
   let instanceType: lc.(AutoScaling.LaunchConfiguration).instanceType
+  case instanceType of
+    | EC2.T2_micro -> Validation.success
+    | EC2.T2_small -> Validation.success
+    | _             -> Validation.failure("Failed Compliance Validation: Must be a valid EC2 instance type. Please see InfoSec.")
+
+
+
+fun validateInstanceTypeEC2(instanceType: EC2.InstanceType) -> Validation:
   case instanceType of
     | EC2.T2_micro  -> Validation.success
     | EC2.T2_small  -> Validation.success
     | EC2.T2_medium -> Validation.success
     | _ -> Validation.failure("Failed Compliance Validation: Must be a valid EC2 instance type. Please see InfoSec.")
+
+# validate validateInstanceType
+
+# fun validateInstanceType(asg: AutoScaling.AutoScalingGroup) -> Validation:
+#   let lc: asg.(AutoScaling.AutoScalingGroup).launchConfiguration
+#   let instanceType: lc.(AutoScaling.LaunchConfiguration).instanceType
+#   case instanceType of
+#     | EC2.T2_micro  -> Validation.success
+#     | EC2.T2_small  -> Validation.success
+#     | EC2.T2_medium -> Validation.success
+#     | _ -> Validation.failure("Failed Compliance Validation: Must be a valid EC2 instance type. Please see InfoSec.")

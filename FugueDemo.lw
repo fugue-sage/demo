@@ -64,19 +64,19 @@ demo-app-asg: AutoScaling.AutoScalingGroup.new {
 demo-app-lc: AutoScaling.LaunchConfiguration.new {
   image: "ami-b7b366d7",
   securityGroups: [demo-app-web-sg],
-  instanceType: EC2.T2_nano,
+  instanceType: EC2.T2_micro,
   associatePublicIpAddress: True,
   iamInstanceProfile: demo-app-instance-profile
 }
 
 
-demo-app-instance: EC2.Instance.new {
-  instanceType: EC2.T2_nano,
-  monitoring: False,
-  subnet: List.elementAt(1,demo-app-network.publicSubnets),
-  securityGroups: [demo-app-web-sg],
-  image: "ami-6869aa05",
-}
+# demo-app-instance: EC2.Instance.new {
+#   instanceType: EC2.M4_large,
+#   monitoring: False,
+#   subnet: List.elementAt(1,demo-app-network.publicSubnets),
+#   securityGroups: [demo-app-web-sg],
+#   image: "ami-6869aa05",
+# }
 
 ### IAM Role
 demo-app-role: IAM.Role.new {
