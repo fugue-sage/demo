@@ -9,7 +9,7 @@ fun validateInstanceTypeLC(lc: AutoScaling.LaunchConfiguration) -> Validation:
   case instanceType of
     | EC2.T2_micro -> Validation.success
     | EC2.T2_small -> Validation.success
-    | _             -> Validation.failure("Failed Compliance Validation: Must be a valid EC2 instance type. Please see InfoSec.")
+    | _             -> Validation.failure("Failed Compliance Validation: Must be a valid EC2 instance type. Please see InfoSec.\n\n\n\n")
 
 
 
@@ -18,15 +18,4 @@ fun validateInstanceTypeEC2(instanceType: EC2.InstanceType) -> Validation:
     | EC2.T2_micro  -> Validation.success
     | EC2.T2_small  -> Validation.success
     | EC2.T2_medium -> Validation.success
-    | _ -> Validation.failure("Failed Compliance Validation: Must be a valid EC2 instance type. Please see InfoSec.")
-
-# validate validateInstanceType
-
-# fun validateInstanceType(asg: AutoScaling.AutoScalingGroup) -> Validation:
-#   let lc: asg.(AutoScaling.AutoScalingGroup).launchConfiguration
-#   let instanceType: lc.(AutoScaling.LaunchConfiguration).instanceType
-#   case instanceType of
-#     | EC2.T2_micro  -> Validation.success
-#     | EC2.T2_small  -> Validation.success
-#     | EC2.T2_medium -> Validation.success
-#     | _ -> Validation.failure("Failed Compliance Validation: Must be a valid EC2 instance type. Please see InfoSec.")
+    | _ -> Validation.failure("Failed Compliance Validation: Must be a valid EC2 instance type. Please see InfoSec.\n\n\n\n\n")
