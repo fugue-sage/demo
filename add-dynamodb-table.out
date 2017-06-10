@@ -1,0 +1,29 @@
+{
+    "fid": "e32d1d4c-6a0d-4c18-a1d5-8fb239cdbcf3",
+    "job_id": "1493670887",
+    "requests": [
+        {
+            "guid": "e32d1d4c-6a0d-4c18-a1d5-8fb239cdbcf3.46750f2a-e086-5600-af79-41d5f2e75652",
+            "params": {
+                "AttributeDefinitions": [
+                    {
+                        "AttributeName": "PropertyName",
+                        "AttributeType": "S"
+                    }
+                ],
+                "KeySchema": [
+                    {
+                        "AttributeName": "PropertyName",
+                        "KeyType": "HASH"
+                    }
+                ],
+                "ProvisionedThroughput": {
+                    "ReadCapacityUnits": 10,
+                    "WriteCapacityUnits": 10
+                },
+                "TableName": "demo-app-table"
+            },
+            "region": "us-west-2",
+            "request_type": "aws.dynamodb.create_table"
+        }
+}

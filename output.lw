@@ -1,0 +1,1159 @@
+composition
+
+import Fugue.AWS as AWS
+import Fugue.AWS.AutoScaling as AutoScaling
+import Fugue.AWS.DynamoDB as DynamoDB
+import Fugue.AWS.EC2 as EC2
+import Fugue.AWS.IAM as IAM
+import Fugue.AWS.SNS as SNS
+import Fugue.AWS.SQS as SQS
+
+
+############################################################
+# Region
+#   From local AWS setting: us-east-1
+############################################################
+region: AWS.Us-east-1
+
+
+############################################################
+# DHCP Options
+#   Generated from AWS resource: dopt-921feff6
+############################################################
+ec2-dhcpoptions-1: EC2.DhcpOptions.new {
+  domainName: "ec2.internal",
+  domainNameServers: [
+    "AmazonProvidedDNS",
+  ],
+  region: region,
+}
+
+
+############################################################
+# VPC
+#   Generated from AWS resource: vpc-4a9f2e2d
+############################################################
+ec2-vpc-1: EC2.Vpc.new {
+  cidrBlock: "172.31.0.0/16",
+  dhcpOptions: ec2-dhcpoptions-1,
+  instanceTenancy: EC2.DefaultTenancy,
+  region: region,
+}
+
+
+############################################################
+# VPC
+#   Generated from AWS resource: vpc-92afb7f4
+############################################################
+ec2-vpc-2: EC2.Vpc.new {
+  cidrBlock: "10.0.0.0/16",
+  dhcpOptions: ec2-dhcpoptions-1,
+  instanceTenancy: EC2.DefaultTenancy,
+  region: region,
+  tags: [
+    AWS.tag("Name", "Fugue Conductor VPC"),
+    AWS.tag("aws:cloudformation:stack-name", "fugue"),
+    AWS.tag("aws:cloudformation:logical-id", "FugueVpc"),
+    AWS.tag("aws:cloudformation:stack-id", "arn:aws:cloudformation:us-east-1:087820496137:stack/fugue/3b884940-2d15-11e7-8f98-500c286014fd"),
+  ],
+}
+
+
+############################################################
+# Subnet
+#   Generated from AWS resource: subnet-3c5b7c59
+############################################################
+ec2-subnet-1: EC2.Subnet.new {
+  availabilityZone: AWS.B,
+  cidrBlock: "10.0.3.0/24",
+  defaultForAz: False,
+  mapPublicIpOnLaunch: False,
+  tags: [
+    AWS.tag("aws:cloudformation:logical-id", "FugueSubnet2"),
+    AWS.tag("aws:cloudformation:stack-name", "fugue"),
+    AWS.tag("aws:cloudformation:stack-id", "arn:aws:cloudformation:us-east-1:087820496137:stack/fugue/3b884940-2d15-11e7-8f98-500c286014fd"),
+  ],
+  vpc: ec2-vpc-2,
+}
+
+
+############################################################
+# Subnet
+#   Generated from AWS resource: subnet-d690a2eb
+############################################################
+ec2-subnet-2: EC2.Subnet.new {
+  availabilityZone: AWS.E,
+  cidrBlock: "172.31.32.0/20",
+  defaultForAz: True,
+  mapPublicIpOnLaunch: True,
+  vpc: ec2-vpc-1,
+}
+
+
+############################################################
+# Subnet
+#   Generated from AWS resource: subnet-f91e40a1
+############################################################
+ec2-subnet-3: EC2.Subnet.new {
+  availabilityZone: AWS.A,
+  cidrBlock: "172.31.16.0/20",
+  defaultForAz: True,
+  mapPublicIpOnLaunch: True,
+  vpc: ec2-vpc-1,
+}
+
+
+############################################################
+# Subnet
+#   Generated from AWS resource: subnet-37777a41
+############################################################
+ec2-subnet-4: EC2.Subnet.new {
+  availabilityZone: AWS.D,
+  cidrBlock: "172.31.0.0/20",
+  defaultForAz: True,
+  mapPublicIpOnLaunch: True,
+  vpc: ec2-vpc-1,
+}
+
+
+############################################################
+# Subnet
+#   Generated from AWS resource: subnet-19590433
+############################################################
+ec2-subnet-5: EC2.Subnet.new {
+  availabilityZone: AWS.C,
+  cidrBlock: "172.31.48.0/20",
+  defaultForAz: True,
+  mapPublicIpOnLaunch: True,
+  vpc: ec2-vpc-1,
+}
+
+
+############################################################
+# Subnet
+#   Generated from AWS resource: subnet-0521ce5f
+############################################################
+ec2-subnet-6: EC2.Subnet.new {
+  availabilityZone: AWS.A,
+  cidrBlock: "10.0.2.0/24",
+  defaultForAz: False,
+  mapPublicIpOnLaunch: False,
+  tags: [
+    AWS.tag("aws:cloudformation:stack-name", "fugue"),
+    AWS.tag("aws:cloudformation:logical-id", "FugueSubnet1"),
+    AWS.tag("aws:cloudformation:stack-id", "arn:aws:cloudformation:us-east-1:087820496137:stack/fugue/3b884940-2d15-11e7-8f98-500c286014fd"),
+  ],
+  vpc: ec2-vpc-2,
+}
+
+
+############################################################
+# Subnet
+#   Generated from AWS resource: subnet-ae0161cb
+############################################################
+ec2-subnet-7: EC2.Subnet.new {
+  availabilityZone: AWS.B,
+  cidrBlock: "172.31.64.0/20",
+  defaultForAz: True,
+  mapPublicIpOnLaunch: True,
+  vpc: ec2-vpc-1,
+}
+
+
+############################################################
+# Security Group
+#   Generated from AWS resource: sg-01f48d7a
+############################################################
+ec2-securitygroup-1: EC2.SecurityGroup.new {
+  description: "default VPC security group",
+  ipPermissions: [
+    EC2.IpPermission.new {
+      fromPort: 0,
+      ipProtocol: "-1",
+      target: EC2.IpPermission.Target.securityGroups([
+  ec2-securitygroup-1,
+]),
+      toPort: 0,
+    },
+  ],
+  ipPermissionsEgress: [
+    EC2.IpPermission.new {
+      fromPort: 0,
+      ipProtocol: "-1",
+      target: EC2.IpPermission.Target.all,
+      toPort: 0,
+    },
+  ],
+  vpc: ec2-vpc-1,
+}
+
+
+############################################################
+# Security Group
+#   Generated from AWS resource: sg-303dd74e
+############################################################
+ec2-securitygroup-2: EC2.SecurityGroup.new {
+  description: "default VPC security group",
+  ipPermissions: [
+    EC2.IpPermission.new {
+      fromPort: 0,
+      ipProtocol: "-1",
+      target: EC2.IpPermission.Target.securityGroups([
+  ec2-securitygroup-2,
+]),
+      toPort: 0,
+    },
+  ],
+  ipPermissionsEgress: [
+    EC2.IpPermission.new {
+      fromPort: 0,
+      ipProtocol: "-1",
+      target: EC2.IpPermission.Target.all,
+      toPort: 0,
+    },
+  ],
+  vpc: ec2-vpc-2,
+}
+
+
+############################################################
+# Security Group
+#   Generated from AWS resource: sg-2f3dd751
+############################################################
+ec2-securitygroup-3: EC2.SecurityGroup.new {
+  description: "FugueVpc",
+  ipPermissionsEgress: [
+    EC2.IpPermission.new {
+      fromPort: 53,
+      ipProtocol: "udp",
+      target: EC2.IpPermission.Target.all,
+      toPort: 53,
+    },
+    EC2.IpPermission.new {
+      fromPort: 53,
+      ipProtocol: "tcp",
+      target: EC2.IpPermission.Target.all,
+      toPort: 53,
+    },
+    EC2.IpPermission.new {
+      fromPort: 123,
+      ipProtocol: "udp",
+      target: EC2.IpPermission.Target.all,
+      toPort: 123,
+    },
+    EC2.IpPermission.new {
+      fromPort: 443,
+      ipProtocol: "tcp",
+      target: EC2.IpPermission.Target.all,
+      toPort: 443,
+    },
+  ],
+  tags: [
+    AWS.tag("aws:cloudformation:logical-id", "FugueVpcSecurityGroup"),
+    AWS.tag("aws:cloudformation:stack-id", "arn:aws:cloudformation:us-east-1:087820496137:stack/fugue/3b884940-2d15-11e7-8f98-500c286014fd"),
+    AWS.tag("aws:cloudformation:stack-name", "fugue"),
+  ],
+  vpc: ec2-vpc-2,
+}
+
+
+############################################################
+# Security Group
+#   Generated from AWS resource: sg-f8ee9783
+############################################################
+ec2-securitygroup-4: EC2.SecurityGroup.new {
+  description: "launch-wizard-1 created 2016-06-24T12:02:13.564-07:00",
+  ipPermissions: [
+    EC2.IpPermission.new {
+      fromPort: 8080,
+      ipProtocol: "tcp",
+      target: EC2.IpPermission.Target.all,
+      toPort: 8080,
+    },
+    EC2.IpPermission.new {
+      fromPort: 22,
+      ipProtocol: "tcp",
+      target: EC2.IpPermission.Target.all,
+      toPort: 22,
+    },
+  ],
+  ipPermissionsEgress: [
+    EC2.IpPermission.new {
+      fromPort: 0,
+      ipProtocol: "-1",
+      target: EC2.IpPermission.Target.all,
+      toPort: 0,
+    },
+  ],
+  vpc: ec2-vpc-1,
+}
+
+
+############################################################
+# Security Group
+#   Generated from AWS resource: sg-66edd819
+############################################################
+ec2-securitygroup-5: EC2.SecurityGroup.new {
+  description: "launch-wizard-2 created 2017-04-20T07:58:29.337-07:00",
+  ipPermissions: [
+    EC2.IpPermission.new {
+      fromPort: 22,
+      ipProtocol: "tcp",
+      target: EC2.IpPermission.Target.all,
+      toPort: 22,
+    },
+  ],
+  ipPermissionsEgress: [
+    EC2.IpPermission.new {
+      fromPort: 0,
+      ipProtocol: "-1",
+      target: EC2.IpPermission.Target.all,
+      toPort: 0,
+    },
+  ],
+  vpc: ec2-vpc-1,
+}
+
+
+############################################################
+# Route Table
+#   Generated from AWS resource: rtb-025c6465
+############################################################
+ec2-routetable-1: EC2.RouteTable.new {
+  routes: [
+    EC2.Route.new {
+      destinationCidrBlock: "0.0.0.0/0",
+      target: EC2.GatewayTarget(EC2.InternetGateway.external("igw-7685d612", region)),
+    },
+  ],
+  vpc: ec2-vpc-1,
+}
+
+
+############################################################
+# Route Table
+#   Generated from AWS resource: rtb-b92d27c0
+############################################################
+ec2-routetable-2: EC2.RouteTable.new {
+  associations: [
+      ec2-subnet-1,
+      ec2-subnet-6,
+  ],
+  routes: [
+    EC2.Route.new {
+      destinationCidrBlock: "0.0.0.0/0",
+      target: EC2.GatewayTarget(EC2.InternetGateway.external("igw-1071a076", region)),
+    },
+  ],
+  tags: [
+    AWS.tag("aws:cloudformation:stack-id", "arn:aws:cloudformation:us-east-1:087820496137:stack/fugue/3b884940-2d15-11e7-8f98-500c286014fd"),
+    AWS.tag("aws:cloudformation:stack-name", "fugue"),
+    AWS.tag("aws:cloudformation:logical-id", "FugueRouteTable"),
+  ],
+  vpc: ec2-vpc-2,
+}
+
+
+############################################################
+# Route Table
+#   Generated from AWS resource: rtb-b72e24ce
+############################################################
+ec2-routetable-3: EC2.RouteTable.new {
+  vpc: ec2-vpc-2,
+}
+
+
+############################################################
+# Instance
+#   Generated from AWS resource: i-05c05e5b66e5716b6
+############################################################
+ec2-instance-1: EC2.Instance.new {
+  blockDeviceMappings: [
+    EC2.InstanceBlockDeviceMapping.new {
+      deviceName: "/dev/xvda",
+      ebs: EC2.EbsInstanceBlockDevice.new {
+        deleteOnTermination: True,
+        volume: EC2.Volume.external("vol-06452605b85bd58eb", region),
+      },
+    },
+  ],
+  ebsOptimized: False,
+  iamInstanceProfile: IAM.InstanceProfile.external("fugue-FugueInstanceProfile-1N4D9S5TOD530"),
+  image: "ami-8bc7a09d",
+  instanceType: EC2.M4_large,
+  monitoring: True,
+  securityGroups: [
+      ec2-securitygroup-3,
+  ],
+  sourceDestCheck: True,
+  subnet: ec2-subnet-1,
+  tags: [
+    AWS.tag("aws:autoscaling:groupName", "fugue-FugueAutoScalingGroup-CWF8H0CP3A2I"),
+    AWS.tag("aws:cloudformation:logical-id", "FugueAutoScalingGroup"),
+    AWS.tag("Name", "Fugue Conductor"),
+    AWS.tag("aws:cloudformation:stack-id", "arn:aws:cloudformation:us-east-1:087820496137:stack/fugue/3b884940-2d15-11e7-8f98-500c286014fd"),
+    AWS.tag("aws:cloudformation:stack-name", "fugue"),
+    AWS.tag("Fugue_Ready", "true"),
+  ],
+}
+
+
+############################################################
+# Launch Configuration
+#   Generated from AWS resource: fugue-FugueLaunchConfiguration-P5JASG27V1Y5
+############################################################
+autoscaling-launchconfiguration-1: AutoScaling.LaunchConfiguration.new {
+  associatePublicIpAddress: True,
+  ebsOptimized: False,
+  iamInstanceProfile: fugue-FugueInstanceProfile-1N4D9S5TOD530,
+  image: "ami-8bc7a09d",
+  instanceMonitoring: True,
+  instanceType: EC2.M4_large,
+  name: "fugue-FugueLaunchConfiguration-P5JASG27V1Y5",
+  securityGroups: [
+      ec2-securitygroup-3,
+  ],
+  userData: "IyEvYmluL2Jhc2gKY2F0IDw8RU9GID4gL2V0Yy9kZWZhdWx0L2Z1Z3VlLWluaXQKRlVHVUVfUzNfQlVDS0VUPWZ1Z3VlLTA4NzgyMDQ5NjEzNy11cy1lYXN0LTEKRlVHVUVfVkFSU19TWVNURU1fVEFCTEU9ZnVndWUtdmFycy1oZWFkbGVzcy1zdG9yZQoKRU9GCg==",
+}
+
+
+############################################################
+# AutoScalingGroup
+#   Generated from AWS resource: fugue-FugueAutoScalingGroup-CWF8H0CP3A2I
+############################################################
+autoscaling-autoscalinggroup-1: AutoScaling.AutoScalingGroup.new {
+  defaultCooldown: 300,
+  healthCheckType: AutoScaling.Ec2,
+  launchConfiguration: autoscaling-launchconfiguration-1,
+  maxSize: 1,
+  minSize: 1,
+  name: "fugue-FugueAutoScalingGroup-CWF8H0CP3A2I",
+  newInstancesProtectedFromScaleIn: False,
+  subnets: [
+      ec2-subnet-1,
+      ec2-subnet-6,
+  ],
+  tags: [
+    AWS.tag("Name", "Fugue Conductor"),
+    AWS.tag("aws:cloudformation:logical-id", "FugueAutoScalingGroup"),
+    AWS.tag("aws:cloudformation:stack-id", "arn:aws:cloudformation:us-east-1:087820496137:stack/fugue/3b884940-2d15-11e7-8f98-500c286014fd"),
+    AWS.tag("aws:cloudformation:stack-name", "fugue"),
+  ],
+  terminationPolicies: [
+    AutoScaling.DefaultTerminationPolicy,
+  ],
+}
+
+
+############################################################
+# IAM Role
+#   Generated from AWS resource: AROAIJENXC7JSBG2NSMAO
+############################################################
+iam-role-1: IAM.Role.new {
+  assumeRolePolicyDocument: '{"Statement": [{"Action": "sts:AssumeRole", "Effect": "Allow", "Principal": {"Service": "codestar.amazonaws.com"}}], "Version": "2012-10-17"}',
+  path: "/service-role/",
+  roleName: "aws-codestar-service-role",
+}
+
+
+############################################################
+# IAM Role
+#   Generated from AWS resource: AROAJV23C26USZ5O4OTVE
+############################################################
+iam-role-2: IAM.Role.new {
+  assumeRolePolicyDocument: '{"Statement": [{"Action": "sts:AssumeRole", "Effect": "Allow", "Principal": {"Service": "ec2.amazonaws.com"}}], "Version": "2012-10-17"}',
+  path: "/",
+  roleName: "fugue-FugueIam-VNOKD8V6QRYH",
+}
+
+
+############################################################
+# IAM Role
+#   Generated from AWS resource: AROAIBEQ7MGNSCHKVTATQ
+############################################################
+iam-role-3: IAM.Role.new {
+  assumeRolePolicyDocument: '{"Statement": [{"Action": "sts:AssumeRole", "Effect": "Allow", "Principal": {"Service": "ec2.amazonaws.com"}}], "Version": "2012-10-17"}',
+  path: "/",
+  roleName: "iam-role",
+}
+
+
+############################################################
+# IAM Role
+#   Generated from AWS resource: AROAI46YJQLQGU7IOWOGE
+############################################################
+iam-role-4: IAM.Role.new {
+  assumeRolePolicyDocument: '{"Statement": [{"Action": "sts:AssumeRole", "Effect": "Allow", "Principal": {"Service": "lambda.amazonaws.com"}}], "Version": "2012-10-17"}',
+  path: "/",
+  roleName: "lambda-role",
+}
+
+
+############################################################
+# IAM Role
+#   Generated from AWS resource: AROAJIGVEVIZULLOYQTG6
+############################################################
+iam-role-5: IAM.Role.new {
+  assumeRolePolicyDocument: '{"Statement": [{"Action": "sts:AssumeRole", "Effect": "Allow", "Principal": {"Service": "mobilehub.amazonaws.com"}, "Sid": ""}], "Version": "2012-10-17"}',
+  path: "/",
+  roleName: "MobileHub_Service_Role",
+}
+
+
+############################################################
+# IAM Role
+#   Generated from AWS resource: AROAJ6OIRHH5HPEVT3FAU
+############################################################
+iam-role-6: IAM.Role.new {
+  assumeRolePolicyDocument: '{"Statement": [{"Action": "sts:AssumeRoleWithSAML", "Condition": {"StringEquals": {"SAML:aud": "https://signin.aws.amazon.com/saml"}}, "Effect": "Allow", "Principal": {"Federated": "arn:aws:iam::087820496137:saml-provider/fugue.okta.com"}}], "Version": "2012-10-17"}',
+  path: "/",
+  roleName: "oktaAdminRole",
+}
+
+
+############################################################
+# IAM Role
+#   Generated from AWS resource: AROAJH35ZNGWIHSDDVSN6
+############################################################
+iam-role-7: IAM.Role.new {
+  assumeRolePolicyDocument: '{"Statement": [{"Action": "sts:AssumeRoleWithSAML", "Condition": {"StringEquals": {"SAML:aud": "https://signin.aws.amazon.com/saml"}}, "Effect": "Allow", "Principal": {"Federated": "arn:aws:iam::087820496137:saml-provider/fugue.okta.com"}}], "Version": "2012-10-17"}',
+  path: "/",
+  roleName: "oktaReadOnlyRole",
+}
+
+
+############################################################
+# IAM Role
+#   Generated from AWS resource: AROAJEPFEVW3WWC7AESAI
+############################################################
+iam-role-8: IAM.Role.new {
+  assumeRolePolicyDocument: '{"Statement": [{"Action": "sts:AssumeRole", "Condition": {"StringEquals": {"sts:ExternalId": "f437a3ed-bd23-4e08-8d6b-3034d166ab6d"}}, "Effect": "Allow", "Principal": {"AWS": "arn:aws:iam::725871512018:root"}, "Sid": "allowSkylinerAccess"}], "Version": "2012-10-17"}',
+  path: "/",
+  roleName: "skyliner-access",
+}
+
+
+############################################################
+# IAM Instance Profile
+#   Generated from AWS resource: AIPAJBC35N3CLXTEHZTXC
+############################################################
+iam-instanceprofile-1: IAM.InstanceProfile.new {
+  instanceProfileName: "fugue-FugueInstanceProfile-1N4D9S5TOD530",
+  path: "/",
+  roles: [
+    IAM.Role.external("fugue-FugueIam-VNOKD8V6QRYH"),
+  ],
+}
+
+
+############################################################
+# IAM Instance Profile
+#   Generated from AWS resource: AIPAJU4RTFYEPH4MOSUSC
+############################################################
+iam-instanceprofile-2: IAM.InstanceProfile.new {
+  instanceProfileName: "helloInstanceProfile",
+  path: "/",
+  roles: [
+  ],
+}
+
+
+############################################################
+# IAM Instance Profile
+#   Generated from AWS resource: AIPAIKEZGSYQBLKLFDJL2
+############################################################
+iam-instanceprofile-3: IAM.InstanceProfile.new {
+  instanceProfileName: "instance-profile",
+  path: "/",
+  roles: [
+    IAM.Role.external("iam-role"),
+  ],
+}
+
+
+############################################################
+# IAM Policy
+#   Generated from AWS resource: arn:aws:iam::087820496137:policy/vars-minimal
+############################################################
+iam-policy-1: IAM.Policy.new {
+  policyDocument: '{"Statement": [{"Action": ["kms:Decrypt", "kms:GenerateDataKey"], "Effect": "Allow", "Resource": ["*"], "Sid": "Stmt1476319328030"}, {"Action": ["cloudwatch:PutMetricData"], "Effect": "Allow", "Resource": ["*"]}, {"Action": ["s3:CreateBucket", "s3:ListBucket", "s3:PutObject", "s3:GetObject", "s3:DeleteObject"], "Effect": "Allow", "Resource": ["*"], "Sid": "Stmt1476319604000"}, {"Action": ["sns:GetTopicAttributes", "sns:List*"], "Effect": "Allow", "Resource": ["*"], "Sid": "Stmt1476319627000"}, {"Action": ["sqs:CreateQueue", "sqs:DeleteQueue", "sqs:GetQueueAttributes", "sqs:PurgeQueue", "sqs:SetQueueAttributes", "sqs:GetQueueUrl", "sqs:SendMessage", "sqs:ReceiveMessage", "sqs:DeleteMessage", "sqs:ListQueues"], "Effect": "Allow", "Resource": ["*"], "Sid": "Stmt1476319665000"}], "Version": "2012-10-17"}',
+  policyName: "vars-minimal",
+}
+
+
+############################################################
+# IAM Policy
+#   Generated from AWS resource: arn:aws:iam::aws:policy/ReadOnlyAccess
+############################################################
+iam-policy-2: IAM.Policy.new {
+  policyDocument: '{"Statement": [{"Action": ["acm:DescribeCertificate", "acm:GetCertificate", "acm:ListCertificates", "acm:ListTagsForCertificate", "apigateway:GET", "application-autoscaling:Describe*", "appstream:Describe*", "appstream:Get*", "appstream:List*", "autoscaling:Describe*", "cloudformation:Describe*", "cloudformation:Get*", "cloudformation:List*", "cloudfront:Get*", "cloudfront:List*", "cloudsearch:Describe*", "cloudsearch:List*", "cloudtrail:DescribeTrails", "cloudtrail:GetEventSelectors", "cloudtrail:GetTrailStatus", "cloudtrail:LookupEvents", "cloudtrail:ListTags", "cloudtrail:ListPublicKeys", "cloudwatch:Describe*", "cloudwatch:Get*", "cloudwatch:List*", "codebuild:BatchGetBuilds", "codebuild:BatchGetProjects", "codebuild:List*", "codecommit:BatchGetRepositories", "codecommit:Get*", "codecommit:GitPull", "codecommit:List*", "codedeploy:Batch*", "codedeploy:Get*", "codedeploy:List*", "config:Deliver*", "config:Describe*", "config:Get*", "config:List*", "datapipeline:DescribeObjects", "datapipeline:DescribePipelines", "datapipeline:EvaluateExpression", "datapipeline:GetAccountLimits", "datapipeline:GetPipelineDefinition", "datapipeline:ListPipelines", "datapipeline:QueryObjects", "datapipeline:ValidatePipelineDefinition", "directconnect:Describe*", "dms:Describe*", "dms:List*", "ds:Check*", "ds:Describe*", "ds:Get*", "ds:List*", "ds:Verify*", "dynamodb:BatchGetItem", "dynamodb:DescribeLimits", "dynamodb:DescribeReservedCapacity", "dynamodb:DescribeReservedCapacityOfferings", "dynamodb:DescribeTable", "dynamodb:GetItem", "dynamodb:ListTables", "dynamodb:ListTagsOfResource", "dynamodb:Query", "dynamodb:Scan", "ec2:Describe*", "ec2:GetConsoleOutput", "ec2:GetConsoleScreenshot", "ecr:BatchCheckLayerAvailability", "ecr:BatchGetImage", "ecr:Describe*", "ecr:Get*", "ecr:List*", "ecs:Describe*", "ecs:List*", "elasticache:Describe*", "elasticache:List*", "elasticbeanstalk:Check*", "elasticbeanstalk:Describe*", "elasticbeanstalk:List*", "elasticbeanstalk:RequestEnvironmentInfo", "elasticbeanstalk:RetrieveEnvironmentInfo", "elasticfilesystem:Describe*", "elasticloadbalancing:Describe*", "elasticmapreduce:Describe*", "elasticmapreduce:List*", "elastictranscoder:List*", "elastictranscoder:Read*", "es:DescribeElasticsearchDomain", "es:DescribeElasticsearchDomains", "es:DescribeElasticsearchDomainConfig", "es:ListDomainNames", "es:ListTags", "es:ESHttpGet", "es:ESHttpHead", "events:DescribeRule", "events:ListRuleNamesByTarget", "events:ListRules", "events:ListTargetsByRule", "events:TestEventPattern", "firehose:Describe*", "firehose:List*", "glacier:ListVaults", "glacier:DescribeVault", "glacier:GetDataRetrievalPolicy", "glacier:GetVaultAccessPolicy", "glacier:GetVaultLock", "glacier:GetVaultNotifications", "glacier:ListJobs", "glacier:ListMultipartUploads", "glacier:ListParts", "glacier:ListTagsForVault", "glacier:DescribeJob", "glacier:GetJobOutput", "health:Describe*", "health:Get*", "health:List*", "iam:GenerateCredentialReport", "iam:GenerateServiceLastAccessedDetails", "iam:Get*", "iam:List*", "inspector:Describe*", "inspector:Get*", "inspector:List*", "inspector:LocalizeText", "inspector:PreviewAgentsForResourceGroup", "iot:Describe*", "iot:Get*", "iot:List*", "kinesisanalytics:DescribeApplication", "kinesisanalytics:DiscoverInputSchema", "kinesisanalytics:GetApplicationState", "kinesisanalytics:ListApplications", "kinesis:Describe*", "kinesis:Get*", "kinesis:List*", "kms:Describe*", "kms:Get*", "kms:List*", "lambda:List*", "lambda:Get*", "logs:Describe*", "logs:Get*", "logs:FilterLogEvents", "logs:TestMetricFilter", "machinelearning:Describe*", "machinelearning:Get*", "mobilehub:GetProject", "mobilehub:ListAvailableFeatures", "mobilehub:ListAvailableRegions", "mobilehub:ListProjects", "mobilehub:ValidateProject", "mobilehub:VerifyServiceRole", "opsworks:Describe*", "opsworks:Get*", "organizations:Describe*", "organizations:List*", "polly:Describe*", "polly:Get*", "polly:List*", "polly:SynthesizeSpeech", "rekognition:CompareFaces", "rekognition:DetectFaces", "rekognition:DetectLabels", "rekognition:List*", "rekognition:SearchFaces", "rekognition:SearchFacesByImage", "rds:Describe*", "rds:ListTagsForResource", "redshift:Describe*", "redshift:ViewQueriesInConsole", "route53:Get*", "route53:List*", "route53domains:CheckDomainAvailability", "route53domains:GetDomainDetail", "route53domains:GetOperationDetail", "route53domains:ListDomains", "route53domains:ListOperations", "route53domains:ListTagsForDomain", "s3:Get*", "s3:List*", "sdb:GetAttributes", "sdb:List*", "sdb:Select*", "ses:Get*", "ses:List*", "shield:Describe*", "shield:List*", "sns:Get*", "sns:List*", "sqs:GetQueueAttributes", "sqs:ListQueues", "sqs:ReceiveMessage", "ssm:Describe*", "ssm:Get*", "ssm:List*", "states:ListStateMachines", "states:ListActivities", "states:DescribeStateMachine", "states:ListExecutions", "states:DescribeExecution", "states:GetExecutionHistory", "states:DescribeActivity", "storagegateway:Describe*", "storagegateway:List*", "swf:Count*", "swf:Describe*", "swf:Get*", "swf:List*", "tag:Get*", "trustedadvisor:Describe*", "waf:Get*", "waf:List*", "workspaces:Describe*", "xray:BatchGetTraces", "xray:Get*"], "Effect": "Allow", "Resource": "*"}], "Version": "2012-10-17"}',
+  policyName: "ReadOnlyAccess",
+}
+
+
+############################################################
+# IAM Policy
+#   Generated from AWS resource: arn:aws:iam::aws:policy/service-role/AWSCodeStarServiceRole
+############################################################
+iam-policy-3: IAM.Policy.new {
+  policyDocument: '{"Statement": [{"Action": ["cloudformation:*Stack*", "cloudformation:GetTemplate"], "Effect": "Allow", "Resource": ["arn:aws:cloudformation:*:*:stack/awscodestar-*", "arn:aws:cloudformation:*:*:stack/awseb-*"], "Sid": "ProjectStack"}, {"Action": ["cloudformation:GetTemplateSummary", "cloudformation:DescribeChangeSet"], "Effect": "Allow", "Resource": "*", "Sid": "ProjectStackTemplate"}, {"Action": ["s3:GetObject"], "Effect": "Allow", "Resource": ["arn:aws:s3:::awscodestar-*/*"], "Sid": "ProjectQuickstarts"}, {"Action": ["s3:*"], "Effect": "Allow", "Resource": ["arn:aws:s3:::aws-codestar-*", "arn:aws:s3:::aws-codestar-*/*", "arn:aws:s3:::elasticbeanstalk-*", "arn:aws:s3:::elasticbeanstalk-*/*"], "Sid": "ProjectS3Buckets"}, {"Action": ["codestar:*Project", "codestar:*Resource*", "codestar:List*", "codestar:Describe*", "codestar:Get*", "codestar:AssociateTeamMember", "codecommit:*", "codepipeline:*", "codedeploy:*", "codebuild:*", "ec2:RunInstances", "autoscaling:*", "cloudwatch:Put*", "ec2:*", "elasticbeanstalk:*", "elasticloadbalancing:*", "iam:ListRoles", "logs:*", "sns:*"], "Effect": "Allow", "Resource": "*", "Sid": "ProjectServices"}, {"Action": ["iam:AttachRolePolicy", "iam:CreateRole", "iam:DeleteRole", "iam:DeleteRolePolicy", "iam:DetachRolePolicy", "iam:GetRole", "iam:PassRole", "iam:PutRolePolicy", "iam:SetDefaultPolicyVersion", "iam:CreatePolicy", "iam:DeletePolicy", "iam:AddRoleToInstanceProfile", "iam:CreateInstanceProfile", "iam:DeleteInstanceProfile", "iam:RemoveRoleFromInstanceProfile"], "Effect": "Allow", "Resource": ["arn:aws:iam::*:role/CodeStarWorker*", "arn:aws:iam::*:policy/CodeStarWorker*", "arn:aws:iam::*:instance-profile/awscodestar-*"], "Sid": "ProjectWorkerRoles"}, {"Action": ["iam:AttachUserPolicy", "iam:DetachUserPolicy"], "Condition": {"ArnEquals": {"iam:PolicyArn": ["arn:aws:iam::*:policy/CodeStar_*"]}}, "Effect": "Allow", "Resource": "*", "Sid": "ProjectTeamMembers"}, {"Action": ["iam:CreatePolicy", "iam:DeletePolicy", "iam:CreatePolicyVersion", "iam:DeletePolicyVersion", "iam:ListEntitiesForPolicy", "iam:ListPolicyVersions"], "Effect": "Allow", "Resource": ["arn:aws:iam::*:policy/CodeStar_*"], "Sid": "ProjectRoles"}, {"Action": ["iam:ListAttachedRolePolicies"], "Effect": "Allow", "Resource": ["arn:aws:iam::*:role/aws-codestar-service-role"], "Sid": "InspectServiceRole"}], "Version": "2012-10-17"}',
+  policyName: "AWSCodeStarServiceRole",
+}
+
+
+############################################################
+# IAM Policy
+#   Generated from AWS resource: arn:aws:iam::aws:policy/service-role/AWSMobileHub_ServiceUseOnly
+############################################################
+iam-policy-4: IAM.Policy.new {
+  policyDocument: '{"Statement": [{"Action": ["cloudformation:CreateUploadBucket", "cloudformation:ValidateTemplate", "cloudfront:CreateDistribution", "cloudfront:DeleteDistribution", "cloudfront:GetDistribution", "cloudfront:GetDistributionConfig", "cloudfront:UpdateDistribution", "cognito-identity:CreateIdentityPool", "cognito-identity:UpdateIdentityPool", "cognito-identity:DeleteIdentityPool", "cognito-identity:SetIdentityPoolRoles", "cognito-idp:CreateUserPool", "dynamodb:CreateTable", "dynamodb:DeleteTable", "dynamodb:DescribeTable", "dynamodb:UpdateTable", "iam:AddClientIDToOpenIDConnectProvider", "iam:CreateOpenIDConnectProvider", "iam:GetOpenIDConnectProvider", "iam:ListOpenIDConnectProviders", "iam:CreateSAMLProvider", "iam:GetSAMLProvider", "iam:ListSAMLProvider", "iam:UpdateSAMLProvider", "lambda:CreateFunction", "lambda:DeleteFunction", "lambda:GetFunction", "mobileanalytics:CreateApp", "mobileanalytics:DeleteApp", "sns:CreateTopic", "sns:DeleteTopic", "sns:ListPlatformApplications", "ec2:DescribeSecurityGroups", "ec2:DescribeSubnets", "ec2:DescribeVpcs", "lex:PutIntent", "lex:GetIntent", "lex:GetIntents", "lex:PutSlotType", "lex:GetSlotType", "lex:GetSlotTypes", "lex:PutBot", "lex:GetBot", "lex:GetBots", "lex:GetBotAlias", "lex:GetBotAliases"], "Effect": "Allow", "Resource": ["*"]}, {"Action": ["sns:CreatePlatformApplication", "sns:DeletePlatformApplication", "sns:GetPlatformApplicationAttributes", "sns:SetPlatformApplicationAttributes"], "Effect": "Allow", "Resource": ["arn:aws:sns:*:*:app/*_MOBILEHUB_*"]}, {"Action": ["s3:CreateBucket", "s3:DeleteBucket", "s3:DeleteBucketPolicy", "s3:DeleteBucketWebsite", "s3:ListBucket", "s3:ListBucketVersions", "s3:GetBucketLocation", "s3:GetBucketVersioning", "s3:PutBucketVersioning", "s3:PutBucketWebsite", "s3:PutBucketPolicy", "s3:SetBucketCrossOriginConfiguration"], "Effect": "Allow", "Resource": ["arn:aws:s3:::*-userfiles-mobilehub-*", "arn:aws:s3:::*-contentdelivery-mobilehub-*", "arn:aws:s3:::*-hosting-mobilehub-*", "arn:aws:s3:::*-deployments-mobilehub-*"]}, {"Action": ["s3:DeleteObject", "s3:DeleteVersion", "s3:DeleteObjectVersion", "s3:GetObject", "s3:GetObjectVersion", "s3:PutObject", "s3:PutObjectAcl"], "Effect": "Allow", "Resource": ["arn:aws:s3:::*-userfiles-mobilehub-*/*", "arn:aws:s3:::*-contentdelivery-mobilehub-*/*", "arn:aws:s3:::*-hosting-mobilehub-*/*", "arn:aws:s3:::*-deployments-mobilehub-*/*"]}, {"Action": ["lambda:AddPermission", "lambda:CreateAlias", "lambda:DeleteAlias", "lambda:UpdateAlias", "lambda:GetFunctionConfiguration", "lambda:GetPolicy", "lambda:RemovePermission", "lambda:UpdateFunctionCode", "lambda:UpdateFunctionConfiguration"], "Effect": "Allow", "Resource": ["arn:aws:lambda:*:*:function:*-mobilehub-*"]}, {"Action": ["iam:CreateRole", "iam:DeleteRole", "iam:DeleteRolePolicy", "iam:GetRole", "iam:GetRolePolicy", "iam:ListRolePolicies", "iam:PassRole", "iam:PutRolePolicy", "iam:UpdateAssumeRolePolicy", "iam:AttachRolePolicy", "iam:DetachRolePolicy"], "Effect": "Allow", "Resource": ["arn:aws:iam::*:role/*_unauth_MOBILEHUB_*", "arn:aws:iam::*:role/*_auth_MOBILEHUB_*", "arn:aws:iam::*:role/*_consolepush_MOBILEHUB_*", "arn:aws:iam::*:role/*_lambdaexecutionrole_MOBILEHUB_*", "arn:aws:iam::*:role/*_smsverification_MOBILEHUB_*", "arn:aws:iam::*:role/*_botexecutionrole_MOBILEHUB_*", "arn:aws:iam::*:role/MOBILEHUB-*-lambdaexecution*", "arn:aws:iam::*:role/MobileHub_Service_Role"]}, {"Action": ["iam:CreateServiceLinkedRole", "iam:GetRole"], "Effect": "Allow", "Resource": ["arn:aws:iam::*:role/aws-service-role/lex.amazonaws.com/AWSServiceRoleForLexBots"]}, {"Action": ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"], "Effect": "Allow", "Resource": ["arn:aws:logs:*:*:log-group:/aws/mobilehub/*:log-stream:*"]}, {"Action": ["iam:ListAttachedRolePolicies"], "Effect": "Allow", "Resource": ["arn:aws:iam::*:role/MobileHub_Service_Role"]}, {"Action": ["cloudformation:CreateStack", "cloudformation:DeleteStack", "cloudformation:DescribeStacks", "cloudformation:DescribeStackEvents", "cloudformation:DescribeStackResource", "cloudformation:GetTemplate", "cloudformation:ListStackResources", "cloudformation:ListStacks", "cloudformation:UpdateStack"], "Effect": "Allow", "Resource": ["arn:aws:cloudformation:*:*:stack/MOBILEHUB-*"]}, {"Action": ["apigateway:DELETE", "apigateway:GET", "apigateway:HEAD", "apigateway:OPTIONS", "apigateway:PATCH", "apigateway:POST", "apigateway:PUT"], "Effect": "Allow", "Resource": ["arn:aws:apigateway:*::/restapis*"]}, {"Action": ["cognito-idp:DeleteUserPool", "cognito-idp:DescribeUserPool", "cognito-idp:CreateUserPoolClient", "cognito-idp:DescribeUserPoolClient", "cognito-idp:DeleteUserPoolClient"], "Effect": "Allow", "Resource": ["arn:aws:cognito-idp:*:*:userpool/*"]}, {"Action": ["mobiletargeting:UpdateApnsChannel", "mobiletargeting:UpdateApnsSandboxChannel", "mobiletargeting:UpdateGcmChannel", "mobiletargeting:DeleteApnsChannel", "mobiletargeting:DeleteApnsSandboxChannel", "mobiletargeting:DeleteGcmChannel"], "Effect": "Allow", "Resource": ["arn:aws:mobiletargeting:*:*:apps/*/channels/*"]}], "Version": "2012-10-17"}',
+  policyName: "AWSMobileHub_ServiceUseOnly",
+}
+
+
+############################################################
+# IAM Policy
+#   Generated from AWS resource: arn:aws:iam::aws:policy/AdministratorAccess
+############################################################
+iam-policy-5: IAM.Policy.new {
+  policyDocument: '{"Statement": [{"Action": "*", "Effect": "Allow", "Resource": "*"}], "Version": "2012-10-17"}',
+  policyName: "AdministratorAccess",
+}
+
+
+############################################################
+# IAM Policy
+#   Generated from AWS resource: arn:aws:iam::aws:policy/IAMUserChangePassword
+############################################################
+iam-policy-6: IAM.Policy.new {
+  policyDocument: '{"Statement": [{"Action": ["iam:ChangePassword"], "Effect": "Allow", "Resource": ["arn:aws:iam::*:user/${aws:username}"]}, {"Action": ["iam:GetAccountPasswordPolicy"], "Effect": "Allow", "Resource": "*"}], "Version": "2012-10-17"}',
+  policyName: "IAMUserChangePassword",
+}
+
+
+############################################################
+# Table
+#   Generated from AWS resource: fugue-checks
+############################################################
+dynamodb-table-1: DynamoDB.Table.new {
+  attributes: {
+    "created": DynamoDB.S,
+    "stream_id": DynamoDB.S,
+    "version": DynamoDB.N,
+  },
+  name: "fugue-checks",
+  provisionedThroughput: {
+    read: 10,
+    write: 10,
+  },
+  region: region,
+  schema: {
+    "stream_id": DynamoDB.HASH,
+    "version": DynamoDB.RANGE,
+  },
+}
+
+
+############################################################
+# Table
+#   Generated from AWS resource: fugue-cli-responses
+############################################################
+dynamodb-table-2: DynamoDB.Table.new {
+  attributes: {
+    "correlation_id": DynamoDB.S,
+    "timestamp": DynamoDB.S,
+  },
+  name: "fugue-cli-responses",
+  provisionedThroughput: {
+    read: 10,
+    write: 10,
+  },
+  region: region,
+  schema: {
+    "correlation_id": DynamoDB.HASH,
+    "timestamp": DynamoDB.RANGE,
+  },
+}
+
+
+############################################################
+# Table
+#   Generated from AWS resource: fugue-vars-headless-store
+############################################################
+dynamodb-table-3: DynamoDB.Table.new {
+  attributes: {
+    "deleted": DynamoDB.N,
+    "key": DynamoDB.S,
+    "last_update": DynamoDB.N,
+    "version": DynamoDB.N,
+  },
+  globalSecondaryIndexes: {
+    "deleted-last_update-index": {
+      projection: DynamoDB.Projection.keysOnly,
+      provisionedThroughput: {
+        read: 200,
+        write: 450,
+      },
+      schema: {
+        "deleted": DynamoDB.HASH,
+        "last_update": DynamoDB.RANGE,
+      },
+    },
+  },
+  name: "fugue-vars-headless-store",
+  provisionedThroughput: {
+    read: 500,
+    write: 500,
+  },
+  region: region,
+  schema: {
+    "key": DynamoDB.HASH,
+    "version": DynamoDB.RANGE,
+  },
+}
+
+
+############################################################
+# Table
+#   Generated from AWS resource: fugue-vars-store
+############################################################
+dynamodb-table-4: DynamoDB.Table.new {
+  attributes: {
+    "deleted": DynamoDB.N,
+    "key": DynamoDB.S,
+    "last_update": DynamoDB.N,
+    "version": DynamoDB.N,
+  },
+  globalSecondaryIndexes: {
+    "deleted-last_update-index": {
+      projection: DynamoDB.Projection.keysOnly,
+      provisionedThroughput: {
+        read: 200,
+        write: 200,
+      },
+      schema: {
+        "deleted": DynamoDB.HASH,
+        "last_update": DynamoDB.RANGE,
+      },
+    },
+  },
+  name: "fugue-vars-store",
+  provisionedThroughput: {
+    read: 200,
+    write: 200,
+  },
+  region: region,
+  schema: {
+    "key": DynamoDB.HASH,
+    "version": DynamoDB.RANGE,
+  },
+}
+
+
+############################################################
+# Queue
+#   Generated from AWS resource: arn:aws:sqs:us-east-1:087820496137:ctl-conductor_vars_userland
+############################################################
+sqs-queue-1: SQS.Queue.new {
+  delaySeconds: 0,
+  maximumMessageSize: 262144,
+  messageRetentionPeriod: 60,
+  name: "ctl-conductor_vars_userland",
+  receiveMessageWaitTimeSeconds: 0,
+  region: region,
+  visibilityTimeout: 30,
+}
+
+
+############################################################
+# Queue
+#   Generated from AWS resource: arn:aws:sqs:us-east-1:087820496137:ctl-i-00767d3baa0102c68
+############################################################
+sqs-queue-2: SQS.Queue.new {
+  delaySeconds: 0,
+  maximumMessageSize: 262144,
+  messageRetentionPeriod: 345600,
+  name: "ctl-i-00767d3baa0102c68",
+  receiveMessageWaitTimeSeconds: 0,
+  region: region,
+  visibilityTimeout: 30,
+}
+
+
+############################################################
+# Queue
+#   Generated from AWS resource: arn:aws:sqs:us-east-1:087820496137:ctl-i-05c05e5b66e5716b6
+############################################################
+sqs-queue-3: SQS.Queue.new {
+  delaySeconds: 0,
+  maximumMessageSize: 262144,
+  messageRetentionPeriod: 60,
+  name: "ctl-i-05c05e5b66e5716b6",
+  receiveMessageWaitTimeSeconds: 0,
+  region: region,
+  visibilityTimeout: 30,
+}
+
+
+############################################################
+# Queue
+#   Generated from AWS resource: arn:aws:sqs:us-east-1:087820496137:ctl-i-0c054d95a8ca01a91
+############################################################
+sqs-queue-4: SQS.Queue.new {
+  delaySeconds: 0,
+  maximumMessageSize: 262144,
+  messageRetentionPeriod: 345600,
+  name: "ctl-i-0c054d95a8ca01a91",
+  receiveMessageWaitTimeSeconds: 0,
+  region: region,
+  visibilityTimeout: 30,
+}
+
+
+############################################################
+# Queue
+#   Generated from AWS resource: arn:aws:sqs:us-east-1:087820496137:fugue-broker-input
+############################################################
+sqs-queue-5: SQS.Queue.new {
+  delaySeconds: 0,
+  maximumMessageSize: 262144,
+  messageRetentionPeriod: 345600,
+  name: "fugue-broker-input",
+  policy: '"{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":\"SQS:SendMessage\",\"Resource\":\"arn:aws:sqs:us-east-1:087820496137:fugue-broker-input\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"arn:aws:sns:us-east-1:087820496137:planner-output\"}}}]}"',
+  receiveMessageWaitTimeSeconds: 0,
+  region: region,
+  visibilityTimeout: 30,
+}
+
+
+############################################################
+# Queue
+#   Generated from AWS resource: arn:aws:sqs:us-east-1:087820496137:fugue-demarc-control
+############################################################
+sqs-queue-6: SQS.Queue.new {
+  delaySeconds: 0,
+  maximumMessageSize: 262144,
+  messageRetentionPeriod: 345600,
+  name: "fugue-demarc-control",
+  policy: '"{\"Version\":\"2012-10-17\",\"Id\":\"85f37b41c1104bf6a7d7b9a94a924cbf\",\"Statement\":[{\"Sid\":\"df540a7264c7fa59bdfc2939dcf08d6f\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":\"SQS:SendMessage\",\"Resource\":\"arn:aws:sqs:us-east-1:087820496137:fugue-demarc-control\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"arn:aws:sns:us-east-1:087820496137:fugue-resource-events\"}}}]}"',
+  receiveMessageWaitTimeSeconds: 0,
+  region: region,
+  visibilityTimeout: 30,
+}
+
+
+############################################################
+# Queue
+#   Generated from AWS resource: arn:aws:sqs:us-east-1:087820496137:fugue-demarc-requests
+############################################################
+sqs-queue-7: SQS.Queue.new {
+  delaySeconds: 0,
+  maximumMessageSize: 262144,
+  messageRetentionPeriod: 300,
+  name: "fugue-demarc-requests",
+  receiveMessageWaitTimeSeconds: 0,
+  region: region,
+  visibilityTimeout: 30,
+}
+
+
+############################################################
+# Queue
+#   Generated from AWS resource: arn:aws:sqs:us-east-1:087820496137:fugue-resource-events-consumer-7kv2ZOSu
+############################################################
+sqs-queue-8: SQS.Queue.new {
+  delaySeconds: 0,
+  maximumMessageSize: 262144,
+  messageRetentionPeriod: 345600,
+  name: "fugue-resource-events-consumer-7kv2ZOSu",
+  policy: '"{\"Version\":\"2012-10-17\",\"Id\":\"SNStoSQS\",\"Statement\":[{\"Sid\":\"SendMessage\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":\"SQS:SendMessage\",\"Resource\":\"arn:aws:sqs:us-east-1:087820496137:fugue-resource-events-consumer-7kv2ZOSu\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"arn:aws:sns:us-east-1:087820496137:fugue-resource-events\"}}}]}"',
+  receiveMessageWaitTimeSeconds: 0,
+  region: region,
+  visibilityTimeout: 30,
+}
+
+
+############################################################
+# Queue
+#   Generated from AWS resource: arn:aws:sqs:us-east-1:087820496137:fugue-resource-events-consumer-J0LpBdzR
+############################################################
+sqs-queue-9: SQS.Queue.new {
+  delaySeconds: 0,
+  maximumMessageSize: 262144,
+  messageRetentionPeriod: 345600,
+  name: "fugue-resource-events-consumer-J0LpBdzR",
+  policy: '"{\"Version\":\"2012-10-17\",\"Id\":\"SNStoSQS\",\"Statement\":[{\"Sid\":\"SendMessage\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":\"SQS:SendMessage\",\"Resource\":\"arn:aws:sqs:us-east-1:087820496137:fugue-resource-events-consumer-J0LpBdzR\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"arn:aws:sns:us-east-1:087820496137:fugue-resource-events\"}}}]}"',
+  receiveMessageWaitTimeSeconds: 0,
+  region: region,
+  visibilityTimeout: 30,
+}
+
+
+############################################################
+# Queue
+#   Generated from AWS resource: arn:aws:sqs:us-east-1:087820496137:fugue-resource-events-consumer-iELlVBQQ
+############################################################
+sqs-queue-10: SQS.Queue.new {
+  delaySeconds: 0,
+  maximumMessageSize: 262144,
+  messageRetentionPeriod: 345600,
+  name: "fugue-resource-events-consumer-iELlVBQQ",
+  policy: '"{\"Version\":\"2012-10-17\",\"Id\":\"SNStoSQS\",\"Statement\":[{\"Sid\":\"SendMessage\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":\"SQS:SendMessage\",\"Resource\":\"arn:aws:sqs:us-east-1:087820496137:fugue-resource-events-consumer-iELlVBQQ\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"arn:aws:sns:us-east-1:087820496137:fugue-resource-events\"}}}]}"',
+  receiveMessageWaitTimeSeconds: 0,
+  region: region,
+  visibilityTimeout: 30,
+}
+
+
+############################################################
+# Queue
+#   Generated from AWS resource: arn:aws:sqs:us-east-1:087820496137:fugue-scheduler-jobs-manager-subscription
+############################################################
+sqs-queue-11: SQS.Queue.new {
+  delaySeconds: 0,
+  maximumMessageSize: 262144,
+  messageRetentionPeriod: 345600,
+  name: "fugue-scheduler-jobs-manager-subscription",
+  policy: '"{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":\"SQS:SendMessage\",\"Resource\":\"arn:aws:sqs:us-east-1:087820496137:fugue-scheduler-jobs-manager-subscription\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"arn:aws:sns:us-east-1:087820496137:fugue-scheduler-jobs\"}}}]}"',
+  receiveMessageWaitTimeSeconds: 0,
+  region: region,
+  visibilityTimeout: 30,
+}
+
+
+############################################################
+# Queue
+#   Generated from AWS resource: arn:aws:sqs:us-east-1:087820496137:fugue-scheduler-signal-handler-input
+############################################################
+sqs-queue-12: SQS.Queue.new {
+  delaySeconds: 0,
+  maximumMessageSize: 262144,
+  messageRetentionPeriod: 345600,
+  name: "fugue-scheduler-signal-handler-input",
+  policy: '"{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":\"SQS:SendMessage\",\"Resource\":\"arn:aws:sqs:us-east-1:087820496137:fugue-scheduler-signal-handler-input\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"arn:aws:sns:us-east-1:087820496137:fugue-scheduler-signals\"}}}]}"',
+  receiveMessageWaitTimeSeconds: 0,
+  region: region,
+  visibilityTimeout: 30,
+}
+
+
+############################################################
+# Queue
+#   Generated from AWS resource: arn:aws:sqs:us-east-1:087820496137:fugue-scheduler-ticker-input
+############################################################
+sqs-queue-13: SQS.Queue.new {
+  delaySeconds: 0,
+  maximumMessageSize: 262144,
+  messageRetentionPeriod: 345600,
+  name: "fugue-scheduler-ticker-input",
+  policy: '"{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":\"SQS:SendMessage\",\"Resource\":\"arn:aws:sqs:us-east-1:087820496137:fugue-scheduler-ticker-input\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"arn:aws:sns:us-east-1:087820496137:fugue-scheduler-job-results\"}}}]}"',
+  receiveMessageWaitTimeSeconds: 0,
+  region: region,
+  visibilityTimeout: 30,
+}
+
+
+############################################################
+# Queue
+#   Generated from AWS resource: arn:aws:sqs:us-east-1:087820496137:fugue-translate-broker-input
+############################################################
+sqs-queue-14: SQS.Queue.new {
+  delaySeconds: 0,
+  maximumMessageSize: 262144,
+  messageRetentionPeriod: 345600,
+  name: "fugue-translate-broker-input",
+  policy: '"{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":\"SQS:SendMessage\",\"Resource\":\"arn:aws:sqs:us-east-1:087820496137:fugue-translate-broker-input\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"arn:aws:sns:us-east-1:087820496137:planner-output\"}}}]}"',
+  receiveMessageWaitTimeSeconds: 0,
+  region: region,
+  visibilityTimeout: 30,
+}
+
+
+############################################################
+# Queue
+#   Generated from AWS resource: arn:aws:sqs:us-east-1:087820496137:fugue-vars-conductor
+############################################################
+sqs-queue-15: SQS.Queue.new {
+  delaySeconds: 0,
+  maximumMessageSize: 262144,
+  messageRetentionPeriod: 60,
+  name: "fugue-vars-conductor",
+  receiveMessageWaitTimeSeconds: 0,
+  region: region,
+  visibilityTimeout: 30,
+}
+
+
+############################################################
+# Queue
+#   Generated from AWS resource: arn:aws:sqs:us-east-1:087820496137:fugue-vars-headless-ctrl
+############################################################
+sqs-queue-16: SQS.Queue.new {
+  delaySeconds: 0,
+  maximumMessageSize: 262144,
+  messageRetentionPeriod: 60,
+  name: "fugue-vars-headless-ctrl",
+  policy: '"{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":\"SQS:SendMessage\",\"Resource\":\"arn:aws:sqs:us-east-1:087820496137:fugue-vars-headless-ctrl\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"arn:aws:sns:us-east-1:087820496137:fugue-resource-events\"}}}]}"',
+  receiveMessageWaitTimeSeconds: 0,
+  region: region,
+  visibilityTimeout: 30,
+}
+
+
+############################################################
+# Queue
+#   Generated from AWS resource: arn:aws:sqs:us-east-1:087820496137:fugue-vars-infra-notification
+############################################################
+sqs-queue-17: SQS.Queue.new {
+  delaySeconds: 0,
+  maximumMessageSize: 262144,
+  messageRetentionPeriod: 60,
+  name: "fugue-vars-infra-notification",
+  policy: '"{\"Version\":\"2012-10-17\",\"Id\":\"2968e27ca3a147e495b27acb65a684fe\",\"Statement\":[{\"Sid\":\"df540a7264c7fa59bdfc2939dcf08d6f\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":\"SQS:SendMessage\",\"Resource\":\"arn:aws:sqs:us-east-1:087820496137:fugue-vars-infra-notification\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"arn:aws:sns:us-east-1:087820496137:fugue-resource-events\"}}}]}"',
+  receiveMessageWaitTimeSeconds: 0,
+  region: region,
+  visibilityTimeout: 30,
+}
+
+
+############################################################
+# Queue
+#   Generated from AWS resource: arn:aws:sqs:us-east-1:087820496137:pmc-conductor_vars_userland
+############################################################
+sqs-queue-18: SQS.Queue.new {
+  delaySeconds: 0,
+  maximumMessageSize: 262144,
+  messageRetentionPeriod: 345600,
+  name: "pmc-conductor_vars_userland",
+  policy: '"{\"Version\":\"2012-10-17\",\"Id\":\"7cb7ec579e2045b1b8e570314670852f\",\"Statement\":[{\"Sid\":\"c9235526f9946bad8492e4dcde2ee431\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":\"SQS:SendMessage\",\"Resource\":\"arn:aws:sqs:us-east-1:087820496137:pmc-conductor_vars_userland\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"arn:aws:sns:us-east-1:087820496137:fugue-vars-broadcast\"}}}]}"',
+  receiveMessageWaitTimeSeconds: 0,
+  region: region,
+  visibilityTimeout: 30,
+}
+
+
+############################################################
+# Queue
+#   Generated from AWS resource: arn:aws:sqs:us-east-1:087820496137:pmc-i-00767d3baa0102c68
+############################################################
+sqs-queue-19: SQS.Queue.new {
+  delaySeconds: 0,
+  maximumMessageSize: 262144,
+  messageRetentionPeriod: 345600,
+  name: "pmc-i-00767d3baa0102c68",
+  policy: '"{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":\"SQS:SendMessage\",\"Resource\":\"arn:aws:sqs:us-east-1:087820496137:pmc-i-00767d3baa0102c68\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"arn:aws:sns:us-east-1:087820496137:fugue-vars-headless-broadcast\"}}}]}"',
+  receiveMessageWaitTimeSeconds: 0,
+  region: region,
+  visibilityTimeout: 30,
+}
+
+
+############################################################
+# Queue
+#   Generated from AWS resource: arn:aws:sqs:us-east-1:087820496137:pmc-i-05c05e5b66e5716b6
+############################################################
+sqs-queue-20: SQS.Queue.new {
+  delaySeconds: 0,
+  maximumMessageSize: 262144,
+  messageRetentionPeriod: 60,
+  name: "pmc-i-05c05e5b66e5716b6",
+  policy: '"{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":\"SQS:SendMessage\",\"Resource\":\"arn:aws:sqs:us-east-1:087820496137:pmc-i-05c05e5b66e5716b6\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"arn:aws:sns:us-east-1:087820496137:fugue-vars-headless-broadcast\"}}}]}"',
+  receiveMessageWaitTimeSeconds: 0,
+  region: region,
+  visibilityTimeout: 30,
+}
+
+
+############################################################
+# Queue
+#   Generated from AWS resource: arn:aws:sqs:us-east-1:087820496137:pmc-i-0c054d95a8ca01a91
+############################################################
+sqs-queue-21: SQS.Queue.new {
+  delaySeconds: 0,
+  maximumMessageSize: 262144,
+  messageRetentionPeriod: 345600,
+  name: "pmc-i-0c054d95a8ca01a91",
+  policy: '"{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":\"SQS:SendMessage\",\"Resource\":\"arn:aws:sqs:us-east-1:087820496137:pmc-i-0c054d95a8ca01a91\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"arn:aws:sns:us-east-1:087820496137:fugue-vars-headless-broadcast\"}}}]}"',
+  receiveMessageWaitTimeSeconds: 0,
+  region: region,
+  visibilityTimeout: 30,
+}
+
+
+############################################################
+# Topic
+#   Generated from AWS resource: arn:aws:sns:us-east-1:087820496137:fugue-resource-events
+############################################################
+sns-topic-1: SNS.Topic.new {
+  name: "fugue-resource-events",
+  policy: '"{\"Version\":\"2008-10-17\",\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Sid\":\"__default_statement_ID\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":[\"SNS:GetTopicAttributes\",\"SNS:SetTopicAttributes\",\"SNS:AddPermission\",\"SNS:RemovePermission\",\"SNS:DeleteTopic\",\"SNS:Subscribe\",\"SNS:ListSubscriptionsByTopic\",\"SNS:Publish\",\"SNS:Receive\"],\"Resource\":\"arn:aws:sns:us-east-1:087820496137:fugue-resource-events\",\"Condition\":{\"StringEquals\":{\"AWS:SourceOwner\":\"087820496137\"}}}]}"',
+  region: region,
+}
+
+
+############################################################
+# Topic
+#   Generated from AWS resource: arn:aws:sns:us-east-1:087820496137:fugue-scheduler-job-results
+############################################################
+sns-topic-2: SNS.Topic.new {
+  name: "fugue-scheduler-job-results",
+  policy: '"{\"Version\":\"2008-10-17\",\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Sid\":\"__default_statement_ID\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":[\"SNS:GetTopicAttributes\",\"SNS:SetTopicAttributes\",\"SNS:AddPermission\",\"SNS:RemovePermission\",\"SNS:DeleteTopic\",\"SNS:Subscribe\",\"SNS:ListSubscriptionsByTopic\",\"SNS:Publish\",\"SNS:Receive\"],\"Resource\":\"arn:aws:sns:us-east-1:087820496137:fugue-scheduler-job-results\",\"Condition\":{\"StringEquals\":{\"AWS:SourceOwner\":\"087820496137\"}}}]}"',
+  region: region,
+}
+
+
+############################################################
+# Topic
+#   Generated from AWS resource: arn:aws:sns:us-east-1:087820496137:fugue-scheduler-jobs
+############################################################
+sns-topic-3: SNS.Topic.new {
+  name: "fugue-scheduler-jobs",
+  policy: '"{\"Version\":\"2008-10-17\",\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Sid\":\"__default_statement_ID\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":[\"SNS:GetTopicAttributes\",\"SNS:SetTopicAttributes\",\"SNS:AddPermission\",\"SNS:RemovePermission\",\"SNS:DeleteTopic\",\"SNS:Subscribe\",\"SNS:ListSubscriptionsByTopic\",\"SNS:Publish\",\"SNS:Receive\"],\"Resource\":\"arn:aws:sns:us-east-1:087820496137:fugue-scheduler-jobs\",\"Condition\":{\"StringEquals\":{\"AWS:SourceOwner\":\"087820496137\"}}}]}"',
+  region: region,
+}
+
+
+############################################################
+# Topic
+#   Generated from AWS resource: arn:aws:sns:us-east-1:087820496137:fugue-scheduler-signals
+############################################################
+sns-topic-4: SNS.Topic.new {
+  name: "fugue-scheduler-signals",
+  policy: '"{\"Version\":\"2008-10-17\",\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Sid\":\"__default_statement_ID\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":[\"SNS:GetTopicAttributes\",\"SNS:SetTopicAttributes\",\"SNS:AddPermission\",\"SNS:RemovePermission\",\"SNS:DeleteTopic\",\"SNS:Subscribe\",\"SNS:ListSubscriptionsByTopic\",\"SNS:Publish\",\"SNS:Receive\"],\"Resource\":\"arn:aws:sns:us-east-1:087820496137:fugue-scheduler-signals\",\"Condition\":{\"StringEquals\":{\"AWS:SourceOwner\":\"087820496137\"}}}]}"',
+  region: region,
+}
+
+
+############################################################
+# Topic
+#   Generated from AWS resource: arn:aws:sns:us-east-1:087820496137:fugue-vars-broadcast
+############################################################
+sns-topic-5: SNS.Topic.new {
+  name: "fugue-vars-broadcast",
+  policy: '"{\"Version\":\"2008-10-17\",\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Sid\":\"__default_statement_ID\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":[\"SNS:GetTopicAttributes\",\"SNS:SetTopicAttributes\",\"SNS:AddPermission\",\"SNS:RemovePermission\",\"SNS:DeleteTopic\",\"SNS:Subscribe\",\"SNS:ListSubscriptionsByTopic\",\"SNS:Publish\",\"SNS:Receive\"],\"Resource\":\"arn:aws:sns:us-east-1:087820496137:fugue-vars-broadcast\",\"Condition\":{\"StringEquals\":{\"AWS:SourceOwner\":\"087820496137\"}}}]}"',
+  region: region,
+}
+
+
+############################################################
+# Topic
+#   Generated from AWS resource: arn:aws:sns:us-east-1:087820496137:fugue-vars-headless-broadcast
+############################################################
+sns-topic-6: SNS.Topic.new {
+  name: "fugue-vars-headless-broadcast",
+  policy: '"{\"Version\":\"2008-10-17\",\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Sid\":\"__default_statement_ID\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":[\"SNS:GetTopicAttributes\",\"SNS:SetTopicAttributes\",\"SNS:AddPermission\",\"SNS:RemovePermission\",\"SNS:DeleteTopic\",\"SNS:Subscribe\",\"SNS:ListSubscriptionsByTopic\",\"SNS:Publish\",\"SNS:Receive\"],\"Resource\":\"arn:aws:sns:us-east-1:087820496137:fugue-vars-headless-broadcast\",\"Condition\":{\"StringEquals\":{\"AWS:SourceOwner\":\"087820496137\"}}}]}"',
+  region: region,
+}
+
+
+############################################################
+# Topic
+#   Generated from AWS resource: arn:aws:sns:us-east-1:087820496137:planner-output
+############################################################
+sns-topic-7: SNS.Topic.new {
+  name: "planner-output",
+  policy: '"{\"Version\":\"2008-10-17\",\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Sid\":\"__default_statement_ID\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":[\"SNS:GetTopicAttributes\",\"SNS:SetTopicAttributes\",\"SNS:AddPermission\",\"SNS:RemovePermission\",\"SNS:DeleteTopic\",\"SNS:Subscribe\",\"SNS:ListSubscriptionsByTopic\",\"SNS:Publish\",\"SNS:Receive\"],\"Resource\":\"arn:aws:sns:us-east-1:087820496137:planner-output\",\"Condition\":{\"StringEquals\":{\"AWS:SourceOwner\":\"087820496137\"}}}]}"',
+  region: region,
+}
+
+
