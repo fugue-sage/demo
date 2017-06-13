@@ -8,8 +8,9 @@ import Fugue.Core.AWS.Common as AWS
 # Network (VPC)
 staging-network: Network.new {
   name: "staging-network", 
-  region: AWS.Us-west-2,
+  region: AWS.Us-east-1,
   cidr: "10.0.0.0/16",
+  tags: [web-app-tag],
   publicSubnets: [
     (AWS.A, "10.0.1.0/24"),
     (AWS.B, "10.0.2.0/24"),
@@ -33,6 +34,14 @@ elbHTTP: EC2.IpPermission({
   prefixLists: None,
   target: internetCIDR
 })
+
+# ssh: EC2.IpPermission({
+#   ipProtocol: "tcp",
+#   fromPort: 22,
+#   toPort: 22,
+#   prefixLists: None,
+#   target: internetCIDR
+# })
 
 elbHTTPS: EC2.IpPermission({
   ipProtocol: "tcp",
