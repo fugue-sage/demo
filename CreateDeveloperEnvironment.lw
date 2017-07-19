@@ -9,7 +9,7 @@ import Fugue.AWS as AWS
 devNetwork: Network.new {
   name: "Developer Environment",
   cidr: "10.0.0.0/16",
-  region: AWS.Us-east-1,
+  region: AWS.Us-west-2,
   publicSubnets: [
     (AWS.A, "10.0.0.0/24"),
     (AWS.B, "10.0.1.0/24"),

@@ -1,0 +1,49 @@
+export
+  requireStandardTagsOnAutoScalingAutoScaleGroups
+  requireStandardTagsOnEC2Instances
+  requireStandardTagsOnELBLoadBalancers
+  requireStandardTagsOnRDSDBInstances
+  requireStandardTagsOnS3Buckets
+
+import Fugue.AWS as AWS
+import Fugue.AWS.AutoScaling as AutoScaling
+import Fugue.AWS.EC2 as EC2
+import Fugue.AWS.ELB as ELB
+import Fugue.AWS.RDS as RDS
+import Fugue.AWS.S3 as S3
+
+requiredTags: [
+  "Name",
+  "Project",
+]
+
+fun includesRequiredTags(tags: List<AWS.Tag>) -> Bool:
+  let fun includesTag(key: String) -> Bool:
+    List.any(fun(t): AWS.Tag.key(t) == key && String.length(AWS.Tag.value(t)) > 0, tags)
+  List.all(includesTag, requiredTags)
+
+fun requireStandardTags(tags: List<AWS.Tag>) -> Validation:
+  if includesRequiredTags(tags) then Validation.success
+  else
+    let requiredList: String.join("\n", ["    - " ++ t for t in requiredTags])
+    Validation.failure("All taggable resources must have the following tags:\n" ++ requiredList ++ "\n")
+
+fun requireStandardTagsOnAutoScalingAutoScaleGroups(autoScalingGroup: AutoScaling.AutoScalingGroup) -> Validation:
+  let tags: Optional.unpack([], autoScalingGroup.(AutoScaling.AutoScalingGroup).tags)
+  requireStandardTags(tags)
+
+fun requireStandardTagsOnEC2Instances(instance: EC2.Instance) -> Validation:
+  let tags: Optional.unpack([], instance.(EC2.Instance).tags)
+  requireStandardTags(tags)
+
+fun requireStandardTagsOnELBLoadBalancers(loadbalancer: ELB.LoadBalancer) -> Validation:
+  let tags: Optional.unpack([], loadbalancer.(ELB.LoadBalancer).tags)
+  requireStandardTags(tags)
+
+fun requireStandardTagsOnRDSDBInstances(dbInstance: RDS.DBInstance) -> Validation:
+  let tags: Optional.unpack([], dbInstance.(RDS.DBInstance).tags)
+  requireStandardTags(tags)
+
+fun requireStandardTagsOnS3Buckets(bucket: S3.Bucket) -> Validation:
+  let tags: Optional.unpack([], bucket.(S3.Bucket).tags)
+  requireStandardTags(tags)

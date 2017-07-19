@@ -12,7 +12,7 @@ import Policies.TagsPolicy
 import Policies.InstancePolicy
 
 # Region
-demo-app-region: AWS.Us-west-2
+demo-app-region: AWS.Us-east-2
 
 # Tags
 demo-app-tag: AWS.tag('Name', 'Fugue Demo App')
@@ -62,7 +62,7 @@ demo-app-asg: AutoScaling.AutoScalingGroup.new {
 demo-app-lc: AutoScaling.LaunchConfiguration.new {
   image: "ami-b7b366d7",
   securityGroups: [demo-app-web-sg],
-  instanceType: EC2.T2_micro,
+  instanceType: EC2.M4_large,
   associatePublicIpAddress: True,
   iamInstanceProfile: demo-app-instance-profile
 }
