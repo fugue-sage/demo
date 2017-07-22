@@ -8,7 +8,6 @@ import Fugue.AWS.ELB as ELB
 import Fugue.AWS.IAM as IAM
 import Fugue.AWS.Pattern.Network as Network
 import Policies.RegionPolicy
-import Policies.TagsPolicy
 import Policies.InstancePolicy
 
 # Region
