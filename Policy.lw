@@ -4,9 +4,9 @@ import Fugue.System.Policy as .
 
 # Add your default account ID below. You can find this ID by executing
 # `fugue account list`.
-default: Account(accountId: "fugue-1493495781163")
-staging: Account(accountId: "staging-1493496512466")
-development: Account(accountId: "development-1493500984701")
+default: Account(accountId: "fugue-1497978393215")
+staging: Account(accountId: "staging-1497978594834")
+development: Account(accountId: "development-1497978638730")
 
 alice: User {userId: "alice"}
 

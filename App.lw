@@ -1,0 +1,25 @@
+composition
+
+import Demo.Backend as Backend
+import Fugue.AWS as AWS
+import Fugue.AWS.Pattern.Network as Network
+import Policies.RegionPolicy
+
+demo-region: AWS.Us-west-2
+
+demo-network: Network.new {
+  name: "dev-network", 
+  region: demo-region,
+  cidr: "10.0.0.0/16",
+  publicSubnets: [
+    (AWS.A, "10.0.1.0/24"),
+    (AWS.B, "10.0.2.0/24"),
+  ],
+  privateSubnets: [],
+}
+
+my-elb-asg-ddb: Backend.new {
+    name: "DemoApp",
+    region: demo-region,
+    network: demo-network
+}

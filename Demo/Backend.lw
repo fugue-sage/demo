@@ -1,0 +1,129 @@
+export
+  type Backend
+  new
+
+import Fugue.AWS.EC2 as EC2
+import Fugue.AWS as AWS
+import Fugue.AWS.IAM as IAM
+import Fugue.AWS.ELB as ELB
+import Fugue.AWS.AutoScaling as AutoScaling
+import Fugue.AWS.DynamoDB as DynamoDB
+import Fugue.AWS.Pattern.Network as Network
+
+type Backend<a>:
+  elbsg: EC2.SecurityGroup
+  hostsg: EC2.SecurityGroup
+  asg: AutoScaling.AutoScalingGroup
+  lc: AutoScaling.LaunchConfiguration
+  elb: ELB.LoadBalancer
+  listener: ELB.Listener
+  ddb: DynamoDB.Table
+  iamprofile: IAM.InstanceProfile
+  iamrole: IAM.Role
+  iampolicy: IAM.Policy
+
+fun new {
+      name: String,
+      region: AWS.Region,
+      network: Network.Network
+    } -> Backend<a>:
+  let hostsg: EC2.SecurityGroup.new {
+    description: "Instance Security Group",
+    ipPermissionsEgress: None,
+    ipPermissions: [
+       EC2.IpPermission.tcp(3000, EC2.IpPermission.Target.securityGroup(elbsg)),
+       ],
+    tags: [AWS.tag("Name", name)],
+    vpc: network.vpc
+  }
+  let elbsg: EC2.SecurityGroup.new {
+    description: "ELB Security Group",
+    ipPermissionsEgress: None,
+    ipPermissions: [
+        EC2.IpPermission.http(EC2.IpPermission.Target.all)
+        ],
+    tags: [AWS.tag("Name", name)],
+    vpc: network.vpc
+  }
+  let asg: AutoScaling.AutoScalingGroup.new {
+    loadBalancers: [elb],
+    subnets: network.publicSubnets,
+    minSize: 4,
+    maxSize: 4,
+    defaultCooldown: 300,
+    healthCheckType: AutoScaling.Ec2,
+    launchConfiguration: lc,
+    tags: [AWS.tag("Name", name)],
+    terminationPolicies: [AutoScaling.ClosestToNextInstanceHour],
+    enabledMetrics: [
+      AutoScaling.GroupInServiceInstances,
+      AutoScaling.GroupTotalInstances
+    ]
+  }
+  let ddb: DynamoDB.Table.new {
+    name: name ++"-table",
+    attributes: {"PropertyName": DynamoDB.S},
+    schema: {"PropertyName": DynamoDB.HASH},
+    provisionedThroughput: {
+      read: 10,
+      write: 10,
+    },
+    region: region
+  }
+  let lc: AutoScaling.LaunchConfiguration.new {
+    image: ami,
+    securityGroups: [hostsg],
+    instanceType: EC2.M3_medium,
+    associatePublicIpAddress: True,
+    iamInstanceProfile: iamprofile
+  }
+  let iamrole: IAM.Role.new {
+    roleName: name,
+    assumeRolePolicyDocument: IAM.Policy.AssumeRole.ec2,
+    rolePolicies: [iampolicy]
+    }
+  let iamprofile: IAM.InstanceProfile.new {
+    instanceProfileName: name ++"-instance-profile",
+    roles: [iamrole]
+  }
+  let iampolicy: IAM.Policy.new {
+    policyName: name,
+    policyDocument: '{"Version": "2012-10-17", "Statement": [ { "Action": [ "dynamodb:*" ], "Effect": "Allow", "Resource": "*" }]}'
+    }
+  let elb: ELB.LoadBalancer.new {
+    loadBalancerName: name,
+    subnets: network.publicSubnets,
+    healthCheck: ELB.HealthCheck.tcp {
+      port: 3000,
+      interval: 15,
+      timeout: 3,
+      unhealthyThreshold: 3,
+      healthyThreshold: 3
+      },
+    securityGroups: [elbsg],
+    listeners: [listener],
+    tags: [AWS.tag("Name", name)],
+  }
+  let listener: ELB.Listener.new {
+    protocol: ELB.HTTP,
+    loadBalancerPort: 80,
+    instancePort: 3000
+  }
+  let ami: case region of
+    | AWS.Us-east-1      -> "ami-b7b366d7"
+    | AWS.Us-west-1      -> "ami-b7b366d7"
+    | AWS.Us-west-2      -> "ami-b7b366d7"
+    | AWS.Eu-west-1      -> "ami-b7b366d7"
+    | _	                 -> AWS.Region.toString(region) ++ " is not supported."
+  {
+    hostsg: hostsg,
+    elbsg: elbsg,
+    elb: elb,
+    asg: asg,
+    iamprofile: iamprofile,
+    listener: listener,
+    lc: lc,
+    iamrole: iamrole,
+    iampolicy: iampolicy,
+    ddb: ddb
+  }
