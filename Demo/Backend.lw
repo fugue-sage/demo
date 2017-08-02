@@ -113,7 +113,7 @@ fun new {
     | AWS.Us-east-1      -> "ami-b7b366d7"
     | AWS.Us-west-1      -> "ami-b7b366d7"
     | AWS.Us-west-2      -> "ami-b7b366d7"
-    | AWS.Us-east-1      -> "ami-b7b366d7"
+    | AWS.Us-east-2      -> "ami-b7b366d7"
     | _	                 -> AWS.Region.toString(region) ++ " is not supported."
   {
     hostsg: hostsg,
