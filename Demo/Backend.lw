@@ -110,7 +110,10 @@ fun new {
     instancePort: 3000
   }
   let ami: case region of
+    | AWS.Us-east-1      -> "ami-b7b366d7"
+    | AWS.Us-west-1      -> "ami-b7b366d7"
     | AWS.Us-west-2      -> "ami-b7b366d7"
+    | AWS.Us-east-1      -> "ami-b7b366d7"
     | _	                 -> AWS.Region.toString(region) ++ " is not supported."
   {
     hostsg: hostsg,

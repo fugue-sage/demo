@@ -5,7 +5,7 @@ import Fugue.AWS as AWS
 import Fugue.AWS.Pattern.Network as Network
 import Policies.RegionPolicy
 
-demo-region: AWS.Us-west-2
+demo-region: AWS.Us-east-1
 
 demo-network: Network.new {
   name: "dev-network", 
@@ -19,7 +19,7 @@ demo-network: Network.new {
 }
 
 my-elb-asg-ddb: Backend.new {
-    name: "DemoApp",
+    name: "demo-app",
     region: demo-region,
     network: demo-network
 }
