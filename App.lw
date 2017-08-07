@@ -5,7 +5,7 @@ import Fugue.AWS as AWS
 import Fugue.AWS.Pattern.Network as Network
 import Policies.RegionPolicy
 
-demo-region: AWS.Us-east-1
+demo-region: AWS.Us-west-1
 
 demo-network: Network.new {
   name: "dev-network", 
