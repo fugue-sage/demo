@@ -27,7 +27,7 @@ Have a few processes already running. The VpcOnly.lw composition is useful for t
 or provide them as "self-service catalogs" to your organization, you can create function that modularizes that workload. Point out the Backend.new record in App.lw, just three fields.
 - show App.lw in Composer so they can see how its the same workload 
 
-Switch to AWS Web Console
+## Switch to AWS Web Console
 - talk about conductor enforcement, generally how it works and such
 - go to a security group and make a change
 - go back to the editor and show the security group record in FugueDemo.lw pointing out how its the conductor's source of truth
