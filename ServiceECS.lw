@@ -47,7 +47,7 @@ clusterInstances: AutoScaling.AutoScalingGroup.new {
         ],
       }
     ],
-    keyName: "zFugueDebugKey",
+    keyName: "sageDebugKey",
     instanceType: EC2.M4_large,
     associatePublicIpAddress: True,
     iamInstanceProfile: IAM.InstanceProfile.new {

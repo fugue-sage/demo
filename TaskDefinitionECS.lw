@@ -34,7 +34,7 @@ wordpressTask:
   }
   ECS.TaskDefinition.new {
     family: "wordpress_example",
-    region: AWS.Us-east-1,
+    region: AWS.Us-east-2,
     containerDefinitions: [
       wordpressContainer,
       mysqlContainer,
