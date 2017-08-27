@@ -1,0 +1,221 @@
+composition
+
+import Fugue.AWS as AWS
+import Fugue.AWS.AutoScaling as AutoScaling
+import Fugue.AWS.EC2 as EC2
+import Fugue.AWS.ECS as ECS
+import Fugue.AWS.ELB as ELB
+import Fugue.AWS.IAM as IAM
+import Fugue.AWS.Pattern.Network as Network
+
+# Bootstrap the cluster
+cluster: ECS.Cluster.new {
+  name: "demo",
+  region: AWS.Us-east-2,
+}
+
+network: Network.public {
+  name: "test",
+  region: AWS.Us-east-2,
+  cidr: "10.0.0.0/16",
+  subnets: [
+    (AWS.A, "10.0.1.0/24"),
+    (AWS.B, "10.0.2.0/24"),
+  ],
+}
+
+clusterInstances: AutoScaling.AutoScalingGroup.new {
+  name: "ecs-test",
+  subnets: network.publicSubnets,
+  minSize: 2,
+  maxSize: 2,
+  defaultCooldown: 300,
+  launchConfiguration: AutoScaling.LaunchConfiguration.new {
+    image: "ami-8a7859ef",
+    securityGroups: [
+      EC2.SecurityGroup.new {
+        vpc: network.vpc,
+        description: "ECS Test Cluster Container Instances",
+        ipPermissions: [
+          EC2.IpPermission.ssh(EC2.IpPermission.Target.ipRange("38.142.6.178/32")),
+          EC2.IpPermission.new {
+            ipProtocol: 'tcp',
+            fromPort: 55000,
+            toPort: 55500,
+            target: EC2.IpPermission.Target.securityGroup(lbSg),
+          },
+        ],
+      }
+    ],
+    keyName: "sageDebugKey",
+    instanceType: EC2.M4_large,
+    associatePublicIpAddress: True,
+    iamInstanceProfile: IAM.InstanceProfile.new {
+      instanceProfileName: "ecs-test",
+      roles: [ecsClusterInstanceRole],
+    },
+    userData: Template.render {
+      template: "#! /bin/bash
+                \
+                \yum update -y
+                \yum install -y ecs-init
+                \service docker start
+                \echo -n \"ECS_CLUSTER={{cluster}}\n\" > /etc/ecs/ecs.config
+                \start ecs",
+      data: {cluster: cluster.(ECS.Cluster).clusterName},
+    }
+  },
+  healthCheckType: AutoScaling.Ec2,
+}
+
+ecsClusterInstanceRole: IAM.Role.new {
+  roleName: "ecsContainerInstanceRole",
+  assumeRolePolicyDocument: IAM.Policy.AssumeRole.ec2,
+  managedPolicies: [
+    IAM.ManagedPolicy.external("arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"),
+  ],
+}
+
+ecsServiceRole: IAM.Role.new {
+  roleName: "ecsServiceRole",
+  assumeRolePolicyDocument: '{
+\  "Version": "2008-10-17",
+\  "Statement": [
+\    {
+\      "Sid": "",
+\      "Effect": "Allow",
+\      "Principal": {
+\        "Service": "ecs.amazonaws.com"
+\      },
+\      "Action": "sts:AssumeRole"
+\    }
+\  ]
+\}',
+  managedPolicies: [
+    IAM.ManagedPolicy.external("arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"),
+  ]
+}
+
+
+# Create a load balanced NGINX service
+demoWebService: ECS.Service.new {
+  name: "demoWeb",
+  cluster: cluster,
+  taskDefinition: web,
+  numDesired: 1,
+  deploymentConfiguration: ECS.DeploymentConfiguration.new {
+    maximumPercent: 200,
+    minimumHealthyPercent: 50,
+  },
+  placementConstraints: ECS.PlacementConstraint.oneTaskPerHost,
+  loadBalancer: ECS.LoadBalancer.classicLoadBalancer {
+    containerName: "nginx",
+    containerPort: 80,
+    loadBalancer: demoWeb,
+  },
+  role: ecsServiceRole,
+}
+
+lbSg: EC2.SecurityGroup.new {
+  vpc: network.vpc,
+  description: "ECS Test Cluster Container Instances",
+  ipPermissions: [
+    EC2.IpPermission.http(EC2.IpPermission.Target.ipRange("38.142.6.178/32")),
+  ],
+}
+
+demoWeb: ELB.LoadBalancer.new {
+  loadBalancerName: "test-web",
+  subnets: network.publicSubnets,
+  healthCheck: ELB.HealthCheck.tcp {
+    port: 55001,
+    interval: 15,
+    timeout: 3,
+    unhealthyThreshold: 3,
+    healthyThreshold: 3,
+  },
+  securityGroups: [
+    lbSg,
+  ],
+  scheme: ELB.InternetFacing,
+  listeners: [
+    ELB.Listener.new {
+      protocol: ELB.HTTP,
+      loadBalancerPort: 80,
+      instanceProtocol: ELB.HTTP,
+      instancePort: 55001,
+    },
+  ],
+}
+
+# Create a wordpress service
+wordpressService: ECS.Service.new {
+  name: "wordpress",
+  cluster: cluster,
+  taskDefinition: wordpress,
+  numDesired: 1,
+  deploymentConfiguration: ECS.DeploymentConfiguration.new {
+    maximumPercent: 200,
+    minimumHealthyPercent: 50,
+  },
+  placementConstraints: ECS.PlacementConstraint.oneTaskPerHost,
+}
+
+wordpress:
+  let mysqlContainer: ECS.ContainerDefinition.new {
+    name: "mysql",
+    image: "mysql",
+    cpu: 10,
+    memory: 500,
+    essential: True,
+    environment: {
+      "MYSQL_ROOT_PASSWORD": "password",
+    },
+  }
+  let wordpressContainer: ECS.ContainerDefinition.new {
+    name: "wordpress",
+    links: [
+      mysqlContainer,
+    ],
+    image: "wordpress",
+    essential: True,
+    portMappings: [
+      ECS.PortMapping.tcp {
+        containerPort: 80,
+        hostPort: 55000,
+      },
+    ],
+    memory: 500,
+    cpu: 10,
+  }
+  ECS.TaskDefinition.new {
+    family: "wordpress",
+    region: AWS.Us-east-2,
+    networkMode: ECS.Bridge,
+    containerDefinitions: [
+      wordpressContainer,
+      mysqlContainer,
+    ],
+  }
+
+web: ECS.TaskDefinition.new {
+  family: "web",
+  region: AWS.Us-east-2,
+  networkMode: ECS.Bridge,
+  containerDefinitions: [
+    ECS.ContainerDefinition.new {
+      name: "nginx",
+      image: "nginx",
+      cpu: 10,
+      memory: 500,
+      essential: True,
+      portMappings: [
+        ECS.PortMapping.tcp {
+          containerPort: 80,
+          hostPort: 55001,
+        },
+      ],
+    },
+  ],
+}
+

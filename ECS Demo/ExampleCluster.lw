@@ -1,0 +1,9 @@
+composition
+
+import Fugue.AWS as AWS
+import Fugue.AWS.ECS as ECS
+
+cluster: ECS.Cluster.new {
+  name: "example",
+  region: AWS.Us-east-2,
+}

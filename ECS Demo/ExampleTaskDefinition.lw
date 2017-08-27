@@ -1,0 +1,42 @@
+# TaskDefinition WordPressexample based on
+# http://docs.aws.amazon.com/AmazonECS/latest/developerguide/example_task_definitions.html#example_task_definition-wordpress.
+composition
+
+import Fugue.AWS as AWS
+import Fugue.AWS.ECS as ECS
+
+wordpressTask:
+  let mysqlContainer: ECS.ContainerDefinition.new {
+    name: "mysql",
+    image: "mysql",
+    cpu: 10,
+    memory: 500,
+    essential: True,
+    environment: {
+      "MYSQL_ROOT_PASWORD": "password",
+    },
+  }
+  let wordpressContainer: ECS.ContainerDefinition.new {
+    name: "wordpress",
+    links: [
+      mysqlContainer,
+    ],
+    image: "wordpress",
+    essential: True,
+    portMappings: [
+      ECS.PortMapping.tcp {
+        containerPort: 80,
+        hostPort: 80,
+      },
+    ],
+    memory: 500,
+    cpu: 10,
+  }
+  ECS.TaskDefinition.new {
+    family: "wordpress_example",
+    region: AWS.Us-east-2,
+    containerDefinitions: [
+      wordpressContainer,
+      mysqlContainer,
+    ],
+  }
