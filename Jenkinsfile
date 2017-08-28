@@ -3,7 +3,6 @@
 stage('Test: Compile Time Validation') {
   node {
     checkout scm
-
     if (env.BRANCH_NAME =~ /^feature.*$|^develop$/) {
       sh 'lwc FugueDemo.lw -s null' //compile infrastructure code to validate configuration
     }
