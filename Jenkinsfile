@@ -4,7 +4,7 @@ stage('Test: Compile Time Validation') {
   node {
     checkout scm
 
-    if (env.BRANCH_NAME =~ /^feature\/.*$|^develop$/) {
+    if (env.BRANCH_NAME =~ /^feature.*$|^develop$/) {
       sh 'lwc FugueDemo.lw -s null' //compile infrastructure code to validate configuration
     }
     if (env.BRANCH_NAME =~ /^master$/) {
@@ -15,7 +15,6 @@ stage('Test: Compile Time Validation') {
 
 stage('Test: Fugue Dry Run') {
   node {
-    debug()
     if (env.BRANCH_NAME =~ /^develop$/) {
       withEnv(["LUDWIG_PATH=cfg/develop"]) {
         withCredentials([[$class: 'StringBinding', credentialsId: 'AWS_DEV_ACCESS_KEY', variable: 'AWS_ACCESS_KEY_ID'], 
@@ -23,6 +22,12 @@ stage('Test: Fugue Dry Run') {
           run_dry_run()
         }
       }
+    }
+    if (env.BRANCH_NAME =~ /^feature.*$/) {
+        withCredentials([[$class: 'StringBinding', credentialsId: 'AWS_PROD_ACCESS_KEY', variable: 'AWS_ACCESS_KEY_ID'],
+                         [$class: 'StringBinding', credentialsId: 'AWS_PROD_SECRET_KEY', variable: 'AWS_SECRET_ACCESS_KEY']]) {
+          run_dry_run()
+          }
     }
     if (env.BRANCH_NAME =~ /^master$/) {
       withEnv(["LUDWIG_PATH=cfg/production"]) {
@@ -47,6 +52,19 @@ stage('Deploy: Fugue Run and Update') {
             sh('fugue update develop FugueDemo.lw -y')
           } else {
             sh('fugue run FugueDemo.lw -a develop')
+          }
+        }
+      }
+    }
+    if (env.BRANCH_NAME =~ /^feature\/.*$/) {
+      withEnv(["LUDWIG_PATH=cfg/develop"]) {
+        withCredentials([[$class: 'StringBinding', credentialsId: 'AWS_DEV_ACCESS_KEY', variable: 'AWS_ACCESS_KEY_ID'], 
+                         [$class: 'StringBinding', credentialsId: 'AWS_DEV_SECRET_KEY', variable: 'AWS_SECRET_ACCESS_KEY']])  {
+          def ret = sh(script: 'fugue status ${env.BRANCH_NAME}', returnStatus: true)
+          if(ret == 0) {
+            sh('fugue update ${env.BRANCH_NAME} FugueDemo.lw -y')
+          } else {
+            sh('fugue run FugueDemo.lw -a ${env.BRANCH_NAME} --account staging')
           }
         }
       }
@@ -81,7 +99,9 @@ def debug() {
 // }
 
 def run_dry_run() {
-  sh('fugue init ami-4abb8a5d')
-  // sh('fugue status')
-  // sh('fugue run FugueDemo.lw --dry-run')
+  withCredentials([[$class: 'StringBinding', credentialsId: 'FUGUE_ROOT_USER', variable: 'FUGUE_ROOT_USER']]) {
+    sh('fugue init us-east-1')
+    sh("fugue user set root ${env.FUGUE_ROOT_USER}")
+    sh('fugue status')
+  }
 }
