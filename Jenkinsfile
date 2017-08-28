@@ -29,12 +29,10 @@ stage('Test: Fugue Dry Run') {
           }
     }
     if (env.BRANCH_NAME =~ /^master$/) {
-      withEnv(["LUDWIG_PATH=cfg/production"]) {
         withCredentials([[$class: 'StringBinding', credentialsId: 'AWS_PROD_ACCESS_KEY', variable: 'AWS_ACCESS_KEY_ID'],
                          [$class: 'StringBinding', credentialsId: 'AWS_PROD_SECRET_KEY', variable: 'AWS_SECRET_ACCESS_KEY']]) {
           run_dry_run()
         }
-      }
     }
   }
 }
