@@ -1,0 +1,5 @@
+@language("no-prelude")
+
+# This type can contain anything.  There is currently no way to convert from
+# this type to another type.
+type opaque Anything

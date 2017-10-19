@@ -93,12 +93,13 @@ web-app-http-listener: ELB.Listener.new {
 }
 
 # ASGs
-web-app-web-app-asg: AutoScaling.AutoScalingGroup.new(
-  AutoScaling.AutoScalingGroup.default with {
+web-app-web-app-asg: AutoScaling.AutoScalingGroup.new( {
     subnets: web-app-network.publicSubnets,
     loadBalancers: [web-app-web-app-elb],
     minSize: 2,
     maxSize: 2,
+    defaultCooldown: 300,
+    healthCheckType: AutoScaling.Ec2,
     launchConfiguration: web-app-web-app-lc,
     tags: web-app-tags,
     terminationPolicies: [AutoScaling.ClosestToNextInstanceHour],
@@ -108,12 +109,13 @@ web-app-web-app-asg: AutoScaling.AutoScalingGroup.new(
     ]
 })
 
-web-app-api-asg: AutoScaling.AutoScalingGroup.new(
-  AutoScaling.AutoScalingGroup.default with {
+web-app-api-asg: AutoScaling.AutoScalingGroup.new({
     subnets: web-app-network.publicSubnets,
     loadBalancers: [web-app-api-elb],
     minSize: 2,
     maxSize: 2,
+    defaultCooldown: 300,
+    healthCheckType: AutoScaling.Ec2,
     launchConfiguration: web-app-api-lc,
     tags: web-app-tags,
     terminationPolicies: [AutoScaling.ClosestToNextInstanceHour],
@@ -124,8 +126,7 @@ web-app-api-asg: AutoScaling.AutoScalingGroup.new(
 })
 
 # ASG launch configs
-web-app-web-app-lc: AutoScaling.LaunchConfiguration.new(
-  AutoScaling.LaunchConfiguration.default with {
+web-app-web-app-lc: AutoScaling.LaunchConfiguration.new({
     image: web-app-ami,
     securityGroups: [web-app-ec2-sg],
     instanceType: EC2.T2_micro,
@@ -134,8 +135,7 @@ web-app-web-app-lc: AutoScaling.LaunchConfiguration.new(
     keyName: web-app-ec2-key-name
 })
 
-web-app-api-lc: AutoScaling.LaunchConfiguration.new(
-  AutoScaling.LaunchConfiguration.default with {
+web-app-api-lc: AutoScaling.LaunchConfiguration.new({
     image: api-ami,
     securityGroups: [web-app-ec2-sg],
     instanceType: EC2.T2_micro,

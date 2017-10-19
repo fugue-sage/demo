@@ -1,0 +1,119 @@
+# This module provides template rendering functionality. Templates are
+# written in the Mustache templating language. You can find more
+# details about Mustache here: <http://mustache.github.io/>.
+
+@language("no-prelude")
+
+import Ludwig.Optional as Optional
+
+# Render Mustache templates
+#
+# The following builtin types can be rendered:
+#
+# - `Int`
+# - `Float`
+# - `String`
+#
+# In addition `List`s, `Dictionary`s and records that contain
+# supported types can be rendered. Attempting to render a value of any
+# other of any other type will result in an error.
+#
+# `Optional` fields in `data` record:
+#
+# These two are equivalent:
+#   `data: {value: 123}`
+#   `data: {value: Optional(123)}
+#
+# And:
+#   `data: {}`
+#   `data: {value: None}`
+#
+# `Optional` fields render like the types they contain. Value `Optional(123)` of
+# type `Optional<Int>` renders the same way as `123` of type `Int`. Fields
+# containing `None` are treated as if they were not present in the record (see
+# examples 5 and 6 below).
+#
+# Examples:
+#
+#     ex1: Template.render {
+#       data: {name: "Bob"},
+#       template: "Hello {{name}}!",
+#     } # => "Hello Bob!"
+#     
+#     ex1: Template.render {
+#       data: {name: "Bob"},
+#       template: "Hello {{name}}!",
+#       missBehavior: Template.MissAsEmptyString,
+#     } # => "Hello Bob!"
+#     
+#     ex2: Template.render {
+#       data: {age: 42},
+#       template: "Hello {{name}}",
+#       missBehavior: Template.MissAsEmptyString,
+#     } # => ""
+#     
+#     ex3: Template.render {
+#       data: {name1: "Bob"},
+#       template: "{{name}}!",
+#       missBehavior: Template.MissAsError,
+#     } # => Substitution error: Variable not found: "name"
+#     
+#     ex4: Template.render {
+#       data: {},
+#       template: "{{#test}}{{/test}}",
+#       missBehavior: Template.MissAsError,
+#     } # => Substitution error: Section target not found: "test"
+#     
+#     ex5: Template.render {
+#       data: {someValue: None},
+#       template: "{{someValue}}",
+#       missBehavior: Template.MissAsEmptyString
+#     } # => ""
+#     
+#     ex6: Template.render {
+#       data: {},
+#       template: "{{someValue}}",
+#       missBehavior: Template.MissAsEmptyString
+#     } # => ""
+#     
+#     ex7: Template.render {
+#       data: {test: "Coffee & Tea"},
+#       template: "I like {{test}}",
+#       escapeHtml: True
+#     } # => "I like Coffee &amp; Tea"
+#
+# @arg template Template `String`.
+#
+# @arg data Record containing the template data. Only supported types
+# may be rendered.
+#
+# @arg missBehavior Whether to return an error or render the empty
+# string on variable/section miss.  Defaults to 'MissAsError'.
+#
+# @arg escapeHtml Whether or not HTML should be escaped in variables.
+# Defaults to `False`.
+#
+# @return String containing the rendered template.
+fun render {
+  template: String,
+  data: {a},
+  missBehavior: Optional<MissBehavior>,
+  escapeHtml: Optional<Bool>
+} -> String:
+  let missBehavior1: Optional.unpack(MissAsError, missBehavior)
+  let escapeHtml1: Optional.unpack(False, escapeHtml)
+  case missBehavior1 of
+    | MissAsEmptyString -> __Ludwig_Template_render(data, template, escapeHtml1)
+    | MissAsError -> __Ludwig_Template_renderChecked(data, template, escapeHtml1)
+
+# Specify rendering behavior when a template variable is not provided.
+#
+# @constructor MissAsEmptyString Replace any missing variables with
+# the the empty string.
+#
+# @constructor MissAsError Raise an error if any template variables
+# are missing.
+type MissBehavior:
+    | MissAsEmptyString
+    | MissAsError
+

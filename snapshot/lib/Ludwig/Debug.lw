@@ -1,0 +1,53 @@
+@language("no-prelude")
+
+import Ludwig.Optional as Optional
+
+export
+    trace
+    traceValue
+    type Output
+    showValue
+
+type Output:
+    | STDOUT
+    | STDERR
+
+# Print a string to stderr (default) or stdout.
+#
+# Example:
+#
+#     x: trace {message: "Hello world!\n"}
+#
+# @arg message The string to print.
+# @arg output  Whether to print to STDERR (default) or STDOUT
+fun trace {message: String, output: Optional<Output>} -> ():
+    let toStdout:
+        case Optional.unpack(STDERR, output) of
+            | STDOUT -> True
+            | STDERR -> False
+    __Ludwig_Debug_trace(message, toStdout)
+
+# Print a Ludwig value to stderr (default) or stdout.
+#
+# Example:
+#
+#     x:
+#         let v: Optional({field: 123})
+#         Debug.traceValue {value: v} # => Optional({field: 123})
+#
+# @arg message The string to print.
+# @arg output  Whether to print to STDERR (default) or STDOUT
+fun traceValue {value: a, output: Optional<Output>} -> ():
+    trace {message: showValue(value), output: output}
+
+# Convert a value into a `String`.  This function is provided for
+# debug purposes ONLY.  The output format is subject to change.
+#
+# Example:
+#
+#     x: showValue(42) # => "42"
+#
+# @arg value The value to convert to a `String`
+# @return The resulting `String`
+fun showValue(value: a) -> String:
+    __Ludwig_Debug_showValue(value)

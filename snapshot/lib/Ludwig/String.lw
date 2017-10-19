@@ -1,0 +1,335 @@
+@language("no-prelude")
+
+import Ludwig.List as List
+import Ludwig.Int as Int
+import Ludwig.Optional as Optional
+import Ludwig.Debug as Debug
+import Ludwig.Error as Error
+
+export
+    # Queries on the String
+    length
+    isEmpty
+    null
+
+    # Constructing lists
+    concat
+    operator ++
+    join
+
+    # Slicing strings
+    slice
+    drop
+    take
+
+    # Parsing
+    toInt
+    toFloat
+
+    # Obtaining strings from the system
+    getEnv
+    getEnvOrDefault
+    getEnvOrError
+    readFileUtf8
+
+    # Further tests
+    startsWith
+    endsWith
+    equal
+
+    # Various
+    split
+    toBytes
+    print
+    hash
+
+# Returns the length of the given 'String'
+#
+# Example:
+#
+#     x: String.length("foo") # => 3
+fun length(string: String) -> Int: __Ludwig_String_length(string)
+
+# Test if a `String` is empty.
+#
+# Example:
+#
+#     x1: String.isEmpty("")    # => True
+#     x2: String.isEmpty("foo") # => False
+#
+# @arg s The `String` to test.
+# @return `True` if `s` is empty, `False` otherwise.
+fun isEmpty(s: String) -> Bool: __Ludwig_String_isEmpty(s)
+
+# *DEPRECATED*: Use `isEmpty` instead.
+#
+# Test if a `String` is empty.
+#
+# Example:
+#
+#     x1: String.null("")    # => True
+#     x2: String.null("foo") # => False
+#
+# @arg s The `String` to test.
+# @return `True` if `s` is empty, `False` otherwise.
+fun null(s: String) -> Bool:
+  # @deprecated("Use `isEmpty` instead.")
+  isEmpty(s)
+
+# Concatenate two strings.
+#
+# Example:
+#
+#     x: String.concat("hello", "world") # => "helloworld"
+fun concat(a: String, b: String) -> String: __Ludwig_String_concat(a, b)
+
+# String concatenation.
+#
+# Example:
+#
+#     x: "hello" ++ "world" # => "helloworld"
+operator ++ infixr 5: concat
+
+# Insert separator String in between elements in the list and concatenate the
+# result.
+#
+# Example:
+#     ex1: String.join(":", ["a", "b", "c"]) # => "a:b:c"
+#
+# @arg sep The separator.
+# @arg xs The list of input Strings
+fun join(sep: String, xs: List<String>) -> String:
+  List.fold(concat, "", List.intersperse(sep, xs))
+
+# Take a substring.
+#
+# Example:
+#
+#     x01: String.slice {start: 2, list: "Hello"} # => "llo"
+#
+# This function will never throw an error.  If `start` is beyond the length of
+# the original list, the empty string will be returned.  If `length` is too
+# long, the string will be trimmed so it still returns as many characters as
+# possible.
+#
+# @arg start  Start index of the substring.  Defaults to 0.
+# @arg length Length of the substring.  Defaults to taking the entire remainder
+# of the string.
+# @arg string The string to slice.
+# @return The requested substring.
+fun slice{
+  start: Optional<Int>,
+  length: Optional<Int>,
+  string: String
+} -> String:
+  case (start, length) of
+    | (None,       None)       -> string
+    | (Optional s, None)       -> __Ludwig_String_drop(s, string)
+    | (Optional s, Optional l) -> __Ludwig_String_take(l, __Ludwig_String_drop(s, string))
+    | (None,       Optional l) -> __Ludwig_String_take(l, string)
+
+# Return the suffix of a String.
+#
+# Example usage:
+#
+#     ex1: String.drop(3, "foobar") # => "bar"
+#     ex2: String.drop(4, "foo")    # => ""
+#
+# Using `String.drop(n, s)` is equivalent to using
+# `String.slice {start: n, string: s}`.
+#
+# @arg n The length of the prefix to remove.
+# @arg str The String to operate on.
+# @return A String made up of `str` with the first `n` characters
+#         removed.
+fun drop(n: Int, str: String) -> String:
+  __Ludwig_String_drop(n, str)
+
+# Return a prefix of a String.
+#
+# Example usage:
+#
+#     ex1: String.take(3, "hello") # => "hel"
+#     ex2: String.take(4, "foo")   # => "foo"
+#
+# Using `String.take(n, s)` is equivalent to using
+# `String.slice {length: n, string: s}`.
+#
+# @arg n The length of the prefix to return.
+# @arg str The String to operate on.
+# @return A String made up of the first `n` characters from `str`.
+fun take(n: Int, str: String) -> String:
+  __Ludwig_String_take(n, str)
+
+# Convert the provided `String` to a `Int`
+#
+# Example:
+#
+#     x1: String.toInt("42")           # => Optional(42)
+#     x2: String.toInt("-1")           # => Optional(-1)
+#     x3: String.toInt("3.14")         # => None
+#     x4: String.toInt("3 blind mice") # => None
+#     x5: String.toInt("hello")        # => None
+#
+# @arg s The `String` to convert.
+# @return An `Optional` with the converted `Int` or `None` if `s`
+# cannot be converted.
+fun toInt(s: String) -> Optional<Int>:
+  __Ludwig_String_toInt(s)
+
+# Convert the provided `String` to a `Float`.
+#
+# Example:
+#
+#     x1: String.toFloat("42")           # => Optional(42.0)
+#     x2: String.toFloat("-1")           # => Optional(-1.0)
+#     x3: String.toFloat("3.14")         # => Optional(3.14)
+#     x4: String.toFloat("3 blind mice") # => None
+#     x5: String.toFloat("hello")        # => None
+#
+# @arg s The `String` to convert.
+# @return An `Optional` with the converted `Float` or `None` if `s`
+# cannot be converted.
+fun toFloat(s: String) -> Optional<Float>:
+  __Ludwig_String_toFloat(s)
+
+# Get an environment variable. Returns `None` if the environment variable is not
+# set.
+#
+# Example:
+#
+#     path: String.getEnv("PATH")
+#
+# @arg varName Name of the environment variable to get.
+# @return The value of that environment variable, or `None`.
+fun getEnv(varName: String) -> Optional<String>:
+  __Ludwig_String_getEnv(varName)
+
+# Get an environment variable. If the environment variable is not set, use
+# the provided default.
+#
+# Example:
+#
+#     path: String.getEnvOrDefault("PATH", "/usr/bin:/bin")
+#
+# @arg varName Name of the environment variable to get.
+# @arg def The value to use if the environment variable is not set.
+# @return The value of that environment variable, or the default.
+fun getEnvOrDefault(varName: String, def: String) -> String:
+  case __Ludwig_String_getEnv(varName) of
+    | None          -> def
+    | Optional x    -> x
+
+# Get an environment variable. If the environment variable is not set, throw an
+# error message.
+#
+# Example:
+#
+#     path: String.getEnvOrError("PATH")
+#
+# @arg varName Name of the environment variable to get.
+# @return The value of that environment variable.
+fun getEnvOrError(varName: String) -> String:
+  case __Ludwig_String_getEnv(varName) of
+    | None          -> Error.errorAt(1, "The environment variable " ++ varName ++ " is not set")
+    | Optional x    -> x
+
+# Read a `String` from an UTF-8 encoded file.
+#
+# Example:
+#
+#     script: String.readFileUtf8("etc/script.sh")
+#
+# @arg filePath The path of the file to read. Relative paths are considered
+# relative to the directory where the compiler is invoked, not the location of
+# the composition.
+# @return The contents of the file.
+fun readFileUtf8(filePath: String) -> String:
+  __Ludwig_String_readFileUtf8(filePath)
+
+# Test if a String starts with a given prefix.
+#
+# Example:
+#
+#     ex1: String.startsWith("foo", "helloworld")   # => False
+#     ex2: String.startsWith("hello", "helloworld") # => True
+#
+# @arg prefix The prefix.
+# @arg str The String to test.
+# @return True is `str` begins with `prefix`; False otherwise.
+fun startsWith(prefix: String, str: String) -> Bool:
+  equal(take(length(prefix), str), prefix)
+
+
+# Test if a String ends with a given suffix.
+# Example:
+#     ex1: String.endsWith("foo", "helloworld")   # => False
+#     ex2: String.endsWith("world", "helloworld") # => True
+#
+# @arg suffix The suffix.
+# @arg str The String to test.
+# @return True is `str` ends with `suffix`; False otherwise.
+fun endsWith(suffix: String, str: String) -> Bool:
+  let len: Int.sub(length(str),length(suffix))
+  equal(drop(len, str), suffix)
+
+# Test if two Strings are equal.
+#
+# This is the same as using the `==` operator.
+#
+# Example:
+#
+#     x1: String.equal("foo", "bar") # => False
+#     x2: String.equal("foo", "foo") # => True
+#
+# @return True if the two Strings are equal, False otherwise.
+fun equal(x: String, y: String) -> Bool: __Ludwig_String_equal(x, y)
+
+# Split a `String` on occurrences of a separator.
+#
+# Example:
+#
+#     split1: String.split("/", "1/2/3")   # => ["1", "2", "3"]
+#     split2: String.split("", "hello")    # => ["h", "e", "l", "l", "o"]
+#
+# If you want to split using a regular expression instead, take a look at the
+# `Ludwig.Regex` module.
+#
+# @arg separator The separator to split the source `String` on.
+# @arg source The `String` to split.
+# @return The `List` of sub-strings. `List` of characters if the
+# `separator` is the empty string.
+fun split(separator: String, source: String) -> List<String>:
+  __Ludwig_String_split(separator, source)
+
+# *DEPRECATED*: Use `Debug.trace` instead.
+# Print a string to stdout.
+#
+# Example:
+#
+#     x: String.print("Hello world!\n")
+#
+# @arg str The string to print.
+fun print(str: String) -> ():
+  @deprecated("Use `Debug.trace` instead.")
+  Debug.trace {message: str, output: Debug.STDOUT}
+
+# Convert the provided `String` to `Bytes`.
+#
+# Example:
+#
+# ex1: String.toBytes("hello world")
+#
+# @arg str The string to convert.
+# @return The string converted to UTF-8 encoded bytes.
+fun toBytes(str: String) -> Bytes: __Ludwig_String_toBytes(str)
+
+# Convert the provided `String` to an `Int` hash.
+#
+# Example:
+#
+# ex1: String.hash("hello world")
+#
+# @arg str The string to convert.
+# @return The string converted to an integer hash.
+fun hash(str: String) -> Int: __Ludwig_String_hash(str)

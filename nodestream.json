@@ -1,0 +1,965 @@
+{
+    "metanodes": [
+        {
+            "tag": "fugue.core.aws.common.Tag",
+            "references": [],
+            "mutables": [],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.common.Region",
+            "references": [],
+            "mutables": [],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.dynamodb.ProvisionedThroughput",
+            "references": [],
+            "mutables": [],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.dynamodb.AttributeDefinition",
+            "references": [],
+            "mutables": [],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.dynamodb.KeySchemaElement",
+            "references": [],
+            "mutables": [],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.dynamodb.Table",
+            "references": [
+                "attribute_definitions",
+                "key_schema",
+                "provisioned_throughput",
+                "local_secondary_indexes",
+                "global_secondary_indexes"
+            ],
+            "mutables": [
+                "provisioned_throughput",
+                "global_secondary_indexes",
+                "stream_view_type"
+            ],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.iam.InstanceProfile",
+            "references": [
+                "roles"
+            ],
+            "mutables": [
+                "roles"
+            ],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.iam.Role",
+            "references": [
+                "role_policies",
+                "managed_policies"
+            ],
+            "mutables": [
+                "assume_role_policy_document",
+                "role_policies",
+                "managed_policies"
+            ],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.iam.Policy",
+            "references": [],
+            "mutables": [],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.ec2.DhcpOptions",
+            "references": [
+                "tags"
+            ],
+            "mutables": [
+                "tags"
+            ],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.ec2.Subnet",
+            "references": [
+                "vpc",
+                "tags"
+            ],
+            "mutables": [
+                "map_public_ip_on_launch",
+                "tags"
+            ],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.ec2.IpPermissionTarget",
+            "references": [
+                "ip_ranges.value",
+                "security_groups.value",
+                "prefix_lists.value"
+            ],
+            "mutables": [],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.ec2.Route",
+            "references": [
+                "target"
+            ],
+            "mutables": [],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.ec2.SecurityGroup",
+            "references": [
+                "ip_permissions",
+                "ip_permissions_egress",
+                "vpc",
+                "tags"
+            ],
+            "mutables": [
+                "ip_permissions",
+                "ip_permissions_egress",
+                "tags"
+            ],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.ec2.RouteTable",
+            "references": [
+                "vpc",
+                "routes",
+                "associations",
+                "tags",
+                "route_propagating_vpn_gateways"
+            ],
+            "mutables": [
+                "routes",
+                "associations",
+                "tags",
+                "route_propagating_vpn_gateways"
+            ],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.ec2.IpPermission",
+            "references": [
+                "prefix_lists",
+                "target"
+            ],
+            "mutables": [],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.ec2.Vpc",
+            "references": [
+                "tags",
+                "dhcp_options"
+            ],
+            "mutables": [
+                "tags",
+                "enable_dns_support",
+                "enable_dns_hostnames",
+                "dhcp_options"
+            ],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.ec2.RouteTarget",
+            "references": [
+                "gateway_target.value",
+                "nat_target.value",
+                "interface_target.value",
+                "instance_target.value",
+                "vpc_peering_connection_target.value",
+                "vpn_gateway_target.value"
+            ],
+            "mutables": [],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.ec2.InternetGateway",
+            "references": [
+                "tags",
+                "vpc"
+            ],
+            "mutables": [
+                "tags",
+                "vpc"
+            ],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.ec2.IpRange",
+            "references": [],
+            "mutables": [],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.elb.HealthCheck",
+            "references": [],
+            "mutables": [],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.elb.LoadBalancer",
+            "references": [
+                "subnets",
+                "instances",
+                "health_check",
+                "security_groups",
+                "listeners",
+                "tags",
+                "access_log"
+            ],
+            "mutables": [
+                "subnets",
+                "instances",
+                "health_check",
+                "security_groups",
+                "listeners",
+                "tags",
+                "cross_zone",
+                "connection_draining",
+                "idle_timeout",
+                "access_log"
+            ],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.elb.Listener",
+            "references": [
+                "server_certificate",
+                "policies"
+            ],
+            "mutables": [
+                "server_certificate",
+                "policies"
+            ],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.autoscaling.LaunchConfiguration",
+            "references": [
+                "security_groups",
+                "block_device_mappings",
+                "iam_instance_profile",
+                "kernel",
+                "ramdisk",
+                "instance"
+            ],
+            "mutables": [],
+            "weights": {}
+        },
+        {
+            "tag": "fugue.core.aws.autoscaling.AutoScalingGroup",
+            "references": [
+                "desired_capacity",
+                "tags",
+                "launch_configuration",
+                "subnets",
+                "load_balancers",
+                "notification_configurations",
+                "instance",
+                "target_groups"
+            ],
+            "mutables": [
+                "min_size",
+                "max_size",
+                "default_cooldown",
+                "health_check_type",
+                "health_check_grace_period",
+                "placement_group",
+                "enabled_metrics",
+                "tags",
+                "termination_policies",
+                "new_instances_protected_from_scale_in",
+                "launch_configuration",
+                "subnets",
+                "load_balancers",
+                "notification_configurations"
+            ],
+            "weights": {}
+        }
+    ],
+    "version": "0.40.0",
+    "nodes": [
+        {
+            "tag": "fugue.core.aws.ec2.IpPermissionTarget",
+            "value": {
+                "IpRanges": [
+                    "&Fugue.AWS.EC2.IpPermission.Target.21f7fb00-109e-5111-a61f-3f1453e1cae1"
+                ]
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": "Fugue.AWS.EC2.IpPermission.Target",
+                "name": "all",
+                "errors": []
+            },
+            "id": "c0d09d41-ac31-5c69-961a-81ed39be3f62"
+        },
+        {
+            "tag": "fugue.core.aws.ec2.IpPermission",
+            "value": {
+                "to_port": 0,
+                "from_port": 0,
+                "ip_protocol": "-1",
+                "target": "&Fugue.AWS.EC2.IpPermission.Target.c0d09d41-ac31-5c69-961a-81ed39be3f62"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": "Fugue.AWS.EC2.IpPermission",
+                "name": "allowAll",
+                "errors": []
+            },
+            "id": "3345945f-3b2a-5231-9b56-18c315aebf46"
+        },
+        {
+            "tag": "fugue.core.aws.elb.Listener",
+            "value": {
+                "instance_port": 3000,
+                "protocol": "Fugue.Core.AWS.ELB.HTTP",
+                "load_balancer_port": 80
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": "",
+                "name": "demo-app-listener",
+                "errors": []
+            },
+            "id": "f6edc5b3-44fa-531c-a240-3f2ab3b9dd55"
+        },
+        {
+            "tag": "fugue.core.aws.dynamodb.Table",
+            "value": {
+                "attribute_definitions": [
+                    "&2d31d4a0-5976-5394-89ef-a0ca41805fc7"
+                ],
+                "provisioned_throughput": "&d82d3a30-ba1e-5197-aa42-f2d8d107b6a6",
+                "region": "Fugue.Core.AWS.Common.Us-west-2",
+                "table_name": "demo-app-table",
+                "key_schema": [
+                    "&d498ab93-0ee9-5915-a50a-f2f884f479a7"
+                ]
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": "",
+                "name": "demo-app-table",
+                "errors": []
+            },
+            "id": "46750f2a-e086-5600-af79-41d5f2e75652"
+        },
+        {
+            "tag": "fugue.core.aws.autoscaling.AutoScalingGroup",
+            "value": {
+                "enabled_metrics": [
+                    "Fugue.Core.AWS.AutoScaling.GroupInServiceInstances",
+                    "Fugue.Core.AWS.AutoScaling.GroupTotalInstances"
+                ],
+                "min_size": 4,
+                "subnets": [
+                    "&ebb20ab5-aae9-592d-b2ba-c8a868d3185f",
+                    "&b3dde5f8-8d77-5c35-b163-a2b1a8bf35cd"
+                ],
+                "max_size": 4,
+                "health_check_type": "Fugue.Core.AWS.AutoScaling.Ec2",
+                "launch_configuration": "&409e81b9-2065-5df3-8f3f-d94097a21976",
+                "termination_policies": [
+                    "Fugue.Core.AWS.AutoScaling.ClosestToNextInstanceHour"
+                ],
+                "region": "Fugue.Core.AWS.Common.Us-west-2",
+                "load_balancers": [
+                    "&220a2dfc-4765-538e-b60a-9b5f3339462c"
+                ],
+                "default_cooldown": 300,
+                "tags": [
+                    "&d41a3307-1c05-590c-8fd5-7984c266685d"
+                ]
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": "",
+                "name": "demo-app-asg",
+                "errors": []
+            },
+            "id": "f8988c9b-f69e-5351-8768-b10a9c17eab7"
+        },
+        {
+            "tag": "fugue.core.aws.iam.InstanceProfile",
+            "value": {
+                "roles": [
+                    "&50c4f0a2-5965-5927-90b5-da40cf5033a0"
+                ],
+                "instance_profile_name": "demo-app-instance-profile"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": "",
+                "name": "demo-app-instance-profile",
+                "errors": []
+            },
+            "id": "81f045ef-6610-59b3-bd1e-99b8ea7a46e2"
+        },
+        {
+            "tag": "fugue.core.aws.common.Tag",
+            "value": {
+                "value": "Fugue Demo App",
+                "key": "Name"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": "",
+                "name": "demo-app-tag",
+                "errors": []
+            },
+            "id": "d41a3307-1c05-590c-8fd5-7984c266685d"
+        },
+        {
+            "tag": "fugue.core.aws.iam.Policy",
+            "value": {
+                "policy_name": "ddb-full",
+                "policy_document": "{\"Version\": \"2012-10-17\", \"Statement\": [ { \"Action\": [ \"dynamodb:*\" ], \"Effect\": \"Allow\", \"Resource\": \"*\" }]}"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": "",
+                "name": "demo-app-role-policy",
+                "errors": []
+            },
+            "id": "3850ff3d-61b8-5fb9-af3d-6e4b9dd576bb"
+        },
+        {
+            "tag": "fugue.core.aws.iam.Role",
+            "value": {
+                "role_policies": [
+                    "&3850ff3d-61b8-5fb9-af3d-6e4b9dd576bb"
+                ],
+                "assume_role_policy_document": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": {\n    \"Effect\": \"Allow\",\n    \"Principal\": {\n      \"Service\": [\"ec2.amazonaws.com\"]\n    },\n    \"Action\": \"sts:AssumeRole\"\n  }\n}",
+                "role_name": "demo-app-role"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": "",
+                "name": "demo-app-role",
+                "errors": []
+            },
+            "id": "50c4f0a2-5965-5927-90b5-da40cf5033a0"
+        },
+        {
+            "tag": "fugue.core.aws.elb.LoadBalancer",
+            "value": {
+                "health_check": "&6bc66a08-dcd9-50fe-9f5f-b09313a4ab6b",
+                "subnets": [
+                    "&ebb20ab5-aae9-592d-b2ba-c8a868d3185f",
+                    "&b3dde5f8-8d77-5c35-b163-a2b1a8bf35cd"
+                ],
+                "security_groups": [
+                    "&f5dee3be-35c8-5231-9bb0-774637927283"
+                ],
+                "listeners": [
+                    "&f6edc5b3-44fa-531c-a240-3f2ab3b9dd55"
+                ],
+                "load_balancer_name": "demo-app-elb",
+                "region": "Fugue.Core.AWS.Common.Us-west-2",
+                "tags": [
+                    "&d41a3307-1c05-590c-8fd5-7984c266685d"
+                ]
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": "",
+                "name": "demo-app-elb",
+                "errors": []
+            },
+            "id": "220a2dfc-4765-538e-b60a-9b5f3339462c"
+        },
+        {
+            "tag": "fugue.core.aws.autoscaling.LaunchConfiguration",
+            "value": {
+                "image": "ami-b7b366d7",
+                "instance_monitoring": true,
+                "associate_public_ip_address": true,
+                "iam_instance_profile": "&81f045ef-6610-59b3-bd1e-99b8ea7a46e2",
+                "security_groups": [
+                    "&f1a51493-b134-59db-9c2f-8cb98585ce32"
+                ],
+                "region": "Fugue.Core.AWS.Common.Us-west-2",
+                "instance_type": "Fugue.Core.AWS.EC2.T2_micro",
+                "user_data": null
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": "",
+                "name": "demo-app-lc",
+                "errors": []
+            },
+            "id": "409e81b9-2065-5df3-8f3f-d94097a21976"
+        },
+        {
+            "tag": "fugue.core.aws.ec2.SecurityGroup",
+            "value": {
+                "ip_permissions": [
+                    "&9f271b57-cbf5-5360-924b-b58b22acdd27",
+                    "&40d56f14-ee1c-5486-add5-15a01e6ab1fb"
+                ],
+                "ip_permissions_egress": [
+                    "&Fugue.AWS.EC2.IpPermission.3345945f-3b2a-5231-9b56-18c315aebf46"
+                ],
+                "vpc": "&468426fe-d453-5fe5-8349-68dde3d23a11",
+                "description": "Allow http/s traffic from the Internet",
+                "tags": [
+                    "&d41a3307-1c05-590c-8fd5-7984c266685d"
+                ]
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": "",
+                "name": "demo-app-elb-sg",
+                "errors": []
+            },
+            "id": "f5dee3be-35c8-5231-9bb0-774637927283"
+        },
+        {
+            "tag": "fugue.core.aws.ec2.SecurityGroup",
+            "value": {
+                "ip_permissions": [
+                    "&a9d16fc8-9e18-50bd-b027-a1f9d12cc610"
+                ],
+                "ip_permissions_egress": [
+                    "&Fugue.AWS.EC2.IpPermission.3345945f-3b2a-5231-9b56-18c315aebf46"
+                ],
+                "vpc": "&468426fe-d453-5fe5-8349-68dde3d23a11",
+                "description": "Allow http traffic from the ELB SG",
+                "tags": [
+                    "&d41a3307-1c05-590c-8fd5-7984c266685d"
+                ]
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": "",
+                "name": "demo-app-web-sg",
+                "errors": []
+            },
+            "id": "f1a51493-b134-59db-9c2f-8cb98585ce32"
+        },
+        {
+            "tag": "fugue.core.aws.ec2.Vpc",
+            "value": {
+                "enable_dns_hostnames": false,
+                "enable_dns_support": true,
+                "cidr_block": "10.0.0.0/16",
+                "region": "Fugue.Core.AWS.Common.Us-west-2",
+                "dhcp_options": "&cf288db7-d5fb-5b63-bc1b-d32df2109104",
+                "tags": [
+                    "&2613e59d-1c8f-5be4-bbfb-a6825ccb2881"
+                ]
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "468426fe-d453-5fe5-8349-68dde3d23a11"
+        },
+        {
+            "tag": "fugue.core.aws.ec2.InternetGateway",
+            "value": {
+                "vpc": "&468426fe-d453-5fe5-8349-68dde3d23a11",
+                "region": "Fugue.Core.AWS.Common.Us-west-2",
+                "tags": [
+                    "&7d7faac0-63d5-56bb-bc45-13ff7a767ae7",
+                    "&3f24c2c5-5ba4-5372-b148-7da3f5452fb1"
+                ]
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "c32082b8-ddd5-5211-9683-a09c3f39ae6c"
+        },
+        {
+            "tag": "fugue.core.aws.ec2.RouteTable",
+            "value": {
+                "routes": [
+                    "&2a4ea8cf-4f49-595d-a09c-6bebfcb5e5be"
+                ],
+                "associations": [
+                    "&ebb20ab5-aae9-592d-b2ba-c8a868d3185f",
+                    "&b3dde5f8-8d77-5c35-b163-a2b1a8bf35cd"
+                ],
+                "vpc": "&468426fe-d453-5fe5-8349-68dde3d23a11",
+                "tags": [
+                    "&615776a0-7268-5287-ba41-ed5ebdec0676",
+                    "&837af1c5-d3e0-5309-b509-30d9c3232b14"
+                ]
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "8faea14d-12e0-59a6-a4c5-d558deb4614f"
+        },
+        {
+            "tag": "fugue.core.aws.ec2.DhcpOptions",
+            "value": {
+                "domain_name": "us-west-2.compute.internal",
+                "region": "Fugue.Core.AWS.Common.Us-west-2",
+                "domain_name_servers": [
+                    "AmazonProvidedDNS"
+                ],
+                "tags": [
+                    "&2613e59d-1c8f-5be4-bbfb-a6825ccb2881"
+                ]
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "cf288db7-d5fb-5b63-bc1b-d32df2109104"
+        },
+        {
+            "tag": "fugue.core.aws.common.Tag",
+            "value": {
+                "value": "demo-network",
+                "key": "Name"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "2613e59d-1c8f-5be4-bbfb-a6825ccb2881"
+        },
+        {
+            "tag": "fugue.core.aws.ec2.Route",
+            "value": {
+                "destination_cidr_block": "0.0.0.0/0",
+                "target": "&ce74bf80-7759-52fc-8734-92a175b718aa"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "2a4ea8cf-4f49-595d-a09c-6bebfcb5e5be"
+        },
+        {
+            "tag": "fugue.core.aws.ec2.RouteTarget",
+            "value": {
+                "GatewayTarget": "&c32082b8-ddd5-5211-9683-a09c3f39ae6c"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "ce74bf80-7759-52fc-8734-92a175b718aa"
+        },
+        {
+            "tag": "fugue.core.aws.common.Tag",
+            "value": {
+                "value": "public",
+                "key": "network"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "837af1c5-d3e0-5309-b509-30d9c3232b14"
+        },
+        {
+            "tag": "fugue.core.aws.common.Tag",
+            "value": {
+                "value": "demo-network-PUBLIC-RT",
+                "key": "Name"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "615776a0-7268-5287-ba41-ed5ebdec0676"
+        },
+        {
+            "tag": "fugue.core.aws.common.Tag",
+            "value": {
+                "value": "public",
+                "key": "network"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "3f24c2c5-5ba4-5372-b148-7da3f5452fb1"
+        },
+        {
+            "tag": "fugue.core.aws.common.Tag",
+            "value": {
+                "value": "demo-network-IGW",
+                "key": "Name"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "7d7faac0-63d5-56bb-bc45-13ff7a767ae7"
+        },
+        {
+            "tag": "fugue.core.aws.ec2.IpPermission",
+            "value": {
+                "to_port": 3000,
+                "from_port": 3000,
+                "ip_protocol": "tcp",
+                "target": "&042531b7-8d36-5d6e-901b-51e36cbb8973"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "a9d16fc8-9e18-50bd-b027-a1f9d12cc610"
+        },
+        {
+            "tag": "fugue.core.aws.ec2.IpPermissionTarget",
+            "value": {
+                "SecurityGroups": [
+                    "&f5dee3be-35c8-5231-9bb0-774637927283"
+                ]
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "042531b7-8d36-5d6e-901b-51e36cbb8973"
+        },
+        {
+            "tag": "fugue.core.aws.ec2.IpPermission",
+            "value": {
+                "to_port": 443,
+                "from_port": 443,
+                "ip_protocol": "tcp",
+                "target": "&Fugue.AWS.EC2.IpPermission.Target.c0d09d41-ac31-5c69-961a-81ed39be3f62"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "40d56f14-ee1c-5486-add5-15a01e6ab1fb"
+        },
+        {
+            "tag": "fugue.core.aws.ec2.IpPermission",
+            "value": {
+                "to_port": 80,
+                "from_port": 80,
+                "ip_protocol": "tcp",
+                "target": "&Fugue.AWS.EC2.IpPermission.Target.c0d09d41-ac31-5c69-961a-81ed39be3f62"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "9f271b57-cbf5-5360-924b-b58b22acdd27"
+        },
+        {
+            "tag": "fugue.core.aws.elb.HealthCheck",
+            "value": {
+                "unhealthy_threshold": 3,
+                "interval": 15,
+                "healthy_threshold": 3,
+                "timeout": 3,
+                "target": "TCP:3000"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "6bc66a08-dcd9-50fe-9f5f-b09313a4ab6b"
+        },
+        {
+            "tag": "fugue.core.aws.dynamodb.AttributeDefinition",
+            "value": {
+                "attribute_name": "PropertyName",
+                "attribute_type": "Fugue.Core.AWS.DynamoDB.S"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "2d31d4a0-5976-5394-89ef-a0ca41805fc7"
+        },
+        {
+            "tag": "fugue.core.aws.dynamodb.ProvisionedThroughput",
+            "value": {
+                "write_capacity_units": 10,
+                "read_capacity_units": 10
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "d82d3a30-ba1e-5197-aa42-f2d8d107b6a6"
+        },
+        {
+            "tag": "fugue.core.aws.ec2.IpRange",
+            "value": {
+                "cidr_ip": "0.0.0.0/0"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "21f7fb00-109e-5111-a61f-3f1453e1cae1"
+        },
+        {
+            "tag": "fugue.core.aws.ec2.Subnet",
+            "value": {
+                "cidr_block": "10.0.2.0/24",
+                "vpc": "&468426fe-d453-5fe5-8349-68dde3d23a11",
+                "map_public_ip_on_launch": true,
+                "availability_zone": "Fugue.Core.AWS.Common.B",
+                "tags": [
+                    "&da6a9a20-f5a7-5f3f-9b20-0c391de67973",
+                    "&cf774855-6176-50af-a68e-fa3f4dafae0e"
+                ]
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "b3dde5f8-8d77-5c35-b163-a2b1a8bf35cd"
+        },
+        {
+            "tag": "fugue.core.aws.common.Tag",
+            "value": {
+                "value": "public",
+                "key": "network"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "cf774855-6176-50af-a68e-fa3f4dafae0e"
+        },
+        {
+            "tag": "fugue.core.aws.common.Tag",
+            "value": {
+                "value": "demo-network-PUBLIC-SN-B",
+                "key": "Name"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "da6a9a20-f5a7-5f3f-9b20-0c391de67973"
+        },
+        {
+            "tag": "fugue.core.aws.ec2.Subnet",
+            "value": {
+                "cidr_block": "10.0.1.0/24",
+                "vpc": "&468426fe-d453-5fe5-8349-68dde3d23a11",
+                "map_public_ip_on_launch": true,
+                "availability_zone": "Fugue.Core.AWS.Common.A",
+                "tags": [
+                    "&57d68db6-99af-51e5-9497-02c08ede2ee6",
+                    "&2d00e548-e24c-527d-a716-7996a41067ee"
+                ]
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "ebb20ab5-aae9-592d-b2ba-c8a868d3185f"
+        },
+        {
+            "tag": "fugue.core.aws.common.Tag",
+            "value": {
+                "value": "public",
+                "key": "network"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "2d00e548-e24c-527d-a716-7996a41067ee"
+        },
+        {
+            "tag": "fugue.core.aws.common.Tag",
+            "value": {
+                "value": "demo-network-PUBLIC-SN-A",
+                "key": "Name"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "57d68db6-99af-51e5-9497-02c08ede2ee6"
+        },
+        {
+            "tag": "fugue.core.aws.dynamodb.KeySchemaElement",
+            "value": {
+                "attribute_name": "PropertyName",
+                "key_type": "Fugue.Core.AWS.DynamoDB.HASH"
+            },
+            "metadata": {
+                "annotations": [],
+                "composition": null,
+                "name": null,
+                "errors": []
+            },
+            "id": "d498ab93-0ee9-5915-a50a-f2f884f479a7"
+        }
+    ],
+    "make_paths": []
+}

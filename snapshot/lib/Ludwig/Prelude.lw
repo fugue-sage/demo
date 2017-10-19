@@ -1,0 +1,109 @@
+@language("no-prelude")
+
+export
+    # Equality
+    operator Equality.==
+    operator Equality.!=
+
+    # Int
+    operator Int.+
+    operator Int.-
+    operator Int.*
+    operator Int./
+    operator Int.%
+    operator Int.^
+
+    operator Int.<
+    operator Int.<=
+    operator Int.>
+    operator Int.>=
+
+    Int.negate
+
+    # Float
+    operator Float.+.
+    operator Float.-.
+    operator Float.*.
+    operator Float./.
+    operator Float.^.
+
+    operator Float.==.
+    operator Float.!=.
+    operator Float.<.
+    operator Float.<=.
+    operator Float.>.
+    operator Float.>=.
+
+    Float.intToFloat
+    Float.floor
+    Float.ceiling
+
+    # Bool
+    operator &&
+    operator ||
+    operator !
+
+    # Debug (for trace)
+    module Debug as Debug
+
+    # String
+    operator String.++
+
+    # Optional
+    operator Optional.?|
+
+    # Validation
+    type Validation.Validation
+    type NodeStream.NodeStream
+
+    # Anything
+    type Anything.Anything
+
+    # Module re-exports
+    module Anything as Anything
+    module Base64 as Base64
+    module Bytes as Bytes
+    module Dictionary as Dictionary
+    module Equality as Equality
+    module Float as Float
+    module Int as Int
+    module List as List
+    module NodeStream as NodeStream
+    module Optional as Optional
+    module PrettyPrint as PrettyPrint
+    module Random as Random
+    module Regex as Regex
+    module StackTrace as StackTrace
+    module String as String
+    module Template as Template
+    module Validation as Validation
+    module Zip as Zip
+
+    module Ludwig as .
+
+    # Miscellaneous
+    Ludwig.Error.error
+    Ludwig.Error.errorAt
+
+import Ludwig as Ludwig
+import Ludwig.Anything as Anything
+import Ludwig.Base64 as Base64
+import Ludwig.Bool as .
+import Ludwig.Bytes as Bytes
+import Ludwig.Dictionary as Dictionary
+import Ludwig.Equality as Equality
+import Ludwig.Error
+import Ludwig.Float as Float
+import Ludwig.Int as Int
+import Ludwig.List as List
+import Ludwig.NodeStream as NodeStream
+import Ludwig.Optional as Optional
+import Ludwig.Debug as Debug
+import Ludwig.PrettyPrint as PrettyPrint
+import Ludwig.Random as Random
+import Ludwig.Regex as Regex
+import Ludwig.StackTrace as StackTrace
+import Ludwig.String as String
+import Ludwig.Template as Template
+import Ludwig.Validation as Validation
+import Ludwig.Zip as Zip

@@ -1,0 +1,50 @@
+# This module provides psuedorandom number generation suport for Ludwig.
+#
+@language("no-prelude")
+
+
+import Ludwig.Optional as Optional
+import Ludwig.String as String
+import Ludwig.String as .
+import Ludwig.Int as .
+import Ludwig.Error as .
+
+# A pseudorandom number generator.  These can be constructed using the `seedInt`
+# or `seedString` functions.
+type opaque RandomGen
+
+# Create a new `RandomGen` from an `Int`.
+#
+# Examples:
+#
+#     gen: seedInt(42)
+#
+# @arg i The int to use as the seed.
+# @return A random generator.
+fun seedInt(i: Int) -> RandomGen: __Ludwig_Random_seedInt(i)
+
+# Create a new `RandomGen` from a `String`.
+#
+# Examples:
+#
+#     gen: seedString("test")
+#
+# @arg s The string to use as the seed.
+# @return A random generator.
+fun seedString(s: String) -> RandomGen: seedInt(String.hash(s))
+
+# Generate a random number in the given range (inclusive).
+#
+# Examples:
+#
+#     n: randomRange(1, 100, seedInt(42))
+#
+# @arg lower The lower bound of the range (inclusive).
+# @arg upper The upper bound of the range (inclusive).
+# @arg generator The random number generator.
+# @return A pseudorandom number and a new random number generator.
+fun randomRange(lower: Int, upper: Int, generator: RandomGen) -> (Int, RandomGen):
+  if lower <= upper then
+    __Ludwig_Random_randomRange(lower, upper, generator)
+  else
+    error("Ludwig.Random.randomRange: lower bound must be <= upper bound")

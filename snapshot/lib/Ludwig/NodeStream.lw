@@ -1,0 +1,127 @@
+# This module allows you to work with the 'NodeStream'.  This is an advanced
+# Ludwig concept that holds the entire output.  By having access to the entire
+# output, it is possible to write validations across values and types.
+@language("no-prelude")
+
+import Ludwig.String as String
+import Ludwig.Optional as Optional
+import Ludwig.Error as .
+import Ludwig.Anything as .
+
+# The 'NodeStream' is an advanced Ludwig concept that holds the entire output of
+# the compiler.  It is possible to write validations for this type.
+type opaque NodeStream
+
+# Get all nodes of a certain type (tag) from the 'NodeStream'.
+#
+# The tag is the concatenation of the module name and the type name.  This is
+# the same as the "fully qualified" type name.
+#
+# Example:
+#
+#     subnets: unsafeGetNodesByTag(ns, 'Fugue.Core.AWS.EC2.Subnet')
+#
+# @arg ns The nodestream
+# @arg tag Tag of the types you want to obtain
+# @return List of nodes of the requested type
+fun unsafeGetNodesByTag(ns: NodeStream, tag: String) -> List<Node<a>>:
+    __Ludwig_NodeStream_unsafeGetNodesByTag(ns, tag)
+
+# Get all present tags.  This can be used to implement a whitelist: simply check
+# all entries in this list against a set of blessed tags.
+fun getTags(ns: NodeStream) -> List<String>:
+    __Ludwig_NodeStream_getTags(ns)
+
+# Get all present nodes.
+fun getNodes(ns: NodeStream) -> List<Node<Anything>>:
+    __Ludwig_NodeStream_getNodes(ns)
+
+# A 'Node' is a single entry in the 'NodeStream'.
+type Node<a>:
+    id: String
+    tag: String
+    value: a
+
+# If you only have the 'value' of a 'Node', you can use this to look up other
+# details such as the ID and the tag.
+fun lookupNodeByValue(ns: NodeStream, value: a) -> Optional<Node<a>>:
+    __Ludwig_NodeStream_lookupNodeByValue(ns, value)
+
+# If you only have the 'id' of a 'Node', you can use this to look up the actual
+# value.
+fun unsafeLookupNodeById(ns: NodeStream, id: String) -> Optional<Node<a>>:
+    __Ludwig_NodeStream_unsafeLookupNodeById(ns, id)
+
+# This function considers the `NodeStream` as a graph and functions relatively
+# similar to many garbage-collecting algorithms.
+#
+# Given a set of "root" IDs for nodes, it will give you all nodes than can be
+# reached by following references from these root nodes.
+#
+# @arg ns The NodeStream
+# @arg ids The set of root nodes to start with.
+# @return A dictionary of reachable nodes.  The dictionary is indexed by node
+# IDs and contains the root nodes as well.
+fun reachableByIds(ns: NodeStream, ids: List<String>) -> Dictionary<Node<Anything>>:
+    __Ludwig_NodeStream_reachableByIds(ns, ids)
+
+# This function checks that both `x` and `y` are node values, *and* that they
+# are in fact the same node.  You can use this to compare the `value` of two
+# `Node`s or to compare arbitrary types that are supposed to be nodes.
+#
+# If `x` or `y` are not nodes, then this function will return `False`.
+#
+# Example:
+#
+#     foo:
+#       let subnet: Subnet.new {...}
+#       NodeStream.valuesEqual(subnet, subnet)  # => True
+#
+# Note a node:
+#
+#     bar: NodeStream.valuesEqual(1, 1)  # => False
+#
+# @arg x First node to compare
+# @arg y Second node to compare
+# @return Whether or not the two nodes are one and the same
+fun valuesEqual(x: a, y: a) -> Bool:
+    __Ludwig_NodeStream_valuesEqual(x, y)
+
+# This function allows you put arbitrary annotations on Ludwig resources (sum type
+# values). These annotations will then be present in the final `NodeStream`.
+#
+# These annotations are similar to annotations in ludwig files, e.g.:
+# `@mutable`, `@proto(2)`, but re-ified on Ludwig values and tracked during
+# execution.
+#
+# Annotations can be `transient` or not.  If an annotation is transient, it is
+# lost when making updates to the value (e.g. using the `with` statement).  If
+# it is not transient, it is kept when updating the value.
+#
+# @arg name Name of the annotation
+# @arg arguments Arguments of the annotation
+# @arg transient Whether this is a transient annotation.  Defaults to `False`
+# @arg value Value to add the annotation to
+# @return The updated value, with the annotation set
+fun unsafeAddMetaAnnotation {
+  name: String,
+  arguments: Optional<List<String>>,
+  transient: Optional<Bool>,
+  value: a
+} -> a:
+  __Ludwig_NodeStream_unsafeAddMetaAnnotation(
+    name,
+    Optional.unpack(False, transient),
+    Optional.unpack([], arguments),
+    value)
+
+# This function allows you take all annotations on `src` and add them to `dst`.
+# This creates a new `dst` value.
+#
+# Note that `transient` annotations (see `unsafeAddMetaAnnotation`) are not
+# copied.
+#
+# @arg src Source of the annotations.
+# @arg dst Destination to copy the annotations to.
+fun unsafeCopyAnnotations(src: a, dst: b) -> b:
+  __Ludwig_NodeStream_unsafeCopyAnnotations(src, dst)

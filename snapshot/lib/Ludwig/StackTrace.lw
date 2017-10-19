@@ -1,0 +1,35 @@
+@language("no-prelude")
+
+# Pretty-printed stack trace of a Ludwig value. Stack traces are attached to
+# constructors. For any other values the result is an empty list.
+#
+# Note: the colorization of the output is controled by --color/--no-color flags
+#
+# Example:
+#
+#     x: IntWrap(123)
+#     t: StackTrace.prettyTrace{value: x, header: "x"} # =>
+#           x:
+#
+#             1| x: IntWrap(123)
+#                   ^^^^^^^^^^^^
+#
+#           In call to IntWrap at "St.lw" (line 1, column 4)
+#
+# @arg value Ludwig value
+# @arg header Stack trace header
+# @arg indent Additional indentation
+# @arg dropFrames Number of frames to pop from the stack
+# @return List of pretty-printed items in the trace
+fun prettyTrace {
+  value: a,
+  header: String,
+  indent: Optional<Int>,
+  dropFrames: Optional<Int>
+} -> String:
+  __Ludwig_StackTrace_prettyTrace {
+    value: value,
+    header: header,
+    indent: indent,
+    dropFrames: dropFrames
+  }

@@ -1,0 +1,142 @@
+@language("no-prelude")
+
+import Ludwig.Error
+
+export
+    isNone
+    map
+    optional
+    unpack
+    mapUnpack
+    equal
+    unpackOrError
+    operator ?|
+
+# Test if an `Optional` value is `None`.
+#
+# Example:
+#
+#     x1: isNone(None)         # => True
+#     x2: isNone(Optional(42)) # => False
+#
+# @arg option The `Optional` to test.
+# @return `True` if `option` is `None`, `False` otherwise.
+fun isNone(option: Optional<a>) -> Bool:
+  case option of
+    | None -> True
+    | _    -> False
+
+# Apply a function to an Optional value.
+#
+# @return `None` if `option` is `None`. Otherwise an `Optional` of `f`
+# applied to `option`s wrapped value.
+#
+# Example:
+#
+#     x1: map(fun(x) x + 1, Optional(42)) # => Optional(43)
+#     x2: map(fun(x) x + 1, None)         # => None
+#
+# @arg f The function to apply.
+# @arg option The `Optional` to operate on.
+fun map(f: fun(a) -> b, option: Optional<a>) -> Optional<b>:
+  case option of
+    | None -> None
+    | Optional x -> Optional(f(x))
+
+# *DEPRECATED*: Use `mapUnpack` instead.
+#
+# Apply a function to the value in an `Optional` and return the result
+# or return the provided default value if the `Optional` is `None`.
+#
+# @return `default` if `option` is `None`, otherwise apply `f` to the
+# value in `option` and return the result.
+#
+# Example:
+#
+#     x1: optional(42, fun(x): x + 1, Optional(42)) # => 43
+#     x2: optional(42, fun(x): x + 1, None)         # => 42
+#
+# @arg default The default value.
+# @arg f The function to apply to the value in `option`.
+# @arg option The `Optional` value.
+fun optional(default: b, f: fun(a) -> b, option: Optional<a>) -> b:
+  @deprecated("Use `mapUnpack` instead.") mapUnpack(default, f, option)
+
+# Unpack a value from an Optional.
+#
+# Example:
+#
+#     x1: unpack("foo", Optional("bar")) # => "bar"
+#     x2: unpack("foo", None)            # => "foo
+#
+# @arg default The default value to return if `option` is `None`.
+# @arg option The optional value to unpack.
+# @return `default` if `option` is `None`, otherwise returns the wrapped value.
+fun unpack(default: a, option: Optional<a>) -> a:
+  case option of
+    | None       -> default
+    | Optional x -> x
+
+# Apply a function to the value in an `Optional` and return the result
+# or return the provided default value if the `Optional` is `None`.
+#
+# @return `default` if `option` is `None`, otherwise apply `f` to the
+# value in `option` and return the result.
+#
+# Example:
+#
+#     x1: mapUnpack(42, fun(x): x + 1, Optional(42)) # => 43
+#     x2: mapUnpack(42, fun(x): x + 1, None)         # => 42
+#
+# @arg default The default value.
+# @arg f The function to apply to the value in `option`.
+# @arg option The `Optional` value.
+fun mapUnpack(default: b, f: fun(a) -> b, option: Optional<a>) -> b:
+  unpack(default, map(f, option))
+
+# Test if two Optional values are equal.
+#
+# Example:
+#
+#     x1: equal(Optional("Foo"), None, String.equal)           # => False
+#     x2: equal(None, None, String.equal)                      # => True
+#     x3: equal(Optional(42), Optional(42), fun(x, y): x == y) # => True
+#
+# @arg this The first value to compare.
+# @arg that The value to compare to `this`.
+# @arg test The function used to test if the Optional elements are equal.
+# @return True if the values are equal, otherwise False.
+fun equal(this: Optional<a>, that: Optional<a>, test: fun(a, a) -> Bool) -> Bool:
+  case (this, that) of
+    | (None, None)             -> True
+    | (None, _)                -> False
+    | (_, None)                -> False
+    | (Optional x, Optional y) -> test(x, y)
+
+# Unpack a value from an Optional.  If there is no value, this function errors
+# with the given error message.
+#
+# Example:
+#
+#     x1: unpackOrError(Optional(1), "printer on fire")  # => 1
+#     x2: unpackOrError(None, "printer on fire")         # => error("printer on fire")
+#
+# @arg option The Optional value to unpack.
+# @arg msg The error message in case `option` is `None`.
+# @return The unpacked value (or never returns, in case of an error).
+fun unpackOrError(option: Optional<a>, msg: String) -> a:
+  case option of
+    | Optional x -> x
+    | None       -> Ludwig.Error.error(msg)
+
+# Optional.unpack in operator form.
+#
+# Example:
+#
+# x1: None ?| 123                    # => 123
+# x2: Optional("Hello") ?| "Ignored" # => "Hello"
+operator ?|  infixr 2: unpackOperator
+
+# Helper function for unpack operator `?|` (not exported)
+fun unpackOperator(option: Optional<a>, default: a) -> a:
+    unpack(default, option)

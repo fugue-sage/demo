@@ -1,0 +1,422 @@
+@language("no-prelude")
+
+import Ludwig.Error as .
+import Ludwig.Int as .
+
+export
+    # Queries on the list
+    length
+    isEmpty
+    null
+
+    # Accessing elements
+    head
+    index
+    elementAt
+    safeIndex
+    safeElementAt
+
+    # Constructing lists
+    cons
+    concat
+    flatten
+
+    # Slicing lists
+    slice
+    tail
+    drop
+    take
+    uncons
+
+    # Higher order functions
+    map
+    filter
+    reduce
+    fold
+    fold1
+    any
+    all
+
+    # Various
+    cartesianProduct
+    cartesian-product
+    equal
+    intersperse
+    zip
+    dropNones
+
+# Return the length of the specified `List`.
+#
+# Example:
+#
+#     my-len: List.length([1, 2, 3])   # => 3
+fun length(xs: List<a>) -> Int: __Ludwig_List_length(xs)
+
+# Returns True if the `List` is empty, `False` otherwise.
+#
+# Example:
+#
+#     List.isEmpty([])     # => True
+#     List.isEmpty([1, 2]) # => False
+fun isEmpty(x: List<a>) -> Bool: __Ludwig_List_isEmpty(x)
+
+# *DEPRECATED*: Use `isEmpty` instead.
+#
+# Returns True if the `List` is empty, `False` otherwise.
+#
+# Example:
+#
+#     List.null([])     # => True
+#     List.null([1, 2]) # => False
+fun null(x: List<a>) -> Bool:
+  # @deprecated("Use `isEmpty` instead.")
+  isEmpty(x)
+
+# Returns the first element of the `List` wrapped in an
+# `Optional`. Returns `None` if the `List` is empty.
+#
+# Example:
+#
+#     my-head: List.head([1, 2, 3])   # => Optional(1)
+#     empty-head: List.head([])       # => None
+fun head(xs: List<a>) -> Optional<a>:
+  if isEmpty(xs) then None else Optional(__Ludwig_List_unsafe_head(xs))
+
+# Retrieve a `List` element by index.
+#
+# Example:
+#
+#     x: List.index(["the", "quick", "brown", "fox"], 2) # => "brown"
+#
+# @arg list The list to index in.
+# @arg i The element index.  The `List` is indexed from 0.
+# @return The element. An out of bounds index causes a error.
+fun index(list: List<a>, i: Int) -> a:
+  case safeIndex(list, i) of
+    | Optional elem -> elem
+    | None -> error(
+      __Ludwig_String_concat("Requested index is out of bounds.\nindex: ",
+      __Ludwig_String_concat(__Ludwig_Int_toString(i),
+      __Ludwig_String_concat(", list length: ",
+      __Ludwig_Int_toString(length(list))))))
+
+# *DEPRECATED*: Use `index` instead.
+#
+# Version of index with the arguments flipped.
+#
+# @arg list The list to index in.
+# @arg i The element index.  The `List` is indexed from 0.
+# @return The element. An out of bounds index causes a compilation error.
+fun elementAt(i: Int, list: List<a>) -> a:
+  # @deprecated("Use `index` instead.")
+  index(list, i)
+
+# Retrieve a `List` element by index.
+#
+# Example:
+#
+#     x: List.safeIndex(["the", "quick", "brown", "fox"], 2)        # => Optional("brown")
+#     y: List.safeIndex(["the", "quick", "brown", "fox", negate(1)] # => None
+#     z: List.safeIndex([], 2)                                      # => None
+#
+# @arg list The list to index in.
+# @arg i The element index.  The `List` is indexed from 0.
+# @return The element wrapped in an `Optional`. Returns `None` on an
+# out of bounds index.
+fun safeIndex(list: List<a>, i: Int) -> Optional<a>:
+  __Ludwig_List_safeIndex(list, i)
+
+# *DEPRECATED*: Use `safeIndex` instead.
+#
+# Version of safeIndex with arguments flipped.
+#
+# @arg list The list to index in.
+# @arg i The element index.  The `List` is indexed from 0.
+# @return The element wrapped in an `Optional`. Returns `None` on an
+# out of bounds index.
+fun safeElementAt(i: Int, list: List<a>) -> Optional<a>:
+  # @deprecated("Use `safeIndex` instead.")
+  safeIndex(list, i)
+
+# Append an element to the front of the specified `List`.
+#
+# Example:
+#
+#     list1: [2, 3]
+#     list2: List.cons(1, list1) # => [1, 2, 3]
+#     list3: List.cons(1, [])   # => [1]
+fun cons(x: a, xs: List<a>) -> List<a>: __Ludwig_List_cons(x, xs)
+
+# Concatenate two `List`s and return the resulting `List`.
+#
+# Example:
+#
+#     my-list: List.concat([1, 2], [3, 4])   # => [1, 2, 3, 4]
+fun concat(x: List<a>, y: List<a>) -> List<a>: __Ludwig_List_concat(x, y)
+
+# Flatten a list of lists into one list.
+#
+# Example:
+#
+#     my-list: List.flatten([[1, 2], [3, 4], [5, 6])  # => [1, 2, 3, 4, 5, 6]
+fun flatten(lists: List<List<a>>) -> List<a>:
+  case __Ludwig_List_uncons(lists) of
+    | None             -> []
+    | Optional (l, ls) -> __Ludwig_List_concat(l, flatten(ls))
+
+# Take a sub-list of a list.
+#
+# Example:
+#
+#     x01: List.slice {start: 2, list: [1, 2, 3, 4]} # => [3, 4]
+#
+# This function will never throw an error.  If `start` is beyond the length of
+# the original list, the empty list will be returned.  If `length` is too long,
+# the list will be trimmed so it still returns as many elements as possible.
+#
+# @arg start  Start index of the sublist.  Defaults to 0.
+# @arg length Length of the sublist.  Defaults to taking the entire remainder of
+# the list.
+# @arg list   The list to slice.
+# @return The requested sublist.
+fun slice{
+  start: Optional<Int>,
+  length: Optional<Int>,
+  list: List<a>
+} -> List<a>:
+  case (start, length) of
+    | (None,       None)       -> list
+    | (Optional s, None)       -> __Ludwig_List_drop(s, list)
+    | (Optional s, Optional l) -> __Ludwig_List_take(l, __Ludwig_List_drop(s, list))
+    | (None,       Optional l) -> __Ludwig_List_take(l, list)
+
+# Returns the specified `List` sans the `head` element wrapped in an
+# `Optional`. Returns `None` if the `List` is empty.
+#
+# Example:
+#
+#     my-tail: List.tail([1, 2, 3])   # => Optional([2, 3])
+#     singleton-tail: List.tail([1])  # => []
+#     empty-tail: List.tail([])       # => None
+#
+# Using `List.tail(l)` is equivalent to using `List.slice {start: 1, list: l}`.
+fun tail(xs: List<a>) -> Optional<List<a>>:
+    if isEmpty(xs) then None else Optional(__Ludwig_List_unsafe_tail(xs))
+
+# Return the original `List` without the first `n` elements. Returns
+# the original `List` if `n` is negative and the empty `List` if
+# `length(xs) <= n`.
+#
+# Example:
+#
+#     drop-1: List.drop(2, [1, 2, 3, 4, 5])   # => [3, 4, 5]
+#     drop-2: List.drop(2, [1])               # => []
+#
+# Using `List.drop(n, l)` is equivalent to using
+# `List.slice {start: n, list: l}`.
+fun drop(n: Int, xs: List<a>) -> List<a>:
+  __Ludwig_List_drop(n, xs)
+
+# Return a `List` of the first `n` elements of the specified
+# `List`. Returns the original `List` if `length(xs) <= n`.
+#
+# Example:
+#
+#     take1: List.take(2, [1, 2, 3, 4, 5])  # => [1, 2]
+#     take2: List.take(2, [1])              # => [1]
+#
+# Using `List.take(n, l)` is equivalent to using
+# `List.slice {length: n, list: l}`.
+fun take(n: Int, xs: List<a>) -> List<a>:
+  __Ludwig_List_take(n, xs)
+
+# Split the specified `List` into a tuple containing the `head` and
+# `tail` of the `List` wrapped in an `Optional`. Returns `None` if the
+# `List` is empty.
+#
+# Example:
+#
+#     uncons1: List.uncons([1, 2, 3])   # => Optional((1, [2, 3]))
+#     uncons2: List.uncons([1])         # => Optional((1, []))
+#     uncons3: List.uncons([])          # => None
+fun uncons(xs: List<a>) -> Optional<(a, List<a>)>:
+  __Ludwig_List_uncons(xs)
+
+# Returns a new `List` constructed by applying the specified function
+# to each element in the provided `List`.
+#
+# Example:
+#
+#     my-list: List.map(fun(x): x * x, [1, 2, 3, 4, 5]   # => [1, 4, 9, 16, 25]
+fun map(f: fun(b) -> a, xs: List<b>) -> List<a>:
+  case __Ludwig_List_uncons(xs) of
+    | Optional (y, ys) -> __Ludwig_List_cons(f(y), map(f, ys))
+    | None             -> []
+
+# Returns a new `List` containing the elements of the specified `List`
+# where the provided predicate evaluates to `True`.
+#
+# Example:
+#
+#     my-filtered: List.filter(fun(x): x % 2 == 0, [1, 2, 3, 4, 5])   # => [2, 4]
+fun filter(f: fun(a) -> Bool, xs: List<a>) -> List<a>:
+  case __Ludwig_List_uncons(xs) of
+    | None             -> []
+    | Optional (y, ys) -> if f(y) then __Ludwig_List_cons(y, filter(f, ys))
+                          else filter(f, ys)
+
+# Reduce a `List` by applying the given binary operation to an initial
+# value and each element of the `List` from left to right.
+#
+# Example:
+#
+#     sum: List.reduce(fun(x, y): x + y, 0, [1, 2, 3, 4, 5])   # => 15
+fun reduce(f: fun(b, a) -> b, z: b, xs: List<a>) -> b:
+  case __Ludwig_List_uncons(xs) of
+    | None             -> z
+    | Optional (y, ys) -> reduce(f, f(z, y), ys)
+
+# *DEPRECATED*: Use `reduce` instead.
+#
+# Reduce a `List` by applying the given binary operation to an initial
+# value and each element of the `List` from left to right.
+#
+# Example:
+#
+#     sum: fold(fun(x, y): x + y, 0, [1, 2, 3, 4, 5])   # => 15
+fun fold(f: fun(b, a) -> b, z: b, xs: List<a>) -> b:
+  # @deprecated("Use `reduce` instead.")
+  reduce(f, z, xs)
+
+# *DEPRECATED*: Use `reduce` instead.
+#
+# Reduce a `List` by applying the given binary operation to each element of the
+# `List` from left to right. The list must contain at least one element.
+#
+# Example:
+#
+#     sum: fold(fun(x, y): x + y, [1, 2, 3, 4, 5])   # => 15
+fun fold1(f: fun(b, b) -> b, xs: List<b>) -> b:
+  # @deprecated("Use `reduce` instead.")
+  case uncons(xs) of
+    | None -> error("At least one element is required")
+    | Optional (y, ys) -> fold(f, y, ys)
+
+# Test if all elements of a `List` have the specified property.
+#
+# Example:
+#
+#     allEvens: all(fun(x): x % 2 == 0, [0, 2, 4, 6]) # => True
+#     allOdds:  all(fun(x): x % 2 == 1, [1, 3, 4, 5]) # => False
+#
+# @return `True` if the `test` function returns `True` for all
+# elements of `list`.
+fun all(test: fun(a) -> Bool, list: List<a>) -> Bool:
+  case __Ludwig_List_uncons(list) of
+    | None             -> True
+    | Optional (x, xs) -> if test(x) then all(test, xs)
+                          else False
+
+# Test if any elements of a `List` have the specified property.
+#
+# Example:
+#
+#     anyOdds:  any(fun(x): x % 2 == 1, [0, 2, 4, 6]) # => False
+#     anyEvens: any(fun(x): x % 2 == 0, [1, 3, 4, 5]) # => True
+#
+# @return `True` if the `test` function returns `True` for any
+# elements of `list`.
+fun any(test: fun(a) -> Bool, list: List<a>) -> Bool:
+  case __Ludwig_List_uncons(list) of
+    | None             -> False
+    | Optional (x, xs) -> if test(x) then True
+                          else any(test, xs)
+
+# Return the Cartesian Product of two `List`s.
+#
+# Example:
+#
+#     my-product: List.cartesianProduct([1, 2], ["a", "b"])   # => [(1, "a"), (1, "b"), (2, "a"), (2, "b")]
+fun cartesianProduct(xs: List<a>, ys: List<b>) -> List<(a, b)>:
+  if __Ludwig_List_isEmpty(ys) then []
+  else case __Ludwig_List_uncons(xs) of
+    | None             -> []
+    | Optional (z, zs) ->
+      __Ludwig_List_concat(map(fun(y): (z, y), ys), cartesianProduct(zs, ys))
+
+# *DEPRECATED*: Use `cartesianProduct` instead.
+#
+# Return the Cartesian Product of two `List`s.
+#
+# Example:
+#
+#     my-product: List.cartesian-product([1, 2], ["a", "b"])   # => [(1, "a"), (1, "b"), (2, "a"), (2, "b")]
+fun cartesian-product(xs: List<a>, ys: List<b>) -> List<(a, b)>:
+  # @deprecated("Use `cartesianProduct` instead.")
+  cartesianProduct(xs, ys)
+
+# Test if two List values are equal.
+#
+# In most cases, you can use the `==` operator.  This function is useful if you
+# want to use a custom equality function for the elements, though.
+#
+# Example:
+#
+#     x1: List.equal([], [], String.equal)                       # => True
+#     x2: List.equal([1,2], [1,2], fun(x, y): x == y)            # => True
+#     x3: List.equal([42], [1, 2], fun(x, y): x == y)            # => False
+#     x4: List.equal(["foo", "bar"], [], String.equal)           # => False
+#
+# @arg this The first list to compare.
+# @arg that The list to compare to `this`.
+# @arg test The function used as the equality test for List elements.
+# @return True if the lists are equal, otherwise False.
+fun equal(this: List<a>, that: List<a>, test: fun(a, a) -> Bool) -> Bool:
+  if length(this) != length(that) then False
+  else
+    case (uncons(this), uncons(that)) of
+      | (None, None)                         -> True
+      | (None, _)                            -> False
+      | (_, None)                            -> False
+      | (Optional (x, xs), Optional (y, ys)) -> if test(x, y) then equal(xs, ys, test) else False
+
+# Insert a separator between elements in the list.
+#
+# Example:
+#     ex1: List.intersperse(":", ["a", "b", "c"]) # => ["a", ":", "b", ":", "c"]
+#
+# @arg sep The separator.
+# @arg xs The list of input elements.
+# @return The interspersed list.
+fun intersperse(sep: a, xs: List<a>) -> List<a>:
+  case uncons(xs) of
+    | None             -> []
+    | Optional (y, ys) -> if isEmpty(ys) then [y]
+                          else concat([y, sep], intersperse(sep, ys))
+
+# Join together two lists as a list of tuples.  Unpaired elements are discarded.
+#
+# Example:
+#     ex1: List.zip([1, 2, 3], ["a", "b"]) # => [(1, "a"), (2, "b")]
+#
+# @arg xs The first list of input elements.
+# @arg ys The second list of input elements.
+# @return A list with tuples.
+fun zip(xs: List<a>, ys: List<b>) -> List<(a,b)>:
+  case (uncons(xs), uncons(ys)) of
+    | (Optional (b, bs), Optional (c, cs)) -> cons((b,c), zip(bs, cs))
+    | _ -> []
+
+# Takes a `List` of `Optional`s and returns a list of just the `Optional` values (removing the `None`s).
+#
+# Example:
+#
+#     xs: List.dropNones[Optional(1), None, Optional(2)]  # => [1,2]
+#
+# @arg xs The list of optionals.
+# @return The list of optional values.
+fun dropNones(xs: List<Optional<a>>) -> List<a>:
+  case uncons(xs) of
+    | None -> []
+    | Optional (None, ys) -> dropNones(ys)
+    | Optional (Optional y, ys) -> cons(y, dropNones(ys))

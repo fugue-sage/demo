@@ -1,0 +1,130 @@
+@language("no-prelude")
+
+# Type to represent pretty documents
+type opaque Doc
+
+# Convert a `String` to `Doc`
+fun text(x: String) -> Doc: __Ludwig_PrettyPrint_text(x)
+
+# Example:
+#
+#     show(text"hello") # => "hello"
+fun show(x: Doc) -> String: __Ludwig_PrettyPrint_show(x)
+
+# Concatenate all documents `xs` either horizontally with `<+>` as long as it
+# fits the page or vertically with `<$>`
+fun sep(xs: List<Doc>) -> Doc: __Ludwig_PrettyPrint_sep(xs)
+
+# Concatenate all documents `xs` vertically with `<$>`
+fun vsep(xs: List<Doc>) -> Doc: __Ludwig_PrettyPrint_vsep(xs)
+
+# Example:
+#
+#     float(123.0) # => text"123.0"
+fun float(x: Float) -> Doc: __Ludwig_PrettyPrint_float(x)
+
+# Example:
+#
+#     int(123) # => text"123"
+fun int(x: Int) -> Doc: __Ludwig_PrettyPrint_int(x)
+
+# Example:
+#
+#     bool(True) # => text"True"
+#     bool(False) # => text"False"
+fun bool(x: Bool) -> Doc: __Ludwig_PrettyPrint_bool(x)
+
+# Like `parens` but with `{` and `}`
+fun braces(x: Doc) -> Doc: __Ludwig_PrettyPrint_braces(x)
+
+# Like `parens` but with `[` and `]`
+fun brackets(x: Doc) -> Doc: __Ludwig_PrettyPrint_brackets(x)
+
+# Encloses document x in parenthesis, `(` and `)`
+#
+# Example:
+#
+#     parens(float(3.0) <$$> text"*" <$$> float(1.0)) # => text"(3.0 * 1.0)"
+fun parens(x: Doc) -> Doc: __Ludwig_PrettyPrint_parens(x)
+
+# `indent n x` indents `x` with `n` spaces
+#
+# Example:
+#
+#     text"header" <> indent 4 <> text"* bullet point" # =>
+#     text"header
+#         \    * bullet point"
+fun indent(n: Int, x: Doc) -> Doc: __Ludwig_PrettyPrint_indent(n, x)
+
+# `x <> y` concatenates documents `x` and `y`
+#
+# Example:
+#
+#     text"abc" <> text"123" # => text"abc123"
+fun concat(x: Doc, y: Doc) -> Doc: __Ludwig_PrettyPrint_concat(x,y)
+
+# Used to specify alternative layouts. `group(x)` undoes all line breaks in
+# document `x`. The resulting line is added to the current line if that fits the
+# page. Otherwise, the document is rendered without any changes.
+fun group(x: Doc) -> Doc: __Ludwig_PrettyPrint_group(x)
+
+Doc space: __Ludwig_PrettyPrint_space
+
+# Advances to the next line
+#
+# Example:
+#
+#     text"hello" <> line <> text"world" # => text"hello\nworld"
+Doc line: __Ludwig_PrettyPrint_line
+
+# Behaves like `space` if the resulting output fits the page, otherwise it
+# behaves like `line`
+Doc softline: __Ludwig_PrettyPrint_softline
+
+# Advances to the next line and indents to the current nesting level. Behaves
+# like empty if the line break is undone by `group`
+Doc linebreak: __Ludwig_PrettyPrint_linebreak
+
+# Behaves like empty if the resulting output fits the page, otherwise it behaves
+# like `line`
+Doc softbreak: __Ludwig_PrettyPrint_softbreak
+
+# Concatenates documents `x` and `y` with a space in between
+#
+# Example:
+#
+#     concatSpace(text"hello", text"world") # => text"hello world"
+fun concatSpace(x: Doc, y: Doc) -> Doc:
+    x <> space <> y
+
+# `x <$> y` concatenates documents `x` and `y` with a `line` in between
+#
+# Example:
+#
+#     concatLine(text"hello", text"world") # => text"hello\nworld"
+fun concatLine(x: Doc, y: Doc) -> Doc:
+    x <> line <> y
+
+# Concatenates documents `x` and `y` with a `softline` in between
+fun concatSoftline(x: Doc, y: Doc) -> Doc:
+    x <> softline <> y
+
+# Concatenates documents `x` and `y` with a `linebreak` in between
+fun concatLinebreak(x: Doc, y: Doc) -> Doc:
+    x <> linebreak <> y
+
+# Concatenates documents `x` and `y` with a `softbreak` in between
+fun concatSoftbreak(x: Doc, y: Doc) -> Doc:
+    x <> softbreak <> y
+
+operator <>   infixr 6: concat
+
+operator <+>  infixr 6: concatSpace
+
+operator <$>  infixr 5: concatLine
+
+operator </>  infixr 5: concatSoftline
+
+operator <$$> infixr 5: concatLinebreak
+
+operator <//> infixr 5: concatSoftbreak

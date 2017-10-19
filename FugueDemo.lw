@@ -7,8 +7,30 @@ import Fugue.AWS.EC2 as EC2
 import Fugue.AWS.ELB as ELB
 import Fugue.AWS.IAM as IAM
 import Fugue.AWS.Pattern.Network as Network
+
+
 import Policies.RegionPolicy
 import Policies.InstancePolicy
+
+
+import CheckELBTotal as .
+
+validate checkELBtotal #{numOfElbAllowed: 1}
+
+demo-app-elb2: ELB.LoadBalancer.new {
+  loadBalancerName: "demo-app-elb2",
+  subnets: demo-app-network.publicSubnets,
+  healthCheck: ELB.HealthCheck.tcp {
+    port: 3000,
+    interval: 15,
+    timeout: 3,
+    unhealthyThreshold: 3,
+    healthyThreshold: 3
+  },
+  securityGroups: [demo-app-elb-sg],
+  listeners: [demo-app-listener],
+  tags: [demo-app-tag],
+}
 
 # Region
 demo-app-region: AWS.Us-west-2
@@ -99,6 +121,7 @@ demo-app-elb: ELB.LoadBalancer.new {
   listeners: [demo-app-listener],
   tags: [demo-app-tag],
 }
+
 
 ### LISTENER
 demo-app-listener: ELB.Listener.new {

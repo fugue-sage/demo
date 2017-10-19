@@ -6,6 +6,7 @@ validate requireStandardTagsOnEC2SecurityGroups
 
 requiredTags: [
   "Name",
+  "App",
 ]
 
 ### TAG FUNCTIONS
