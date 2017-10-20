@@ -12,6 +12,26 @@ import Fugue.AWS.Pattern.Network as Network
 import Policies.RegionPolicy
 import Policies.InstancePolicy
 
+
+import CheckELBTotal as .
+
+validate checkELBtotal 
+
+demo-app-elb2: ELB.LoadBalancer.new {
+  loadBalancerName: "demo-app-elb2",
+  subnets: demo-app-network.publicSubnets,
+  healthCheck: ELB.HealthCheck.tcp {
+    port: 3000,
+    interval: 15,
+    timeout: 3,
+    unhealthyThreshold: 3,
+    healthyThreshold: 3
+  },
+  securityGroups: [demo-app-elb-sg],
+  listeners: [demo-app-listener],
+  tags: [demo-app-tag],
+}
+
 # Region
 demo-app-region: AWS.Us-west-2
 

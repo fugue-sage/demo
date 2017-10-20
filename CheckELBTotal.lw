@@ -6,6 +6,6 @@ numberOfElbsAllowed: 1
 fun checkELBtotal(ns: NodeStream) -> Validation:
         let List<NodeStream.Node<ELB.LoadBalancer>> allELBs: NodeStream.unsafeGetNodesByTag(ns, "Fugue.Core.AWS.ELB.LoadBalancer")
         if List.length(allELBs) > numberOfElbsAllowed then
-            Validation.failure "You can only have one ELB per workload"
+            Validation.failure ("You can only have " ++ Int.toString(numberOfElbsAllowed) ++ " ELB per workload")
         else
             Validation.success
