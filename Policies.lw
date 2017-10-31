@@ -6,7 +6,7 @@ import Fugue.AWS as AWS
 # Register the validations
 validate validateInstanceType
 validate usWestOnly
-
+validate ebsEncrypted
 
 # validate EC2 instance types
 fun validateInstanceType(instanceType: EC2.InstanceType) -> Validation:
@@ -14,12 +14,17 @@ fun validateInstanceType(instanceType: EC2.InstanceType) -> Validation:
     | EC2.T2_micro  -> Validation.success
     | EC2.T2_small  -> Validation.success
     | EC2.T2_medium -> Validation.success
-    | _ -> Validation.failure("Failed Compliance Validation: Must be a valid EC2 instance type. Please see InfoSec.\n")
+    | _ -> Validation.failure("Failed Compliance Validation: Must be a valid EC2 instance type. Please see InfoSec.")
 
 # validate approved AWS regions
 fun usWestOnly(region: AWS.Region) -> Validation:
   case region of
     | AWS.Us-west-1 -> Validation.success
     | AWS.Us-west-2 -> Validation.success
-    | _             -> Validation.failure("Invalid Region: Everything must run in Us-west-1 or Us-west-2 only\n")
+    | _             -> Validation.failure("Invalid Region: Everything must run in Us-west-1 or Us-west-2 only")
 
+# validate volumes are encrypted
+fun ebsEncrypted(volume: EC2.Volume) -> Validation:
+  case volume.(EC2.Volume).encrypted of
+    | Optional True  -> Validation.success
+    | _              -> Validation.failure("Volumes must be encrypted")

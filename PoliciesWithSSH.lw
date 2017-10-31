@@ -23,7 +23,13 @@ fun usWestOnly(region: AWS.Region) -> Validation:
     | AWS.Us-west-2 -> Validation.success
     | _             -> Validation.failure("Invalid Region: Everything must run in Us-west-1 or Us-west-2 only\n")
 
+# validate volumes are encrypted
+fun ebsEncrypted(volume: EC2.Volume) -> Validation:
+  case volume.(EC2.Volume).encrypted of
+    | Optional True  -> Validation.success
+    | _              -> Validation.failure("EBS volumes must be encrypted.")
 
+# don't allow SSH in security groups
 fun disallowInboundSsh(sg: EC2.SecurityGroup) -> Validation:
   case sg.(EC2.SecurityGroup).ipPermissions of
     | None           -> Validation.success
