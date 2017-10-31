@@ -1,7 +1,5 @@
-#import Fugue.AWS.AutoScaling as AutoScaling
 import Fugue.AWS.EC2 as EC2
 import Fugue.AWS as AWS
-
 
 # Register the validations
 validate validateInstanceType
@@ -14,7 +12,7 @@ fun validateInstanceType(instanceType: EC2.InstanceType) -> Validation:
     | EC2.T2_micro  -> Validation.success
     | EC2.T2_small  -> Validation.success
     | EC2.T2_medium -> Validation.success
-    | _ -> Validation.failure("Failed Compliance Validation: Must be a valid EC2 instance type. Please see InfoSec.")
+    | _ -> Validation.failure("Policy violation: Instances must be T2 micro, small, or medium")
 
 # validate approved AWS regions
 fun usWestOnly(region: AWS.Region) -> Validation:
@@ -27,4 +25,4 @@ fun usWestOnly(region: AWS.Region) -> Validation:
 fun ebsEncrypted(volume: EC2.Volume) -> Validation:
   case volume.(EC2.Volume).encrypted of
     | Optional True  -> Validation.success
-    | _              -> Validation.failure("Volumes must be encrypted")
+    | _              -> Validation.failure("Policy violation: Volumes must be encrypted")

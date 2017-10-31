@@ -8,9 +8,6 @@ import Fugue.AWS.ELB as ELB
 import Fugue.AWS.IAM as IAM
 import Fugue.AWS.Pattern.Network as Network
 
-# import Policies.RegionPolicy
-# import Policies.InstancePolicy
-
 import Policies
 
 # Region
@@ -58,7 +55,7 @@ demo-ebs: EC2.InstanceBlockDeviceMapping.new {
       availabilityZone: AWS.A,
       tags: [demo-app-tag],
       volumeType: EC2.Standard,
-      encrypted: True,
+      encrypted: False,
     },
     deleteOnTermination: True,
   }
