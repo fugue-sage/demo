@@ -1,6 +1,6 @@
 composition
 
-import Demo.Backend as Backend
+import Services.CommonBackend as Backend
 import Fugue.AWS as AWS
 import Fugue.AWS.Pattern.Network as Network
 

@@ -1,5 +1,5 @@
 export
-  type Backend
+  type CommonBackend
   new
 
 import Fugue.AWS.EC2 as EC2
@@ -10,7 +10,7 @@ import Fugue.AWS.AutoScaling as AutoScaling
 import Fugue.AWS.DynamoDB as DynamoDB
 import Fugue.AWS.Pattern.Network as Network
 
-type Backend<a>:
+type CommonBackend<a>:
   elbsg: EC2.SecurityGroup
   hostsg: EC2.SecurityGroup
   asg: AutoScaling.AutoScalingGroup
@@ -26,7 +26,7 @@ fun new {
       name: String,
       region: AWS.Region,
       network: Network.Network
-    } -> Backend<a>:
+    } -> CommonBackend<a>:
   let hostsg: EC2.SecurityGroup.new {
     description: "Instance Security Group",
     ipPermissionsEgress: None,
