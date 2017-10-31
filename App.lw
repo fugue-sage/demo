@@ -6,7 +6,7 @@ import Fugue.AWS.Pattern.Network as Network
 
 demo-region: AWS.Us-west-1
 
-# Create a new network or add to existing
+# Create a new network or add to existing (see Cloud Team)
 demo-network: Network.new {
   name: "dev-network", 
   region: demo-region,

@@ -31,7 +31,7 @@ demo-app-network: Network.new {
   privateSubnets: [],
 }
 
-# ### DYNAMODB TABLE
+### DYNAMODB TABLE
 demo-app-table: DynamoDB.Table.new {
   name: "demo-app-table",
   attributes: {"PropertyName": DynamoDB.S},
@@ -42,6 +42,14 @@ demo-app-table: DynamoDB.Table.new {
   },
   region: demo-app-region,
 }
+
+### S3 BUCKET
+# bucketName: 'example-bucket-name'
+
+# bucket0: S3.Bucket.new {
+#   name: bucketName,
+#   region: demo-app-region,
+# }
 
 ### AUTOSCALING GROUP
 demo-app-asg: AutoScaling.AutoScalingGroup.new {
