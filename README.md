@@ -1,4 +1,4 @@
-### Fugue Demo Composition
+## Fugue Demo Composition
 This version of FugueDemo.lw is the usual workload but with a few new things that help us showcase policies.
 
 There is now an ```EC2.InstanceBlockDeviceMapping``` that attaches to the ```LaunchConfiguration```. It has an ```EC2.Volume``` configured and there is a corresponding validation that its encrypted.
