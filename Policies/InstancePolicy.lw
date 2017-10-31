@@ -8,4 +8,8 @@ fun validateInstanceType(instanceType: EC2.InstanceType) -> Validation:
     | EC2.T2_micro  -> Validation.success
     | EC2.T2_small  -> Validation.success
     | EC2.T2_medium -> Validation.success
-    | _ -> Validation.failure("Failed Compliance Validation: Must be a valid EC2 instance type. Please see InfoSec.\n")
+    | _ -> Validation.failure("Failed Validation: Must be a T2_micro, T2_small, or T2_medium.")
+
+
+
+

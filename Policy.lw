@@ -21,7 +21,7 @@ hector: User {userId: "hector"}
 
 hectorLimitedAccessDefault: accountRules {
           principals: [hector],
-          accounts: [default],
+          accounts: [staging],
           actions:[AccountRunProcess,
                    AccountKillProcess,
                    AccountStatusProcess]}

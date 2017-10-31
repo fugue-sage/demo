@@ -8,7 +8,7 @@ import Fugue.Core.AWS.Common as AWS
 # Network (VPC)
 staging-network: Network.new {
   name: "staging-network", 
-  region: AWS.Us-east-1,
+  region: AWS.Us-west-2,
   cidr: "10.0.0.0/16",
   tags: [web-app-tag],
   publicSubnets: [
