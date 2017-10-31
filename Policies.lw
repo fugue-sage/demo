@@ -27,7 +27,7 @@ fun usWestOnly(region: AWS.Region) -> Validation:
 fun allowInboundSshInApprovedEnvironmentsOnly(sg: EC2.SecurityGroup) -> Validation:
   case sg.(EC2.SecurityGroup).ipPermissions of
     | None           -> Validation.success
-    | Optional rules -> if List.any(allowsSsh, rules) then Validation.failure("Inbound SSH access (port 22) is not allowed outside of the DEV environment.")
+    | Optional rules -> if List.any(allowsSsh, rules) then Validation.failure("Inbound SSH access (port 22) is not allowed without special permission.")
                         else Validation.success
 
 # Returns True if the given IpPermission allows SSH (port 22) access.
