@@ -2,17 +2,13 @@ import Fugue.AWS.AutoScaling as AutoScaling
 import Fugue.AWS.EC2 as EC2
 import Fugue.AWS as AWS
 
+
+# Register the validations
 validate validateInstanceType
 validate usWestOnly
-validate requireStandardTagsOnAutoScalingAutoScaleGroups
-validate requireStandardTagsOnEC2SecurityGroups
+validate allowInboundSshInApprovedEnvironmentsOnly
 
-requiredTags: [
-  "Name",
-  "Application"
-]
-
-
+# validate EC2 instance types
 fun validateInstanceType(instanceType: EC2.InstanceType) -> Validation:
   case instanceType of
     | EC2.T2_micro  -> Validation.success
@@ -20,7 +16,7 @@ fun validateInstanceType(instanceType: EC2.InstanceType) -> Validation:
     | EC2.T2_medium -> Validation.success
     | _ -> Validation.failure("Failed Compliance Validation: Must be a valid EC2 instance type. Please see InfoSec.\n")
 
-
+# validate approved AWS regions
 fun usWestOnly(region: AWS.Region) -> Validation:
   case region of
     | AWS.Us-west-1 -> Validation.success
@@ -28,23 +24,18 @@ fun usWestOnly(region: AWS.Region) -> Validation:
     | _             -> Validation.failure("Invalid Region: Everything must run in Us-west-1 or Us-west-2 only\n")
 
 
-### TAG FUNCTIONS
+fun allowInboundSshInApprovedEnvironmentsOnly(sg: EC2.SecurityGroup) -> Validation:
+  case sg.(EC2.SecurityGroup).ipPermissions of
+    | None           -> Validation.success
+    | Optional rules -> if List.any(allowsSsh, rules) then Validation.failure("Inbound SSH access (port 22) is not allowed outside of the DEV environment.")
+                        else Validation.success
 
-fun includesRequiredTags(tags: List<AWS.Tag>) -> Bool:
-  let fun includesTag(key: String) -> Bool:
-    List.any(fun(t): AWS.Tag.key(t) == key && String.length(AWS.Tag.value(t)) > 0, tags)
-  List.all(includesTag, requiredTags)
-
-fun requireStandardTags(tags: List<AWS.Tag>) -> Validation:
-  if includesRequiredTags(tags) then Validation.success
-  else
-    let requiredList: String.join("\n", ["    - " ++ t for t in requiredTags])
-    Validation.failure("All taggable resources must have the following tags:\n" ++ requiredList ++ "\n")
-
-fun requireStandardTagsOnAutoScalingAutoScaleGroups(autoScalingGroup: AutoScaling.AutoScalingGroup) -> Validation:
-  let tags: Optional.unpack([], autoScalingGroup.(AutoScaling.AutoScalingGroup).tags)
-  requireStandardTags(tags)
-
-fun requireStandardTagsOnEC2SecurityGroups(securityGroup: EC2.SecurityGroup) -> Validation:
-  let tags: Optional.unpack([], securityGroup.(EC2.SecurityGroup).tags)
-  requireStandardTags(tags)
+# Returns True if the given IpPermission allows SSH (port 22) access.
+fun allowsSsh(rule: EC2.IpPermission) -> Bool:
+  case rule.(EC2.IpPermission).ipProtocol of
+    | "-1"  -> True
+    | "udp" -> False
+    | "tcp" -> let fromPort: rule.(EC2.IpPermission).fromPort
+               let toPort: rule.(EC2.IpPermission).toPort
+               (fromPort <= 22) && (toPort >= 22)
+    | _     -> False

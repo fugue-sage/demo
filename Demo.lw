@@ -1,4 +1,0 @@
-export
-  module Backend as Backend
-
-import Demo.Backend as Backend

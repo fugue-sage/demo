@@ -8,10 +8,10 @@ import Fugue.AWS.ELB as ELB
 import Fugue.AWS.IAM as IAM
 import Fugue.AWS.Pattern.Network as Network
 
-import Policies.RegionPolicy
-import Policies.InstancePolicy
+# import Policies.RegionPolicy
+# import Policies.InstancePolicy
 
-# import Policies
+import Policies
 
 # Region
 demo-app-region: AWS.Us-west-2
@@ -117,6 +117,7 @@ demo-app-elb-sg: EC2.SecurityGroup.new {
   ipPermissions: [
     EC2.IpPermission.http(EC2.IpPermission.Target.all),
     EC2.IpPermission.https(EC2.IpPermission.Target.all),
+    EC2.IpPermission.ssh(EC2.IpPermission.Target.all)
   ],
   tags: [demo-app-tag],
   vpc: demo-app-network.vpc

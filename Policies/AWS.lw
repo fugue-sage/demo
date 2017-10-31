@@ -1,4 +1,0 @@
-export
-  module AWS as .
-
-import Fugue.AWS as AWS

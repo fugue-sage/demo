@@ -3,10 +3,10 @@ composition
 import Demo.Backend as Backend
 import Fugue.AWS as AWS
 import Fugue.AWS.Pattern.Network as Network
-import Policies.RegionPolicy
 
 demo-region: AWS.Us-west-1
 
+# Create a new network or add to existing
 demo-network: Network.new {
   name: "dev-network", 
   region: demo-region,

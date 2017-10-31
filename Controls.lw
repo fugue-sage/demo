@@ -1,7 +1,0 @@
-import Controls.Tags as Tags
-
-validate Tags.requireStandardTagsOnAutoScalingAutoScaleGroups
-validate Tags.requireStandardTagsOnEC2Instances
-validate Tags.requireStandardTagsOnELBLoadBalancers
-validate Tags.requireStandardTagsOnRDSDBInstances
-validate Tags.requireStandardTagsOnS3Buckets
