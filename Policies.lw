@@ -6,7 +6,7 @@ import Fugue.AWS as AWS
 # Register the validations
 validate validateInstanceType
 validate usWestOnly
-validate allowInboundSshInApprovedEnvironmentsOnly
+validate disallowInboundSsh
 
 # validate EC2 instance types
 fun validateInstanceType(instanceType: EC2.InstanceType) -> Validation:
@@ -24,7 +24,7 @@ fun usWestOnly(region: AWS.Region) -> Validation:
     | _             -> Validation.failure("Invalid Region: Everything must run in Us-west-1 or Us-west-2 only\n")
 
 
-fun allowInboundSshInApprovedEnvironmentsOnly(sg: EC2.SecurityGroup) -> Validation:
+fun disallowInboundSsh(sg: EC2.SecurityGroup) -> Validation:
   case sg.(EC2.SecurityGroup).ipPermissions of
     | None           -> Validation.success
     | Optional rules -> if List.any(allowsSsh, rules) then Validation.failure("Inbound SSH access (port 22) is not allowed without special permission.")
