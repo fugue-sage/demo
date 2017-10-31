@@ -45,7 +45,6 @@ demo-app-table: DynamoDB.Table.new {
 
 ### S3 BUCKET
 # bucketName: 'example-bucket-name'
-
 # bucket0: S3.Bucket.new {
 #   name: bucketName,
 #   region: demo-app-region,
@@ -59,7 +58,7 @@ demo-ebs: EC2.InstanceBlockDeviceMapping.new {
       availabilityZone: AWS.A,
       tags: [demo-app-tag],
       volumeType: EC2.Standard,
-      encrypted: False,
+      encrypted: True,
     },
     deleteOnTermination: True,
   }
