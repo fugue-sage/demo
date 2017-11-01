@@ -3,4 +3,4 @@ This version of ```FugueDemo.lw``` is the usual workload but with a few new thin
 
 There is now an ```EC2.InstanceBlockDeviceMapping``` that attaches to the ```LaunchConfiguration```. It has an ```EC2.Volume``` configured and there is a corresponding validation that its encrypted.
 
-There are two policy files, one with SSH and one without. For myself, I've been using the one *with* SSH for conductor side. That way in a demo I can allow SSH to the ASG and it will compile fine, but then the conductor will reject it. The case being this particular target conductor is only for production.
+There are two policy files, one that prevents SSH ingress and one that doesn't check. For myself, I've been using the one *with* NoSSH for conductor side. That way in a demo I can allow SSH to the ASG and it will compile fine, but then the conductor will reject it. The case being this particular target conductor is only for production.

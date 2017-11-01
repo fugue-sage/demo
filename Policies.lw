@@ -5,6 +5,12 @@ import Fugue.AWS as AWS
 validate validateInstanceType
 validate usWestOnly
 validate ebsEncrypted
+validate requireStandardTagsOnEC2SecurityGroups
+
+requiredTags: [
+  "Name",
+  "Project",
+]
 
 # validate EC2 instance types
 fun validateInstanceType(instanceType: EC2.InstanceType) -> Validation:
@@ -26,3 +32,23 @@ fun ebsEncrypted(volume: EC2.Volume) -> Validation:
   case volume.(EC2.Volume).encrypted of
     | Optional True  -> Validation.success
     | _              -> Validation.failure("Policy violation: Volumes must be encrypted")
+
+### TAG FUNCTIONS
+fun includesRequiredTags(tags: List<AWS.Tag>) -> Bool:
+  let fun includesTag(key: String) -> Bool:
+    List.any(fun(t): AWS.Tag.key(t) == key && String.length(AWS.Tag.value(t)) > 0, tags)
+  List.all(includesTag, requiredTags)
+
+fun requireStandardTags(tags: List<AWS.Tag>) -> Validation:
+  if includesRequiredTags(tags) then Validation.success
+  else
+    let requiredList: String.join("\n", ["    - " ++ t for t in requiredTags])
+    Validation.failure("All taggable resources must have the following tags:\n" ++ requiredList ++ "\n")
+
+# fun requireStandardTagsOnAutoScalingAutoScaleGroups(autoScalingGroup: AutoScaling.AutoScalingGroup) -> Validation:
+#   let tags: Optional.unpack([], autoScalingGroup.(AutoScaling.AutoScalingGroup).tags)
+#   requireStandardTags(tags)
+
+fun requireStandardTagsOnEC2SecurityGroups(securityGroup: EC2.SecurityGroup) -> Validation:
+  let tags: Optional.unpack([], securityGroup.(EC2.SecurityGroup).tags)
+  requireStandardTags(tags)
