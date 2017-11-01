@@ -12,31 +12,6 @@ stage('Test: Compile Time Validation') {
   }
 }
 
-stage('Test: Fugue Dry Run') {
-  node {
-    if (env.BRANCH_NAME =~ /^develop$/) {
-      withEnv(["LUDWIG_PATH=cfg/develop"]) {
-        withCredentials([[$class: 'StringBinding', credentialsId: 'DEMO_AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'], 
-                         [$class: 'StringBinding', credentialsId: 'DEMO_AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY']]) {
-          run_dry_run()
-        }
-      }
-    }
-    if (env.BRANCH_NAME =~ /^feature.*$/) {
-        withCredentials([[$class: 'StringBinding', credentialsId: 'DEMO_AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'],
-                         [$class: 'StringBinding', credentialsId: 'DEMO_AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY']]) {
-          run_dry_run()
-          }
-    }
-    if (env.BRANCH_NAME =~ /^master$/) {
-        withCredentials([[$class: 'StringBinding', credentialsId: 'DEMO_AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'],
-                         [$class: 'StringBinding', credentialsId: 'DEMO_AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY']]) {
-          run_dry_run()
-        }
-    }
-  }
-}
-
 stage('Deploy: Fugue Run and Update') {
   node {
     if (env.BRANCH_NAME =~ /^develop$/) {
@@ -95,7 +70,7 @@ def debug() {
 //   sh('make')
 // }
 
-def run_dry_run() {
+def fugue_init() {
   withCredentials([[$class: 'StringBinding', credentialsId: 'FUGUE_ROOT_USER', variable: 'FUGUE_ROOT_USER']]) {
     sh('fugue init us-east-1')
     sh("fugue user set root ${env.FUGUE_ROOT_USER}")
