@@ -1,4 +1,3 @@
-import Fugue.AWS.AutoScaling as AutoScaling
 import Fugue.AWS.EC2 as EC2
 import Fugue.AWS as AWS
 
