@@ -58,7 +58,7 @@ demo-ebs: EC2.InstanceBlockDeviceMapping.new {
       availabilityZone: AWS.A,
       tags: demo-app-tag,
       volumeType: EC2.Standard,
-      encrypted: True,
+      encrypted: False,
     },
     deleteOnTermination: True,
   }
