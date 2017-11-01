@@ -8,13 +8,16 @@ import Fugue.AWS.ELB as ELB
 import Fugue.AWS.IAM as IAM
 import Fugue.AWS.Pattern.Network as Network
 
-import PoliciesWithSSH
+import Policies
 
 # Region
 demo-app-region: AWS.Us-west-2
 
 # Tags
-demo-app-tag: AWS.tag('Name', 'Fugue Demo App')
+demo-app-tag: [
+  AWS.tag('Name', 'Fugue Demo App'),
+  AWS.tag('Project', 'Demo Project')
+]
 
 # Network (VPC)
 demo-app-network: Network.new {
@@ -53,7 +56,7 @@ demo-ebs: EC2.InstanceBlockDeviceMapping.new {
     volume: EC2.Volume.new {
       size: 1,
       availabilityZone: AWS.A,
-      tags: [demo-app-tag],
+      tags: demo-app-tag,
       volumeType: EC2.Standard,
       encrypted: True,
     },
@@ -70,7 +73,7 @@ demo-app-asg: AutoScaling.AutoScalingGroup.new {
   defaultCooldown: 300,
   healthCheckType: AutoScaling.Ec2,
   launchConfiguration: demo-app-lc,
-  tags: [demo-app-tag],
+  tags: demo-app-tag,
   terminationPolicies: [AutoScaling.ClosestToNextInstanceHour],
   enabledMetrics: [
     AutoScaling.GroupInServiceInstances,
@@ -119,7 +122,7 @@ demo-app-elb: ELB.LoadBalancer.new {
   },
   securityGroups: [demo-app-elb-sg],
   listeners: [demo-app-listener],
-  tags: [demo-app-tag],
+  tags: demo-app-tag,
 }
 
 
@@ -137,7 +140,7 @@ demo-app-elb-sg: EC2.SecurityGroup.new {
     EC2.IpPermission.http(EC2.IpPermission.Target.all),
     EC2.IpPermission.https(EC2.IpPermission.Target.all),
   ],
-  tags: [demo-app-tag],
+  tags: demo-app-tag,
   vpc: demo-app-network.vpc
 }
 
@@ -149,7 +152,7 @@ demo-app-web-sg: EC2.SecurityGroup.new {
     EC2.IpPermission.tcp(3000, EC2.IpPermission.Target.securityGroup(demo-app-elb-sg)),
     EC2.IpPermission.ssh(EC2.IpPermission.Target.all)
   ],
-  tags: [demo-app-tag],
+  tags: demo-app-tag,
   vpc: demo-app-network.vpc
 }
 
