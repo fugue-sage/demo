@@ -6,10 +6,12 @@ stage('Test: Compile Time Validation') {
     if (env.BRANCH_NAME =~ /^feature.*$|^develop$/) {
       fugue_init()
       sh 'lwc FugueDemo.lw -s null' //compile infrastructure code to validate configuration
+      sh 'echo "Validations passed"'
     }
     if (env.BRANCH_NAME =~ /^master$/) {
       fugue_init()
       sh 'lwc FugueDemo.lw -s null' //compile infrastructure code to validate configuration
+      sh 'echo "Validations passed"'
     }
   }
 }
