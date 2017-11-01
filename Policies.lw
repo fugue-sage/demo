@@ -45,10 +45,6 @@ fun requireStandardTags(tags: List<AWS.Tag>) -> Validation:
     let requiredList: String.join("\n", ["    - " ++ t for t in requiredTags])
     Validation.failure("All taggable resources must have the following tags:\n" ++ requiredList ++ "\n")
 
-# fun requireStandardTagsOnAutoScalingAutoScaleGroups(autoScalingGroup: AutoScaling.AutoScalingGroup) -> Validation:
-#   let tags: Optional.unpack([], autoScalingGroup.(AutoScaling.AutoScalingGroup).tags)
-#   requireStandardTags(tags)
-
 fun requireStandardTagsOnEC2SecurityGroups(securityGroup: EC2.SecurityGroup) -> Validation:
   let tags: Optional.unpack([], securityGroup.(EC2.SecurityGroup).tags)
   requireStandardTags(tags)
