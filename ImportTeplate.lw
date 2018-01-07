@@ -1,0 +1,179 @@
+composition
+
+import Fugue.AWS as AWS
+import Fugue.AWS.DynamoDB as DynamoDB
+import Fugue.AWS.EC2 as EC2
+
+
+############################################################
+# Region
+#   From local AWS setting: us-west-2
+############################################################
+region: AWS.Us-west-2
+
+
+############################################################
+# Table
+#   Generated from AWS resource: MobileApp
+############################################################
+dynamodb-table-1: DynamoDB.Table.new {
+  attributes: {
+    "MobileAppKey": DynamoDB.S,
+  },
+  name: "MobileApp",
+  provisionedThroughput: {
+    read: 5,
+    write: 5,
+  },
+  region: region,
+  schema: {
+    "MobileAppKey": DynamoDB.HASH,
+  },
+}
+
+
+############################################################
+# DHCP Options
+#   Generated from AWS resource: dopt-d7b5eeb1
+############################################################
+ec2-dhcpoptions-1: EC2.DhcpOptions.new {
+  domainName: "us-west-2.compute.internal",
+  domainNameServers: [
+    "AmazonProvidedDNS",
+  ],
+  region: region,
+  tags: [
+    AWS.tag("Name", "MobileApp"),
+  ],
+}
+
+
+############################################################
+# Instance
+#   Generated from AWS resource: i-0eaaa502716608fd9
+############################################################
+ec2-instance-1: EC2.Instance.newWithNetworkInterfaces {
+  disableApiTermination: False,
+  ebsOptimized: False,
+  image: "ami-0a00ce72",
+  instanceType: EC2.T2_micro,
+  monitoring: False,
+  primaryNetworkInterface: EC2.PrimaryInstanceNetworkInterface {
+    associatePublicIpAddress: False,
+    description: "Primary network interface",
+    privateIpAddress: "10.0.1.121",
+    securityGroups: [
+          ec2-securitygroup-1,
+    ],
+    sourceDestCheck: True,
+    subnet:   ec2-subnet-1,
+  },
+  rootBlockDevice: EC2.RootBlockDevice.new {
+    tags: [
+      AWS.tag("Name", "MobileApp"),
+    ],
+    volumeSize: 8,
+    volumeType: EC2.Gp2,
+  },
+  tags: [
+    AWS.tag("Name", "MobileApp"),
+  ],
+}
+
+
+############################################################
+# InternetGateway
+#   Generated from AWS resource: igw-cbdbc8ac
+############################################################
+ec2-internetgateway-1: EC2.InternetGateway.new {
+  region: region,
+  tags: [
+    AWS.tag("Name", "MobileApp"),
+  ],
+  vpc: ec2-vpc-1,
+}
+
+
+############################################################
+# Route Table
+#   Generated from AWS resource: rtb-30dc8949
+############################################################
+ec2-routetable-1: EC2.RouteTable.new {
+  associations: [
+      ec2-subnet-1,
+  ],
+  tags: [
+    AWS.tag("Name", "MobileApp"),
+  ],
+  vpc: ec2-vpc-1,
+}
+
+
+############################################################
+# Security Group
+#   Generated from AWS resource: sg-87ea19fb
+############################################################
+ec2-securitygroup-1: EC2.SecurityGroup.new {
+  description: "for MobileApp demo",
+  ipPermissions: [
+    EC2.IpPermission.new {
+      fromPort: 80,
+      ipProtocol: "tcp",
+      target: EC2.IpPermission.Target.all,
+      toPort: 80,
+    },
+    EC2.IpPermission.new {
+      fromPort: 443,
+      ipProtocol: "tcp",
+      target: EC2.IpPermission.Target.all,
+      toPort: 443,
+    },
+  ],
+  ipPermissionsEgress: [
+    EC2.IpPermission.new {
+      fromPort: 0,
+      ipProtocol: "-1",
+      target: EC2.IpPermission.Target.all,
+      toPort: 0,
+    },
+  ],
+  tags: [
+    AWS.tag("Name", "MobileApp"),
+  ],
+  vpc: ec2-vpc-1,
+}
+
+
+############################################################
+# Subnet
+#   Generated from AWS resource: subnet-43fe8e0b
+############################################################
+ec2-subnet-1: EC2.Subnet.new {
+  availabilityZone: AWS.B,
+  cidrBlock: "10.0.1.0/24",
+  defaultForAz: False,
+  mapPublicIpOnLaunch: False,
+  tags: [
+    AWS.tag("Name", "MobileApp"),
+  ],
+  vpc: ec2-vpc-1,
+}
+
+
+############################################################
+# VPC
+#   Generated from AWS resource: vpc-6b616b0d
+############################################################
+ec2-vpc-1: EC2.Vpc.new {
+  cidrBlock: "10.0.0.0/16",
+  dhcpOptions: ec2-dhcpoptions-1,
+  enableDnsHostnames: False,
+  enableDnsSupport: True,
+  instanceTenancy: EC2.DefaultTenancy,
+  region: region,
+  tags: [
+    AWS.tag("Name", "MobileApp"),
+  ],
+}
+
+

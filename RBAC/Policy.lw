@@ -6,32 +6,38 @@ import Fugue.System.Policy as .
 # `fugue account list`.
 default: Account(accountId: "fugue-1503423091826")
 staging: Account(accountId: "staging-1503424007951")
-development: Account(accountId: "develop-1503424046085")
+production: Account(accountId: "production-1510764078922")
 
 alice: User {userId: "alice"}
+bob: User {userId: "bob"}
+charlie: User {userId: "charlie"}
+david: User {userId: "david"}
 
-aliceLimitedAccessDefault: accountRules {
-          principals: [alice],
-          accounts: [default],
-          actions:[AccountRunProcess,
-                   AccountKillProcess,
-                   AccountStatusProcess]}
+web: Account(accountId: "web-1483061704854")
+Process network: AliasedProcess {alias: "Network"}
 
-hector: User {userId: "hector"}
+aliceAdmin: accountRules {
+        principals: [alice],
+        accounts: [AllAccounts],
+        actions: allAccountActions}
 
-hectorLimitedAccessDefault: accountRules {
-          principals: [hector],
+bobCanRunInStaging: accountRules {
+          principals: [bob],
           accounts: [staging],
-          actions:[AccountRunProcess,
-                   AccountKillProcess,
-                   AccountStatusProcess]}
+          actions: [AccountRunProcess,
+            AccountStatusProcess,
+            AccountUpdateProcess,
+            AccountKillProcess]}
 
-sam: User {userId: "sam"}
+bobCanListProduction: accountRules {
+          principals: [bob],
+          accounts: [production],
+          actions: [AccountStatusProcess]}
 
-samLimitedAccessDefault: accountRules {
-          principals: [sam],
-          accounts: [development],
-          actions:[AccountRunProcess,
-                   AccountKillProcess,
-                   AccountUpdateProcess,
-                   AccountStatusProcess]}
+charlieAcctTable: accountTableRules { principals: [charlie],
+                                    actions: allAccountTableActions }
+
+davidStatusNetwork: Rule {
+          principal: david,
+          subject: ProcessType(network),
+          action: ProcessAction(ProcessGetStatus)}

@@ -15,7 +15,7 @@ demo-app-region: AWS.Us-west-2
 
 # Tags
 demo-app-tag: [
-  AWS.tag('Name', 'Fugue Demo App'),
+  AWS.tag('Name', 'Fugue App'),
   AWS.tag('Project', 'Demo Project')
 ]
 
@@ -43,12 +43,6 @@ demo-app-table: DynamoDB.Table.new {
   region: demo-app-region,
 }
 
-### S3 BUCKET
-# bucketName: 'example-bucket-name'
-# bucket0: S3.Bucket.new {
-#   name: bucketName,
-#   region: demo-app-region,
-# }
 
 demo-ebs: EC2.InstanceBlockDeviceMapping.new {
   deviceName: "/dev/sdz",
@@ -58,7 +52,7 @@ demo-ebs: EC2.InstanceBlockDeviceMapping.new {
       availabilityZone: AWS.A,
       tags: demo-app-tag,
       volumeType: EC2.Standard,
-      encrypted: False,
+      encrypted: True,
     },
     deleteOnTermination: True,
   }
@@ -150,7 +144,7 @@ demo-app-web-sg: EC2.SecurityGroup.new {
   description: "Allow http traffic from the ELB SG",
   ipPermissions: [
     EC2.IpPermission.tcp(3000, EC2.IpPermission.Target.securityGroup(demo-app-elb-sg)),
-    #EC2.IpPermission.ssh(EC2.IpPermission.Target.all)
+     #EC2.IpPermission.ssh(EC2.IpPermission.Target.all),
   ],
   tags: demo-app-tag,
   vpc: demo-app-network.vpc

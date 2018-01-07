@@ -2,7 +2,7 @@ composition
 
 import Fugue.AWS.EC2 as EC2
 import Fugue.AWS.Pattern.Network as Network
-import Fugue.AWS as AWS
+import Fugue.Core.AWS.Common as AWS
 
 
 # Network (VPC)
@@ -10,7 +10,7 @@ staging-network: Network.new {
   name: "staging-network", 
   region: AWS.Us-west-2,
   cidr: "10.0.0.0/16",
-  tags: web-app-tag,
+  tags: [web-app-tag],
   publicSubnets: [
     (AWS.A, "10.0.1.0/24"),
     (AWS.B, "10.0.2.0/24"),
@@ -23,7 +23,7 @@ staging-sg: EC2.SecurityGroup({
   description: "Allow http/s traffic from the Internet",
   ipPermissions: [elbHTTPS, elbHTTP],
   ipPermissionsEgress: None,
-  tags: web-app-tag,
+  tags: [web-app-tag],
   vpc: staging-network.vpc
 })
 
@@ -55,7 +55,7 @@ elbHTTPS: EC2.IpPermission({
 internetCIDR: EC2.IpRanges([EC2.IpRange(cidrIp: "0.0.0.0/0")])
 
 # Tags
-web-app-tag: [
-  AWS.tag("Name", "Fugue App"),
-  AWS.tag("Project", "Demo Project")
-]
+web-app-tag: AWS.Tag({
+  key: 'Environment',
+  value: 'Staging'
+})
