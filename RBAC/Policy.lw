@@ -29,10 +29,10 @@ bobCanRunInStaging: accountRules {
             AccountUpdateProcess,
             AccountKillProcess]}
 
-bobCanListProduction: accountRules {
-          principals: [bob],
-          accounts: [production],
-          actions: [AccountStatusProcess]}
+# bobCanListProduction: accountRules {
+#           principals: [bob],
+#           accounts: [production],
+#           actions: [AccountStatusProcess]}
 
 charlieAcctTable: accountTableRules { principals: [charlie],
                                     actions: allAccountTableActions }

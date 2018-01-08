@@ -9,6 +9,9 @@ import Fugue.AWS.IAM as IAM
 import Fugue.AWS.Pattern.Network as Network
 
 import Policies
+# import InstancePriceValidation as .
+
+# #validate checkInstancePricingLimit{hourlyBudget: 0.10}
 
 # Region
 demo-app-region: AWS.Us-west-2
@@ -43,6 +46,24 @@ demo-app-table: DynamoDB.Table.new {
   region: demo-app-region,
 }
 
+largerInstance: EC2.Instance.new {
+  subnet: List.elementAt(0, demo-app-network.publicSubnets),
+  blockDeviceMappings: [
+    EC2.InstanceBlockDeviceMapping.new {
+      deviceName: "/dev/sdz",
+      ebs: EC2.EbsInstanceBlockDevice.new {
+        volume: EC2.Volume.new {
+          size: 1,
+          availabilityZone: AWS.A,
+          encrypted: True,
+        },
+      },
+    }
+  ],
+  image: "ami-a9d276c9",
+  securityGroups: [demo-app-web-sg],
+  instanceType: EC2.P2_16xlarge
+}
 
 demo-ebs: EC2.InstanceBlockDeviceMapping.new {
   deviceName: "/dev/sdz",
@@ -79,7 +100,7 @@ demo-app-asg: AutoScaling.AutoScalingGroup.new {
 demo-app-lc: AutoScaling.LaunchConfiguration.new {
   image: "ami-b7b366d7",
   securityGroups: [demo-app-web-sg],
-  instanceType: EC2.T2_micro,
+  instanceType: EC2.M4_large,
   blockDeviceMappings: [demo-ebs],
   associatePublicIpAddress: True,
   iamInstanceProfile: demo-app-instance-profile
