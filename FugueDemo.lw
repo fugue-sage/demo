@@ -9,9 +9,6 @@ import Fugue.AWS.IAM as IAM
 import Fugue.AWS.Pattern.Network as Network
 
 import Policies
-# import InstancePriceValidation as .
-
-# #validate checkInstancePricingLimit{hourlyBudget: 0.10}
 
 # Region
 demo-app-region: AWS.Us-west-2
@@ -62,7 +59,8 @@ largerInstance: EC2.Instance.new {
   ],
   image: "ami-a9d276c9",
   securityGroups: [demo-app-web-sg],
-  instanceType: EC2.P2_16xlarge
+  instanceType: EC2.P2_16xlarge,
+  #userData: "/my/user/data.sh"
 }
 
 demo-ebs: EC2.InstanceBlockDeviceMapping.new {
@@ -73,7 +71,7 @@ demo-ebs: EC2.InstanceBlockDeviceMapping.new {
       availabilityZone: AWS.A,
       tags: demo-app-tag,
       volumeType: EC2.Standard,
-      encrypted: True,
+      encrypted: False,
     },
     deleteOnTermination: True,
   }
@@ -100,7 +98,7 @@ demo-app-asg: AutoScaling.AutoScalingGroup.new {
 demo-app-lc: AutoScaling.LaunchConfiguration.new {
   image: "ami-b7b366d7",
   securityGroups: [demo-app-web-sg],
-  instanceType: EC2.M4_large,
+  instanceType: EC2.T2_micro,
   blockDeviceMappings: [demo-ebs],
   associatePublicIpAddress: True,
   iamInstanceProfile: demo-app-instance-profile
@@ -165,7 +163,7 @@ demo-app-web-sg: EC2.SecurityGroup.new {
   description: "Allow http traffic from the ELB SG",
   ipPermissions: [
     EC2.IpPermission.tcp(3000, EC2.IpPermission.Target.securityGroup(demo-app-elb-sg)),
-     #EC2.IpPermission.ssh(EC2.IpPermission.Target.all),
+    EC2.IpPermission.ssh(EC2.IpPermission.Target.all),
   ],
   tags: demo-app-tag,
   vpc: demo-app-network.vpc

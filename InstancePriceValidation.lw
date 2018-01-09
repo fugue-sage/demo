@@ -14,6 +14,7 @@ fun instanceType(node: NodeStream.Node<EC2.Instance>) -> EC2.InstanceType:
   # specified.
   node.value.(EC2.Instance).instanceType ?| EC2.M1_small
 
+
 fun checkInstancePricingLimit {
     hourlyBudget: Float
 } -> fun(NodeStream) -> Validation:
@@ -32,6 +33,7 @@ fun checkInstancePricingLimit {
           Validation.failure(msg)
         else
           Validation.success
+
 
 # Validate the hourly instance budget of a composition by doing something like: 
 # validate checkInstancePricingLimit{hourlyBudget: 0.10}

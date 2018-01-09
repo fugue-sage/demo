@@ -13,7 +13,6 @@ bob: User {userId: "bob"}
 charlie: User {userId: "charlie"}
 david: User {userId: "david"}
 
-web: Account(accountId: "web-1483061704854")
 Process network: AliasedProcess {alias: "Network"}
 
 aliceAdmin: accountRules {
@@ -29,10 +28,6 @@ bobCanRunInStaging: accountRules {
             AccountUpdateProcess,
             AccountKillProcess]}
 
-# bobCanListProduction: accountRules {
-#           principals: [bob],
-#           accounts: [production],
-#           actions: [AccountStatusProcess]}
 
 charlieAcctTable: accountTableRules { principals: [charlie],
                                     actions: allAccountTableActions }
