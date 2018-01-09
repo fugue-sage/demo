@@ -16,52 +16,52 @@ stage('Test: Compile Time Validation') {
   }
 }
 
-// stage('Deploy: Fugue Run and Update') {
-//   node {
-//     if (env.BRANCH_NAME =~ /^develop$/) {
-//       withEnv(["LUDWIG_PATH=cfg/develop"]) {
-//         withCredentials([[$class: 'StringBinding', credentialsId: 'DEMO_AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'], 
-//                          [$class: 'StringBinding', credentialsId: 'DEMO_AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY']])  {
-//           debug()
-//           def ret = sh(script: 'fugue status develop', returnStatus: true)
-//           if(ret == 0) {
-//             sh('fugue update develop FugueDemo.lw -y')
-//           } else {
-//             sh('fugue run FugueDemo.lw -a develop')
-//           }
-//         }
-//       }
-//     }
-//     if (env.BRANCH_NAME =~ /^feature\/.*$/) {
-//       withEnv(["LUDWIG_PATH=cfg/develop"]) {
-//         withCredentials([[$class: 'StringBinding', credentialsId: 'DEMO_AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'], 
-//                          [$class: 'StringBinding', credentialsId: 'DEMO_AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY']])  {
-//           def ret = sh(script: 'fugue status ${env.BRANCH_NAME}', returnStatus: true)
-//           if(ret == 0) {
-//             sh('fugue update ${env.BRANCH_NAME} FugueDemo.lw -y')
-//           } else {
-//             sh('fugue run FugueDemo.lw -a ${env.BRANCH_NAME} --account staging')
-//           }
-//         }
-//       }
-//     }
+stage('Deploy: Fugue Run and Update') {
+  node {
+    if (env.BRANCH_NAME =~ /^develop$/) {
+      withEnv(["LUDWIG_PATH=cfg/develop"]) {
+        withCredentials([[$class: 'StringBinding', credentialsId: 'DEMO_AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'], 
+                         [$class: 'StringBinding', credentialsId: 'DEMO_AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY']])  {
+          debug()
+          def ret = sh(script: 'fugue status develop', returnStatus: true)
+          if(ret == 0) {
+            sh('fugue update develop FugueDemo.lw -y')
+          } else {
+            sh('fugue run FugueDemo.lw -a develop')
+          }
+        }
+      }
+    }
+    if (env.BRANCH_NAME =~ /^feature\/.*$/) {
+      withEnv(["LUDWIG_PATH=cfg/develop"]) {
+        withCredentials([[$class: 'StringBinding', credentialsId: 'DEMO_AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'], 
+                         [$class: 'StringBinding', credentialsId: 'DEMO_AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY']])  {
+          def ret = sh(script: 'fugue status ${env.BRANCH_NAME}', returnStatus: true)
+          if(ret == 0) {
+            sh('fugue update ${env.BRANCH_NAME} FugueDemo.lw -y')
+          } else {
+            sh('fugue run FugueDemo.lw -a ${env.BRANCH_NAME} --account staging')
+          }
+        }
+      }
+    }
 
-//     if (env.BRANCH_NAME =~ /^master$/) {
-//       withEnv(["LUDWIG_PATH=cfg/production"]) {
-//         withCredentials([[$class: 'StringBinding', credentialsId: 'DEMO_AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'],
-//                          [$class: 'StringBinding', credentialsId: 'DEMO_AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY']])  {
-//           debug()
-//           def ret = sh(script: 'fugue status production', returnStatus: true)
-//           if(ret == 0) {
-//             sh('fugue update production FugueDemo.lw -y')
-//           } else {
-//             sh('fugue run FugueDemo.lw -a production')
-//           }
-//         }
-//       }
-//     }
-//   }
-// }
+    if (env.BRANCH_NAME =~ /^master$/) {
+      withEnv(["LUDWIG_PATH=cfg/production"]) {
+        withCredentials([[$class: 'StringBinding', credentialsId: 'DEMO_AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'],
+                         [$class: 'StringBinding', credentialsId: 'DEMO_AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY']])  {
+          debug()
+          def ret = sh(script: 'fugue status production', returnStatus: true)
+          if(ret == 0) {
+            sh('fugue update production FugueDemo.lw -y')
+          } else {
+            sh('fugue run FugueDemo.lw -a production')
+          }
+        }
+      }
+    }
+  }
+}
 
 def debug() {
   echo(env.BRANCH_NAME)
