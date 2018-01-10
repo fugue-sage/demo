@@ -7,7 +7,6 @@ import Fugue.AWS.ELB as ELB
 
 import Policies
 
-
 ############################################################
 # Region
 #   From local AWS setting: us-west-2
