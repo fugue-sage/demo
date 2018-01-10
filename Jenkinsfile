@@ -67,9 +67,9 @@ stage('Deploy: Fugue Run and Update') {
                          [$class: 'StringBinding', credentialsId: 'DEMO_AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY']]) {
           def ret = sh(script: "fugue status ${env.BRANCH_NAME}", returnStatus: true)
           if(ret == 0) {
-            sh("fugue update ${env.BRANCH_NAME} compositions/CreateDeveloperEnvironment.lw -y")
+            sh("fugue update ${env.BRANCH_NAME} FugueDemo.lw -y")
           } else {
-            sh("fugue run compositions/CreateDeveloperEnvironment.lw -a ${env.BRANCH_NAME}")
+            sh("fugue run FugueDemo.lw -a ${env.BRANCH_NAME}")
           }
         }
       }
@@ -80,9 +80,9 @@ stage('Deploy: Fugue Run and Update') {
                          [$class: 'StringBinding', credentialsId: 'DEMO_AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY']]) {
           def ret = sh(script: 'fugue status develop', returnStatus: true)
           if(ret == 0) {
-            sh('fugue update develop compositions/CreateDeveloperEnvironment.lw -y')
+            sh('fugue update develop FugueDemo.lw -y')
           } else {
-            sh('fugue run compositions/CreateDeveloperEnvironment.lw -a develop')
+            sh('fugue run FugueDemo.lw -a develop')
           }
         }
       }
@@ -93,9 +93,9 @@ stage('Deploy: Fugue Run and Update') {
                          [$class: 'StringBinding', credentialsId: 'DEMO_AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY']]) {
           def ret = sh(script: 'fugue status staging', returnStatus: true)
           if(ret == 0) {
-            sh('fugue update staging compositions/CreateDeveloperEnvironment.lw -y')
+            sh('fugue update staging FugueDemo.lw -y')
           } else {
-            sh('fugue run compositions/CreateDeveloperEnvironment.lw -a staging')
+            sh('fugue run FugueDemo.lw -a staging --account staging')
           }
         }
       }
@@ -106,9 +106,9 @@ stage('Deploy: Fugue Run and Update') {
                          [$class: 'StringBinding', credentialsId: 'DEMO_AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY']]) {
           def ret = sh(script: 'fugue status production', returnStatus: true)
           if(ret == 0) {
-            sh('fugue update production compositions/CreateDeveloperEnvironment.lw -y')
+            sh('fugue update production FugueDemo.lw -y')
           } else {
-            sh('fugue run compositions/CreateDeveloperEnvironment.lw -a production')
+            sh('fugue run FugueDemo.lw -a production')
           }
         }
       }
@@ -132,6 +132,6 @@ def run_dry_run() {
     sh("fugue init us-east-1")
     sh("fugue user set root ${env.FUGUE_ROOT_USER}")
     //sh('fugue status')
-    //sh('fugue run compositions/CreateDeveloperEnvironment.lw --dry-run')
+    //sh('fugue run FugueDemo.lw --dry-run')
   }
 }
