@@ -95,7 +95,7 @@ stage('Deploy: Fugue Run and Update') {
           if(ret == 0) {
             sh('fugue update staging FugueDemo.lw -y')
           } else {
-            sh('fugue run FugueDemo.lw -a staging')
+            sh('fugue run FugueDemo.lw -a staging --account staging')
           }
         }
       }
