@@ -43,25 +43,6 @@ demo-app-table: DynamoDB.Table.new {
   region: demo-app-region,
 }
 
-largerInstance: EC2.Instance.new {
-  subnet: List.elementAt(0, demo-app-network.publicSubnets),
-  blockDeviceMappings: [
-    EC2.InstanceBlockDeviceMapping.new {
-      deviceName: "/dev/sdz",
-      ebs: EC2.EbsInstanceBlockDevice.new {
-        volume: EC2.Volume.new {
-          size: 1,
-          availabilityZone: AWS.A,
-          encrypted: True,
-        },
-      },
-    }
-  ],
-  image: "ami-a9d276c9",
-  securityGroups: [demo-app-web-sg],
-  instanceType: EC2.P2_16xlarge,
-  #userData: "/my/user/data.sh"
-}
 
 demo-ebs: EC2.InstanceBlockDeviceMapping.new {
   deviceName: "/dev/sdz",
@@ -71,7 +52,7 @@ demo-ebs: EC2.InstanceBlockDeviceMapping.new {
       availabilityZone: AWS.A,
       tags: demo-app-tag,
       volumeType: EC2.Standard,
-      encrypted: False,
+      encrypted: True,
     },
     deleteOnTermination: True,
   }
@@ -163,7 +144,7 @@ demo-app-web-sg: EC2.SecurityGroup.new {
   description: "Allow http traffic from the ELB SG",
   ipPermissions: [
     EC2.IpPermission.tcp(3000, EC2.IpPermission.Target.securityGroup(demo-app-elb-sg)),
-    EC2.IpPermission.ssh(EC2.IpPermission.Target.all),
+    #EC2.IpPermission.ssh(EC2.IpPermission.Target.all),
   ],
   tags: demo-app-tag,
   vpc: demo-app-network.vpc
