@@ -129,8 +129,9 @@ def run_validations() {
 
 def run_dry_run() {
   withCredentials([[$class: 'StringBinding', credentialsId: 'FUGUE_ROOT_USER', variable: 'FUGUE_ROOT_USER']]) {
+    sh("fugue init us-east-1")
     sh("fugue user set root ${env.FUGUE_ROOT_USER}")
-    sh('fugue status')
-    sh('fugue run compositions/CreateDeveloperEnvironment.lw --dry-run')
+    //sh('fugue status')
+    //sh('fugue run compositions/CreateDeveloperEnvironment.lw --dry-run')
   }
 }
