@@ -1,4 +1,4 @@
-#A general collection of useful demo assets
+###A general collection of useful demo assets
 
 `FugueDemo.lw` is the basic standard "Hello World!" Fugue demo composition.
 
