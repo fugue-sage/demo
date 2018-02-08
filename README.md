@@ -4,6 +4,8 @@
 
 `App.lw` uses `Services/CommonBackend.lw` as a service catalog for a basic workload that mirrors `FugueDemo.lw`. Meant to show how to create your own service catalog abstractions. 
 
+`VpcOnly.lw` is a good one to use to create processes so Fugue status output looks better. It just creates a VPC and can be run multiple times in an account if necessary.
+
 `PriceExample.lw` shows how to use Node Stream validations with a per hour budget. (Note: Use the price validations repo https://github.com/LuminalHQ/price-validations directly for a more thorough demo of this. This is just a handy local copy, and incomplete for how that project works).
 
 `ImportTemplate.lw` can be run to spin up some useful resources tagged as "MobileApp" for subsequent use with Transcriber. Note that the DDB table must be manually tagged to complete the process (Fugue DDB does not yet support DDB tagging). Also remember to fun `fugue release` on this.
