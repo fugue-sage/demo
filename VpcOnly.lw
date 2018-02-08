@@ -10,7 +10,7 @@ staging-network: Network.new {
   name: "staging-network", 
   region: AWS.Us-west-2,
   cidr: "10.0.0.0/16",
-  tags: web-app-tag,
+  tags: [AWS.tag("Name", "Fugue Demo VPC")],
   publicSubnets: [
     (AWS.A, "10.0.1.0/24"),
     (AWS.B, "10.0.2.0/24"),
@@ -31,6 +31,6 @@ staging-sg: EC2.SecurityGroup.new {
 
 # Tags
 web-app-tag: [
-  AWS.tag("Name", "Fugue App"),
+  AWS.tag("Name", "Demo"),
   AWS.tag("Project", "Demo Project")
 ]

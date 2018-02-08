@@ -7,7 +7,6 @@ import Fugue.AWS.ELB as ELB
 
 import Policies
 
-
 ############################################################
 # Region
 #   From local AWS setting: us-west-2
@@ -131,10 +130,10 @@ ec2-securitygroup-1: EC2.SecurityGroup.new {
       toPort: 80,
     },
     EC2.IpPermission.new {
-      fromPort: 22,
+      fromPort: 443,
       ipProtocol: "tcp",
       target: EC2.IpPermission.Target.all,
-      toPort: 22,
+      toPort: 443,
     },
   ],
   ipPermissionsEgress: [

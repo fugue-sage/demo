@@ -1,7 +1,6 @@
 import Fugue.AWS.EC2 as EC2
 import Fugue.AWS as AWS
 
-import InstancePriceValidation as .
 
 # Register the validations
 validate validateInstanceType
@@ -9,7 +8,7 @@ validate usWestOnly
 validate disallowInboundSsh
 validate ebsEncrypted
 validate requireStandardTagsOnEC2SecurityGroups
-validate checkInstancePricingLimit{hourlyBudget: 10.00}
+
 
 requiredTags: [
   "Name",

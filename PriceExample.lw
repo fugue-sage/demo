@@ -1,0 +1,83 @@
+# Copyright 2017 Fugue
+
+composition
+
+import Fugue.AWS as AWS
+import Fugue.AWS.EC2 as EC2
+
+import InstancePriceValidation as .
+
+
+#########################################################
+# Check total instance hourly pricing against the budget 
+#########################################################
+validate checkInstancePricingLimit{hourlyBudget: 0.10}
+
+#########################
+# EC2 Instance
+#########################
+smallInstance: EC2.Instance.new {
+  subnet: exampleSubnet,
+  blockDeviceMappings: [
+    EC2.InstanceBlockDeviceMapping.new {
+      deviceName: "/dev/sdz",
+      ebs: EC2.EbsInstanceBlockDevice.new {
+        volume: EC2.Volume.new {
+          size: 1,
+          availabilityZone: exampleSubnetAZ
+        },
+      },
+    }
+  ],
+  image: "ami-a9d276c9",
+  securityGroups: [exampleSecurityGroup],
+  instanceType: EC2.M4_large
+}
+
+
+
+largerInstance: EC2.Instance.new {
+  subnet: exampleSubnet,
+  blockDeviceMappings: [
+    EC2.InstanceBlockDeviceMapping.new {
+      deviceName: "/dev/sdz",
+      ebs: EC2.EbsInstanceBlockDevice.new {
+        volume: EC2.Volume.new {
+          size: 1,
+          availabilityZone: exampleSubnetAZ
+        },
+      },
+    }
+  ],
+  image: "ami-a9d276c9",
+  securityGroups: [exampleSecurityGroup],
+  instanceType: EC2.M4_large
+}
+
+
+#########################
+### PREREQUISITES
+#########################
+
+exampleVpc: EC2.Vpc.new {
+  cidrBlock: "10.0.0.0/16",
+  region: AWS.Us-west-2,
+}
+
+exampleSubnet: EC2.Subnet.new {
+  cidrBlock: '10.0.1.0/24',
+  vpc: exampleVpc,
+  availabilityZone: exampleSubnetAZ
+}
+
+exampleSubnetAZ: AWS.A
+
+sgHTTP: EC2.IpPermission.http(EC2.IpPermission.Target.all)
+
+sgHTTPS: EC2.IpPermission.https(EC2.IpPermission.Target.all)
+
+exampleSecurityGroup: EC2.SecurityGroup.new {
+  description: "Allow http/s traffic from the Internet",
+  vpc: exampleVpc,
+  ipPermissions: [sgHTTP, sgHTTPS]
+}
