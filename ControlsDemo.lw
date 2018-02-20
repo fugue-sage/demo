@@ -3,19 +3,12 @@ composition
 import Fugue.AWS as AWS
 import Fugue.AWS.DynamoDB as DynamoDB
 import Fugue.AWS.EC2 as EC2
+import Fugue.AWS.S3 as S3
 
+import Policies
 
-############################################################
-# Region
-#   From local AWS setting: us-west-2
-############################################################
 region: AWS.Us-west-2
 
-
-############################################################
-# Table
-#   Generated from AWS resource: MobileApp
-############################################################
 dynamodb-table-1: DynamoDB.Table.new {
   attributes: {
     "MobileAppKey": DynamoDB.S,
@@ -31,11 +24,6 @@ dynamodb-table-1: DynamoDB.Table.new {
   },
 }
 
-
-############################################################
-# DHCP Options
-#   Generated from AWS resource: dopt-d7b5eeb1
-############################################################
 ec2-dhcpoptions-1: EC2.DhcpOptions.new {
   domainName: "us-west-2.compute.internal",
   domainNameServers: [
@@ -47,11 +35,6 @@ ec2-dhcpoptions-1: EC2.DhcpOptions.new {
   ],
 }
 
-
-############################################################
-# Instance
-#   Generated from AWS resource: i-0eaaa502716608fd9
-############################################################
 ec2-instance-1: EC2.Instance.newWithNetworkInterfaces {
   disableApiTermination: False,
   ebsOptimized: False,
@@ -81,10 +64,6 @@ ec2-instance-1: EC2.Instance.newWithNetworkInterfaces {
 }
 
 
-############################################################
-# InternetGateway
-#   Generated from AWS resource: igw-cbdbc8ac
-############################################################
 ec2-internetgateway-1: EC2.InternetGateway.new {
   region: region,
   tags: [
@@ -94,10 +73,6 @@ ec2-internetgateway-1: EC2.InternetGateway.new {
 }
 
 
-############################################################
-# Route Table
-#   Generated from AWS resource: rtb-30dc8949
-############################################################
 ec2-routetable-1: EC2.RouteTable.new {
   associations: [
       ec2-subnet-1,
@@ -108,34 +83,12 @@ ec2-routetable-1: EC2.RouteTable.new {
   vpc: ec2-vpc-1,
 }
 
-
-############################################################
-# Security Group
-#   Generated from AWS resource: sg-87ea19fb
-############################################################
 ec2-securitygroup-1: EC2.SecurityGroup.new {
   description: "for MobileApp demo",
   ipPermissions: [
-    EC2.IpPermission.new {
-      fromPort: 80,
-      ipProtocol: "tcp",
-      target: EC2.IpPermission.Target.all,
-      toPort: 80,
-    },
-    EC2.IpPermission.new {
-      fromPort: 443,
-      ipProtocol: "tcp",
-      target: EC2.IpPermission.Target.all,
-      toPort: 443,
-    },
-  ],
-  ipPermissionsEgress: [
-    EC2.IpPermission.new {
-      fromPort: 0,
-      ipProtocol: "-1",
-      target: EC2.IpPermission.Target.all,
-      toPort: 0,
-    },
+    EC2.IpPermission.http(EC2.IpPermission.Target.all),
+    EC2.IpPermission.https(EC2.IpPermission.Target.all),
+    EC2.IpPermission.ssh(EC2.IpPermission.Target.all),
   ],
   tags: [
     AWS.tag("Name", "MobileApp"),
@@ -144,10 +97,6 @@ ec2-securitygroup-1: EC2.SecurityGroup.new {
 }
 
 
-############################################################
-# Subnet
-#   Generated from AWS resource: subnet-43fe8e0b
-############################################################
 ec2-subnet-1: EC2.Subnet.new {
   availabilityZone: AWS.B,
   cidrBlock: "10.0.1.0/24",
@@ -160,10 +109,6 @@ ec2-subnet-1: EC2.Subnet.new {
 }
 
 
-############################################################
-# VPC
-#   Generated from AWS resource: vpc-6b616b0d
-############################################################
 ec2-vpc-1: EC2.Vpc.new {
   cidrBlock: "10.0.0.0/16",
   dhcpOptions: ec2-dhcpoptions-1,
@@ -176,4 +121,13 @@ ec2-vpc-1: EC2.Vpc.new {
   ],
 }
 
+s3-bucket-1: S3.Bucket.new {
+  acl: S3.Private,
+  name: "health-app-087820496137",
+  region: region,
+  #policy: S3.Bucket.Policy.SSE.s3("health-app-087820496137"),
+  tags: [
+    AWS.tag("Name", "HealthApp"),
+  ],
+}
 

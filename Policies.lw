@@ -1,6 +1,6 @@
 import Fugue.AWS.EC2 as EC2
 import Fugue.AWS as AWS
-
+import Fugue.AWS.S3 as S3
 
 # Register the validations
 validate validateInstanceType
@@ -8,6 +8,7 @@ validate usWestOnly
 validate disallowInboundSsh
 validate ebsEncrypted
 validate requireStandardTagsOnEC2SecurityGroups
+validate requireServerSideEncryptionS3BucketPolicy
 
 
 requiredTags: [
@@ -53,6 +54,24 @@ fun allowsSsh(rule: EC2.IpPermission) -> Bool:
                (fromPort <= 22) && (toPort >= 22)
     | _     -> False
 
+
+#TODO add bucket policy inspection for requiring SSL
+
+fun requireServerSideEncryptionS3BucketPolicy(bucket: S3.Bucket) -> Validation:
+    let fail: Validation.failure("SSE policy is required on all S3 Buckets")
+    case bucket.(S3.Bucket).policy of
+      | None            -> fail
+      | Optional policy -> let name: bucket.(S3.Bucket).name
+                           if isSSE(policy, name) then Validation.success
+                           else fail
+
+fun isSSE(policy: String, name: String) -> Bool:
+  let kmsPolicy: S3.Bucket.Policy.SSE.kms(name)
+  let s3Policy: S3.Bucket.Policy.SSE.s3(name)
+  String.equal(policy, kmsPolicy) || String.equal(policy, s3Policy)
+
+
+  
 ### TAG FUNCTIONS
 fun includesRequiredTags(tags: List<AWS.Tag>) -> Bool:
   let fun includesTag(key: String) -> Bool:
