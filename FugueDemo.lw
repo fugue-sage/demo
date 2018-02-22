@@ -8,10 +8,10 @@ import Fugue.AWS.ELB as ELB
 import Fugue.AWS.IAM as IAM
 import Fugue.AWS.Pattern.Network as Network
 
-import Policies
+#import Policies
 
 # Region
-demo-app-region: AWS.Us-west-2
+demo-app-region: AWS.Us-east-2
 
 # Tags
 demo-app-tag: [
@@ -31,7 +31,7 @@ demo-app-network: Network.new {
   privateSubnets: [],
 }
 
-### DYNAMODB TABLE
+### DYNAMODB TABLE ###
 demo-app-table: DynamoDB.Table.new {
   name: "demo-app-table",
   attributes: {"PropertyName": DynamoDB.S},
@@ -52,7 +52,7 @@ demo-ebs: EC2.InstanceBlockDeviceMapping.new {
       availabilityZone: AWS.A,
       tags: demo-app-tag,
       volumeType: EC2.Standard,
-      encrypted: True,
+      encrypted: False,
     },
     deleteOnTermination: True,
   }
