@@ -5,24 +5,24 @@ import Fugue.AWS.DynamoDB as DynamoDB
 import Fugue.AWS.EC2 as EC2
 import Fugue.AWS.S3 as S3
 
-import Policies
+#import Policies
 
 region: AWS.Us-west-2
 
-dynamodb-table-1: DynamoDB.Table.new {
-  attributes: {
-    "MobileAppKey": DynamoDB.S,
-  },
-  name: "MobileApp",
-  provisionedThroughput: {
-    read: 5,
-    write: 5,
-  },
-  region: region,
-  schema: {
-    "MobileAppKey": DynamoDB.HASH,
-  },
-}
+# dynamodb-table-1: DynamoDB.Table.new {
+#   attributes: {
+#     "MobileAppKey": DynamoDB.S,
+#   },
+#   name: "MobileAppTable",
+#   provisionedThroughput: {
+#     read: 5,
+#     write: 5,
+#   },
+#   region: region,
+#   schema: {
+#     "MobileAppTableKey": DynamoDB.HASH,
+#   },
+# }
 
 ec2-dhcpoptions-1: EC2.DhcpOptions.new {
   domainName: "us-west-2.compute.internal",
@@ -88,7 +88,7 @@ ec2-securitygroup-1: EC2.SecurityGroup.new {
   ipPermissions: [
     EC2.IpPermission.http(EC2.IpPermission.Target.all),
     EC2.IpPermission.https(EC2.IpPermission.Target.all),
-    EC2.IpPermission.ssh(EC2.IpPermission.Target.all),
+    #EC2.IpPermission.ssh(EC2.IpPermission.Target.all),
   ],
   tags: [
     AWS.tag("Name", "MobileApp"),
@@ -125,7 +125,7 @@ s3-bucket-1: S3.Bucket.new {
   acl: S3.Private,
   name: "health-app-087820496137",
   region: region,
-  #policy: S3.Bucket.Policy.SSE.s3("health-app-087820496137"),
+  policy: S3.Bucket.Policy.SSE.kms("health-app-087820496137"),
   tags: [
     AWS.tag("Name", "HealthApp"),
   ],
